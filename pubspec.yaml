@@ -89,8 +89,9 @@ flutter:
     - assets/iphone_16.png
     - assets/Car.png
     - assets/laptop.png
+    - assets/iphone_16_bigger.png
   fonts:
-    - family: Nunito Sans
+    - family: Roboto
       fonts:
         - asset: fonts/Roboto/static/Roboto_Condensed-Regular.ttf
           weight: 400

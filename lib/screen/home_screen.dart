@@ -1,3 +1,4 @@
+import 'package:begining/products/iphone_15.dart';
 import 'package:begining/provider/carousel_provider.dart';
 import 'package:begining/provider/password_provider.dart';
 import 'package:begining/screen/navigation.dart';
@@ -106,30 +107,40 @@ class HomeScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset('assets/iphone_15.png'),
-                                ),
-                                Text(
-                                  'iPhone 15',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Iphone15(),
+                                ), // Thay NewPage bằng trang bạn muốn chuyển đến
+                              );
+                            },
+                            child: SizedBox(
+                              width: 100,
+                              child: Column(
+                                children: [
+                                  Card(
+                                    child: Image.asset('assets/iphone_15.png'),
                                   ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$999',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
+                                  Text(
+                                    'iPhone 15',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Nunito Sans',
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 20),
+                                  Text(
+                                    '\$999',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Raleway',
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(width: 20),
@@ -169,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                                   'Car Model',
                                   style: TextStyle(
                                     fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
+                                    fontFamily: 'Roboto',
                                   ),
                                 ),
                                 SizedBox(height: 20),
