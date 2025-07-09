@@ -8,32 +8,42 @@ class Iphone15 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'iPhone 16',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Nunito Sans',
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.only(
+          left: 12.0,
+          right: 12.0,
+          top: 5.0,
+        ),
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               Container(
                 height: MediaQuery.of(context).size.height * 0.4,
                 width: MediaQuery.of(context).size.width * 0.7,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
                   image: DecorationImage(
-                    image: const AssetImage('assets/products/iphone_16_bigger.png'),
+                    image: const AssetImage(
+                      'assets/products/iphone_16_bigger.png',
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-              Text(
-                'iPhone 16',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Nunito Sans',
-                ),
-              ),
+
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -87,10 +97,7 @@ class Iphone15 extends StatelessWidget {
                 ),
                 child: Text(
                   'View installment options',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w300,
-                  ),
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
                 ),
               ),
               SizedBox(height: 10),
@@ -120,10 +127,7 @@ class Iphone15 extends StatelessWidget {
                 ),
                 child: Text(
                   'Add to cart',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w300,
-                  ),
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.025),

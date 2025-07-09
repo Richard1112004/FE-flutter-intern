@@ -7,13 +7,24 @@ class Iphone15Options extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Installment Plans',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Nunito Sans',
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Center(
             child: Column(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.2,
                   width: MediaQuery.of(context).size.width * 0.35,
@@ -45,7 +56,10 @@ class Iphone15Options extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 6.0, right: 6.0),
                     child: Text(
                       'The most attractive installment plans',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
@@ -53,7 +67,6 @@ class Iphone15Options extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
@@ -62,7 +75,10 @@ class Iphone15Options extends StatelessWidget {
                               color: Colors.grey.withOpacity(0.2),
                               spreadRadius: 1,
                               blurRadius: 5,
-                              offset: const Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                0,
+                                3,
+                              ), // changes position of shadow
                             ),
                           ],
                         ),
@@ -120,8 +136,7 @@ class Iphone15Options extends StatelessWidget {
                                     DataCell(Text(('Total Payment'))),
                                     DataCell(Text('\$ 1610')),
                                   ],
-                                )
-                            
+                                ),
                               ],
                             ),
                           ),
@@ -135,7 +150,10 @@ class Iphone15Options extends StatelessWidget {
                               color: Colors.grey.withOpacity(0.2),
                               spreadRadius: 1,
                               blurRadius: 5,
-                              offset: const Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                0,
+                                3,
+                              ), // changes position of shadow
                             ),
                           ],
                         ),
@@ -193,8 +211,7 @@ class Iphone15Options extends StatelessWidget {
                                     DataCell(Text(('Total Payment'))),
                                     DataCell(Text('\$ 1610')),
                                   ],
-                                )
-                            
+                                ),
                               ],
                             ),
                           ),
@@ -208,7 +225,10 @@ class Iphone15Options extends StatelessWidget {
                               color: Colors.grey.withOpacity(0.2),
                               spreadRadius: 1,
                               blurRadius: 5,
-                              offset: const Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                0,
+                                3,
+                              ), // changes position of shadow
                             ),
                           ],
                         ),
@@ -266,8 +286,7 @@ class Iphone15Options extends StatelessWidget {
                                     DataCell(Text(('Total Payment'))),
                                     DataCell(Text('\$ 1610')),
                                   ],
-                                )
-                            
+                                ),
                               ],
                             ),
                           ),
@@ -281,7 +300,6 @@ class Iphone15Options extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Navigation(),
     );
   }
 }

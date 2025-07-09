@@ -1,4 +1,5 @@
 import 'package:begining/cart/view_cart.dart';
+import 'package:begining/profile/my_profile.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class NavigationProvider with ChangeNotifier {
         // Navigate to Profile Screen
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const MyProfile()),
         );
         break;
     }
