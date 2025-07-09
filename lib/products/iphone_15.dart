@@ -1,3 +1,5 @@
+import 'package:begining/products/iphone_15_options.dart';
+import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
 
 class Iphone15 extends StatelessWidget {
@@ -57,69 +59,82 @@ class Iphone15 extends StatelessWidget {
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-              TextButton(
-                onPressed: () => {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  // ),
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    Color.fromARGB(255, 18, 17, 0),
-                  ),
-                  foregroundColor: WidgetStatePropertyAll(Colors.white),
-                  shadowColor: WidgetStatePropertyAll(
-                    Colors.black.withOpacity(0.5),
-                  ),
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Iphone15Options(),
+                        ),
+                      ),
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        Color.fromARGB(255, 18, 17, 0),
+                      ),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      shadowColor: WidgetStatePropertyAll(
+                        Colors.black.withOpacity(0.5),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                      ),
+                      // minimumSize: WidgetStatePropertyAll(
+                      //   const Size(double.infinity, 50),
+                      // ),
+                    ),
+                    child: Text(
+                      'View installment options',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
-                  minimumSize: WidgetStatePropertyAll(
-                    const Size(double.infinity, 50),
-                  ),
-                ),
-                child: Text(
-                  'View installment options',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-              TextButton(
-                onPressed: () => {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  // ),
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    Color.fromARGB(255, 0, 76, 255)
-                  ),
-                  foregroundColor: WidgetStatePropertyAll(Colors.white),
-                  shadowColor: WidgetStatePropertyAll(
-                    Colors.black.withOpacity(0.5),
-                  ),
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                  SizedBox(width: 10),
+                  TextButton(
+                    onPressed: () => {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      // ),
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        Color.fromARGB(255, 0, 76, 255),
+                      ),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      shadowColor: WidgetStatePropertyAll(
+                        Colors.black.withOpacity(0.5),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                      ),
+                      // minimumSize: WidgetStatePropertyAll(
+                      //   const Size(double.infinity, 50),
+                      // ),
+                    ),
+                    child: Text(
+                      'Add to cart',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
-                  minimumSize: WidgetStatePropertyAll(
-                    const Size(double.infinity, 50),
-                  ),
-                ),
-                child: Text(
-                  'Add to cart',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
-                ),
+                ],
               ),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: Navigation(),
     );
   }
 }
