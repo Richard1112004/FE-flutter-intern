@@ -51,6 +51,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   carousel_slider: ^5.1.1
   smooth_page_indicator: ^1.2.1
+  select_dialog: ^2.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -78,18 +79,18 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/icon.jpg
-    - assets/google_logo.png
-    - assets/bubble_02.png
-    - assets/bubble_01.png
-    - assets/bubble_03.png
-    - assets/bubblle_04.png
+    - assets/login/icon.jpg
+    - assets/login/google_logo.png
+    - assets/login/bubble_02.png
+    - assets/login/bubble_01.png
+    - assets/login/bubble_03.png
+    - assets/login/bubblle_04.png
     - assets/home.png
-    - assets/iphone_15.png
-    - assets/iphone_16.png
-    - assets/Car.png
-    - assets/laptop.png
-    - assets/iphone_16_bigger.png
+    - assets/products/iphone_15.png
+    - assets/products/iphone_16.png
+    - assets/products/Car.png
+    - assets/products/laptop.png
+    - assets/products/iphone_16_bigger.png
   fonts:
     - family: Roboto
       fonts:

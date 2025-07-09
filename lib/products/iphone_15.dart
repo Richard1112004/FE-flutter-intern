@@ -20,7 +20,7 @@ class Iphone15 extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
                   image: DecorationImage(
-                    image: const AssetImage('assets/iphone_16_bigger.png'),
+                    image: const AssetImage('assets/products/iphone_16_bigger.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -59,82 +59,78 @@ class Iphone15 extends StatelessWidget {
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Iphone15Options(),
-                        ),
-                      ),
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        Color.fromARGB(255, 18, 17, 0),
-                      ),
-                      foregroundColor: WidgetStatePropertyAll(Colors.white),
-                      shadowColor: WidgetStatePropertyAll(
-                        Colors.black.withOpacity(0.5),
-                      ),
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                      ),
-                      // minimumSize: WidgetStatePropertyAll(
-                      //   const Size(double.infinity, 50),
-                      // ),
-                    ),
-                    child: Text(
-                      'View installment options',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w300,
-                      ),
+              TextButton(
+                onPressed: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Iphone15Options(),
                     ),
                   ),
-                  SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () => {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                      // ),
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        Color.fromARGB(255, 0, 76, 255),
-                      ),
-                      foregroundColor: WidgetStatePropertyAll(Colors.white),
-                      shadowColor: WidgetStatePropertyAll(
-                        Colors.black.withOpacity(0.5),
-                      ),
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                      ),
-                      // minimumSize: WidgetStatePropertyAll(
-                      //   const Size(double.infinity, 50),
-                      // ),
-                    ),
-                    child: Text(
-                      'Add to cart',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w300,
-                      ),
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                    Color.fromARGB(255, 18, 17, 0),
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white),
+                  shadowColor: WidgetStatePropertyAll(
+                    Colors.black.withOpacity(0.5),
+                  ),
+                  shape: WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
                     ),
                   ),
-                ],
+                  minimumSize: WidgetStatePropertyAll(
+                    const Size(double.infinity, 50),
+                  ),
+                ),
+                child: Text(
+                  'View installment options',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
               ),
+              SizedBox(height: 10),
+              TextButton(
+                onPressed: () => {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  // ),
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                    Color.fromARGB(255, 0, 76, 255),
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white),
+                  shadowColor: WidgetStatePropertyAll(
+                    Colors.black.withOpacity(0.5),
+                  ),
+                  shape: WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                  ),
+                  minimumSize: WidgetStatePropertyAll(
+                    const Size(double.infinity, 50),
+                  ),
+                ),
+                child: Text(
+                  'Add to cart',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.025),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Navigation(),
     );
   }
 }

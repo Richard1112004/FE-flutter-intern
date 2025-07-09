@@ -12,9 +12,9 @@ class ForgotpasswordScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Image.asset('assets/bubble_03.png', height: 170),
+                  Image.asset('assets/login/bubble_03.png', height: 170),
                   SizedBox(width: 148),
-                  Image.asset('assets/bubble_01.png', height: 170),
+                  Image.asset('assets/login/bubble_01.png', height: 170),
                 ],
               ),
               SizedBox(height: 70),

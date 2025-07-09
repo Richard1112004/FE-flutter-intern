@@ -44,9 +44,9 @@ class PasswordScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Image.asset('assets/bubble_03.png', height: 170),
+                  Image.asset('assets/login/bubble_03.png', height: 170),
                   SizedBox(width: 121),
-                  Image.asset('assets/bubblle_04.png', height: 170),
+                  Image.asset('assets/login/bubblle_04.png', height: 170),
                 ],
               ),
               SizedBox(height: 50),

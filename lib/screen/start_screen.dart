@@ -11,7 +11,7 @@ class StartScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 100),
-            Image.asset('assets/icon.jpg', height: 170),
+            Image.asset('assets/login/icon.jpg', height: 170),
             Text(
               'Richard Shop',
               style: TextStyle(
@@ -80,7 +80,7 @@ class StartScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      'assets/google_logo.png', // Đường dẫn đến file logo Google
+                      'assets/login/google_logo.png', // Đường dẫn đến file logo Google
                       width: 20,
                       height: 20,
                     ),

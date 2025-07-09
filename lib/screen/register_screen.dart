@@ -17,9 +17,9 @@ class RegisterScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Image.asset('assets/bubble_02.png', height: 170),
+                  Image.asset('assets/login/bubble_02.png', height: 170),
                   SizedBox(width: 119),
-                  Image.asset('assets/bubble_01.png', height: 170),
+                  Image.asset('assets/login/bubble_01.png', height: 170),
                 ],
               ),
               Align(

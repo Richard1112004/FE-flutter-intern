@@ -121,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Card(
-                                    child: Image.asset('assets/iphone_15.png'),
+                                    child: Image.asset('assets/products/iphone_15.png'),
                                   ),
                                   Text(
                                     'iPhone 15',
@@ -149,7 +149,7 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 Card(
-                                  child: Image.asset('assets/iphone_16.png'),
+                                  child: Image.asset('assets/products/iphone_16.png'),
                                 ),
                                 Text(
                                   'iPhone 16',
@@ -175,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                             width: 100,
                             child: Column(
                               children: [
-                                Card(child: Image.asset('assets/Car.png')),
+                                Card(child: Image.asset('assets/products/Car.png')),
                                 Text(
                                   'Car Model',
                                   style: TextStyle(
@@ -200,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                             width: 100,
                             child: Column(
                               children: [
-                                Card(child: Image.asset('assets/laptop.png')),
+                                Card(child: Image.asset('assets/products/laptop.png')),
                                 Text(
                                   'Laptop',
                                   style: TextStyle(
@@ -248,7 +248,7 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 Card(
-                                  child: Image.asset('assets/iphone_15.png'),
+                                  child: Image.asset('assets/products/iphone_15.png'),
                                 ),
                                 Text(
                                   'iPhone 15',
@@ -275,7 +275,7 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 Card(
-                                  child: Image.asset('assets/iphone_16.png'),
+                                  child: Image.asset('assets/products/iphone_16.png'),
                                 ),
                                 Text(
                                   'iPhone 16',
@@ -301,7 +301,7 @@ class HomeScreen extends StatelessWidget {
                             width: 100,
                             child: Column(
                               children: [
-                                Card(child: Image.asset('assets/Car.png')),
+                                Card(child: Image.asset('assets/products/Car.png')),
                                 Text(
                                   'Car Model',
                                   style: TextStyle(
@@ -326,7 +326,7 @@ class HomeScreen extends StatelessWidget {
                             width: 100,
                             child: Column(
                               children: [
-                                Card(child: Image.asset('assets/laptop.png')),
+                                Card(child: Image.asset('assets/products/laptop.png')),
                                 Text(
                                   'Laptop',
                                   style: TextStyle(

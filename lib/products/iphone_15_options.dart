@@ -20,7 +20,7 @@ class Iphone15Options extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                      image: const AssetImage('assets/iphone_16.png'),
+                      image: const AssetImage('assets/products/iphone_16.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
