@@ -1,3 +1,4 @@
+import 'package:begining/order/orders.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:select_dialog/select_dialog.dart';
@@ -177,8 +178,9 @@ class ViewCart extends StatelessWidget {
                                               color: Color(0xFF004BFE),
                                               width: 1,
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10.0),
@@ -196,21 +198,27 @@ class ViewCart extends StatelessWidget {
                                                   children: [
                                                     Column(
                                                       crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Text(item["price"],
-                                                            style: TextStyle(
-                                                              color: Colors.black,
-                                                              fontSize: 14,
-                                                              fontWeight: FontWeight
-                                                                  .w700,
-                                                                  fontFamily: 'Raleway',
-                                                            )),
+                                                        Text(
+                                                          item["price"],
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontFamily:
+                                                                'Raleway',
+                                                          ),
+                                                        ),
                                                         Text(
                                                           item["type"],
                                                           style: TextStyle(
                                                             color: Colors.black
-                                                                .withOpacity(0.6),
+                                                                .withOpacity(
+                                                                  0.6,
+                                                                ),
                                                           ),
                                                         ),
                                                       ],
@@ -220,8 +228,8 @@ class ViewCart extends StatelessWidget {
                                                       style: ButtonStyle(
                                                         backgroundColor:
                                                             WidgetStatePropertyAll(
-                                                          Color(0xFF004BFE),
-                                                        ),
+                                                              Color(0xFF004BFE),
+                                                            ),
                                                       ),
                                                       onPressed: () {
                                                         Navigator.pop(context);
@@ -489,7 +497,12 @@ class ViewCart extends StatelessWidget {
                         Spacer(),
                         TextButton(
                           onPressed: () {
-                            // Handle checkout action
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Orders(),
+                              ),
+                            );
                           },
                           style: ButtonStyle(
                             backgroundColor: WidgetStatePropertyAll(
