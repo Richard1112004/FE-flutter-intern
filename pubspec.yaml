@@ -91,6 +91,7 @@ flutter:
     - assets/products/Car.png
     - assets/products/laptop.png
     - assets/products/iphone_16_bigger.png
+    - assets/profile/user.png
   fonts:
     - family: Roboto
       fonts:

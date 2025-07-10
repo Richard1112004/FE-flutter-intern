@@ -1,3 +1,5 @@
+import 'package:begining/profile/edit_my_profile.dart';
+import 'package:begining/profile/shipping_address.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
 
@@ -31,10 +33,10 @@ class MyProfile extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () => {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    // ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const EditMyProfile()),
+                    ),
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -166,10 +168,10 @@ class MyProfile extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () => {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    // ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ShippingAddress()),
+                    ),
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -242,6 +244,7 @@ class MyProfile extends StatelessWidget {
                       Text(
                         'Logout',
                         style: TextStyle(
+                          color: Colors.red,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                         ),
