@@ -21,11 +21,7 @@ class Iphone15 extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(
-          left: 12.0,
-          right: 12.0,
-          top: 5.0,
-        ),
+        padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 5.0),
         child: Center(
           child: Column(
             children: [
@@ -63,74 +59,83 @@ class Iphone15 extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: Text(
-                    'The iPhone 16 is the latest in Apple\'s line of smartphones, featuring cutting-edge technology and a sleek design.',
+                    'The iPhone 16 is the latest in Apple\'s line of smartphones, featuring cutting-edge technology and a sleek design. It comes with a powerful A16 chip, an advanced camera system',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   ),
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-              TextButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Iphone15Options(),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Iphone15Options(),
+                        ),
+                      ),
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        Color.fromARGB(255, 18, 17, 0),
+                      ),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      shadowColor: WidgetStatePropertyAll(
+                        Colors.black.withOpacity(0.5),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                      ),
+                      // minimumSize: WidgetStatePropertyAll(
+                      //   const Size(double.infinity, 50),
+                      // ),
+                    ),
+                    child: Text(
+                      'View installment options',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    Color.fromARGB(255, 18, 17, 0),
-                  ),
-                  foregroundColor: WidgetStatePropertyAll(Colors.white),
-                  shadowColor: WidgetStatePropertyAll(
-                    Colors.black.withOpacity(0.5),
-                  ),
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                  SizedBox(width: 10),
+                  TextButton(
+                    onPressed: () => {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      // ),
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        Color.fromARGB(255, 0, 76, 255),
+                      ),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      shadowColor: WidgetStatePropertyAll(
+                        Colors.black.withOpacity(0.5),
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                      ),
+                      // minimumSize: WidgetStatePropertyAll(
+                      //   const Size(double.infinity, 50),
+                      // ),
+                    ),
+                    child: Text(
+                      'Add to cart',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
-                  minimumSize: WidgetStatePropertyAll(
-                    const Size(double.infinity, 50),
-                  ),
-                ),
-                child: Text(
-                  'View installment options',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
-                ),
+                ],
               ),
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () => {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  // ),
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    Color.fromARGB(255, 0, 76, 255),
-                  ),
-                  foregroundColor: WidgetStatePropertyAll(Colors.white),
-                  shadowColor: WidgetStatePropertyAll(
-                    Colors.black.withOpacity(0.5),
-                  ),
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                  ),
-                  minimumSize: WidgetStatePropertyAll(
-                    const Size(double.infinity, 50),
-                  ),
-                ),
-                child: Text(
-                  'Add to cart',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.025),
             ],
           ),
         ),

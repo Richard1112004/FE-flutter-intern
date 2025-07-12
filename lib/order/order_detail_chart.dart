@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+
 class OrderDetailChart extends StatelessWidget {
   const OrderDetailChart({super.key});
   @override
@@ -25,7 +26,7 @@ class OrderDetailChart extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'Track you order',
+                    'Chart order',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
@@ -34,12 +35,11 @@ class OrderDetailChart extends StatelessWidget {
                     icon: Icon(Icons.bar_chart_sharp, color: Colors.white),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                OrderDetailChart(),
-                          ),
-                        );
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderDetailChart(),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
@@ -78,14 +78,12 @@ class OrderDetailChart extends StatelessWidget {
               SizedBox(height: 20),
               // Add your order details here
               SizedBox(
-                
                 height: 200,
                 child: Row(
-
                   children: [
                     Expanded(
                       flex: 3,
-                      child: PieChart(  
+                      child: PieChart(
                         PieChartData(
                           sections: [
                             PieChartSectionData(
@@ -138,7 +136,6 @@ class OrderDetailChart extends StatelessWidget {
                               ),
                               radius: 50,
                             ),
-                            
                           ],
                         ),
                       ),
@@ -150,23 +147,168 @@ class OrderDetailChart extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Order Status',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                '10/04/2025',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          Text('Processing', style: TextStyle(fontSize: 14)),
-                          SizedBox(height: 10),
-                          Text('Estimated Delivery', style: TextStyle(fontSize: 14)),
-                          SizedBox(height: 10),
-                          Text('In Transit', style: TextStyle(fontSize: 14)),
-                          SizedBox(height: 10),
-                          Text('Delivered', style: TextStyle(fontSize: 14)),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                '10/04/2025',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                '10/04/2025',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                '10/04/2025',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                '10/04/2025',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Months Paid: 2 of 5',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Remaining Balance: \$1000',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+              ),
+              SizedBox(height: 20),
+              DataTable(
+                dataRowColor: MaterialStateProperty.all(Colors.white),
+                dataRowHeight: 40,
+                headingRowHeight: 40,
+                headingRowColor: MaterialStateProperty.all(
+                  const Color.fromARGB(255, 164, 188, 244),
+                ),
+                columns: [
+                  DataColumn(label: Text('Due Date')),
+                  DataColumn(label: Text('Amount')),
+                  DataColumn(label: Text('Status')),
+                ],
+                rows: [
+                  DataRow(
+                    cells: [
+                      DataCell(Text(('10/04/2025'))),
+                      DataCell(Text('\$ 170')),
+                      DataCell(Text('Paid')),
+                    ],
+                  ),
+                  DataRow(
+                    cells: [
+                      DataCell(Text(('10/05/2025'))),
+                      DataCell(Text('\$ 170')),
+                      DataCell(Text('Paid')),
+                    ],
+                  ),
+                  DataRow(
+                    cells: [
+                      DataCell(Text(('10/06/2025'))),
+                      DataCell(Text('\$ 170')),
+                      DataCell(Text('Overdue', style: TextStyle(color: Colors.red))),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),

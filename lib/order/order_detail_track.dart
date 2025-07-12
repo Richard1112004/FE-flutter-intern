@@ -181,6 +181,7 @@ class OrderDetail extends StatelessWidget {
                 isCompleted: true,
                 isLast: true,
               ),
+              
             ],
           ),
         ),
