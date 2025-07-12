@@ -61,7 +61,7 @@ class User {
 
   static User getMockUser() {
     try{
-      return _allUsers.first;
+      return _allUsers.last;
     } 
     catch (e) {
       return e as User;
@@ -80,5 +80,24 @@ class User {
 
   static void clearAllUsers() {
     _allUsers.clear();
+  }
+
+
+  static User? authenticate(String email, String password) {
+    for (var user in _allUsers) {
+      if (user.email == email && user.password == password) {
+        return user;
+      }
+    }
+    return null; // Return null if no user matches
+  }
+
+  static bool userExists(String email) {
+    for (var user in _allUsers) {
+      if (user.email == email) {
+        return true; // User with this email already exists
+      }
+    }
+    return false; // No user with this email found
   }
 }

@@ -3,6 +3,7 @@ import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:begining/provider/password_provider.dart';
+import 'package:begining/model/user.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -10,6 +11,8 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final passwordProvider = Provider.of<PasswordProvider>(context);
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -53,6 +56,7 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       TextField(
+                        controller: emailController, // Add controller
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white),
@@ -77,6 +81,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       TextField(
+                        controller: passwordController, // Add controller
                         obscureText: !passwordProvider.currentIndex,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -134,13 +139,33 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
-                            ),
-                          ),
+                        onPressed: ()  {
+                          String email = emailController.text.trim();
+                          String password = passwordController.text.trim();
+                          
+                          if (email.isEmpty || password.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Please fill in all fields')),
+                            );
+                            return;
+                          }
+
+                          User? authenticatedUser = User.authenticate(email, password);
+                          
+                          if (authenticatedUser != null) {
+                            // Login successful
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                          } else {
+                            // Login failed
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Invalid email or password')),
+                            );
+                          }
                         },
                         style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(

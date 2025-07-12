@@ -145,7 +145,7 @@ class RegisterScreen extends StatelessWidget {
                             passwordController.text,
                             phoneController.text,
                           ),
-                          print(User.getMockUser()),
+                          print(User.getMockUsers()),
                           Navigator.push(
                             context,
                             MaterialPageRoute(
