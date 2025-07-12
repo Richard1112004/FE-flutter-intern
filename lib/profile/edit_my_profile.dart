@@ -1,3 +1,4 @@
+import 'package:begining/model/user.dart';
 import 'package:begining/provider/password_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,9 @@ class EditMyProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final passwordProvider = Provider.of<PasswordProvider>(context);
+    final TextEditingController emailController = TextEditingController(text: User.getMockUser().email);
+    final TextEditingController phoneController = TextEditingController(text: User.getMockUser().phone);
+    final TextEditingController nameController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Your Profile'),
@@ -73,6 +77,7 @@ class EditMyProfile extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
+                controller: nameController,
                 obscureText: false,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
@@ -95,6 +100,7 @@ class EditMyProfile extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
@@ -116,6 +122,7 @@ class EditMyProfile extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
+                controller: phoneController,
                 obscureText: false,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
@@ -139,6 +146,11 @@ class EditMyProfile extends StatelessWidget {
               SizedBox(height: 20),
               TextButton(
                 onPressed: () {
+                  User user = User.getMockUser();
+                  user.name = nameController.text;
+                  user.email = emailController.text;
+                  user.phone = phoneController.text;
+                  print(user);
                   // Add your save logic here
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Profile updated successfully!')),

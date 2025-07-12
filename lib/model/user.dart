@@ -1,13 +1,84 @@
 class User {
-  final String name;
-  final int age;
+  String id;
+  String name;
+  String email;
+  String password;
+  String phone;
+  String province;
+  String street;
 
-  User({required this.name, required this.age});
+  static List<User> _allUsers = [];
+
+  User({
+    this.id = '',
+    this.name = '',
+    required this.email,
+    required this.password,
+    required this.phone,
+    this.province = '',
+    this.street = '',
+  }) {
+     _allUsers.add(this);
+  }
+
+  // get and set methods for name, email, password, phone, province, street
+  String get getName => name;
+  set setName(String name) => this.name = name;
+  String get getEmail => email;
+  set setEmail(String email) => this.email = email;
+  String get getPassword => password;
+  set setPassword(String password) => this.password = password;
+  String get getPhone => phone;
+  set setPhone(String phone) => this.phone = phone;
+  String get getProvince => province;
+  set setProvince(String province) => this.province = province;
+  String get getStreet => street;
+  set setStreet(String street) => this.street = street;
+
+
+
+  // Factory constructor for creating User from Map
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
+      password: map['password'] ?? '',
+      phone: map['phone'] ?? '',
+      province: map['province'] ?? '',
+      street: map['street'] ?? '',
+    );
+  }
+  @override
+  String toString() {
+    return 'User{id: $id, name: $name, email: $email, password: $password, phone: $phone, province: $province, street: $street}';
+  }
+
+  // Mock data
+  static List<User> getMockUsers() {
+    return List.from(_allUsers);
+  }
+
+  static User getMockUser() {
+    try{
+      return _allUsers.first;
+    } 
+    catch (e) {
+      return e as User;
+    }
+  }
+  // Get a single mock user
+  // create a user from email and password and phone number
+  static User createUser(String email, String password, String phone) {
+    return User(
+      email: email,
+      password: password,
+      phone: phone,
+    );
+  }
+
+
+  static void clearAllUsers() {
+    _allUsers.clear();
+  }
 }
-
-// Tạo danh sách dữ liệu giả
-List<User> mockUsers = [
-  User(name: "Nguyen Van A", age: 25),
-  User(name: "Tran Thi B", age: 30),
-  User(name: "Le Van C", age: 22),
-];

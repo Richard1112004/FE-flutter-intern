@@ -1,3 +1,4 @@
+import 'package:begining/model/user.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,9 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final passwordProvider = Provider.of<PasswordProvider>(context);
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -40,6 +44,7 @@ class RegisterScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       TextField(
+                        controller: emailController,
                         obscureText: false,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -66,6 +71,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       TextField(
+                        controller: passwordController,
                         obscureText: !passwordProvider.currentIndex,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -105,6 +111,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       TextField(
+                        controller: phoneController,
                         obscureText: false,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
@@ -133,6 +140,12 @@ class RegisterScreen extends StatelessWidget {
                       SizedBox(height: 20),
                       TextButton(
                         onPressed: () => {
+                          User.createUser(
+                            emailController.text,
+                            passwordController.text,
+                            phoneController.text,
+                          ),
+                          print(User.getMockUser()),
                           Navigator.push(
                             context,
                             MaterialPageRoute(
