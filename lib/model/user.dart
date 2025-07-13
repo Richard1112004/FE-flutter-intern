@@ -10,7 +10,7 @@ class User {
   static List<User> _allUsers = [];
 
   User({
-    this.id = '',
+    this.id = '1',
     this.name = '',
     required this.email,
     required this.password,

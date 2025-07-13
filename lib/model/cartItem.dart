@@ -1,114 +1,123 @@
 // First, you need to define CartItem and Order classes
+import 'package:provider/provider.dart';
+
 class CartItem {
   final String id;
-  final String productName;
-  final int quantity;
-  final double price;
-  final double term;
+  int quantity;
+  double term;
   final String userId; // Added userId to link to User
   final String orderId; // Added productId to link to Product
+  final String product_id;
+
+  static List<CartItem> cartItems = [];
 
   CartItem({
     required this.id,
-    required this.productName,
     required this.quantity,
-    required this.price,
     required this.term,
     required this.userId, // Initialize userId
     required this.orderId, // Initialize orderId
-  });
+    required this.product_id,
+  }) {
+    cartItems.add(this);
+  }
 
   // Factory constructor for creating CartItem from Map
   factory CartItem.fromMap(Map<String, dynamic> map) {
     return CartItem(
       id: map['id'] ?? '',
-      productName: map['productName'] ?? '',
       quantity: map['quantity'] ?? 0,
-      price: map['price']?.toDouble() ?? 0.0,
       term: map['term']?.toDouble() ?? 0.0,
       userId: map['userId'] ?? '',
       orderId: map['orderId'] ?? '',
+      product_id: map['product_id'] ?? '',
     );
   }
 
   // Mock data
   static List<CartItem> getMockCartItems() {
-    return [
-      CartItem(
-        id: 'cart_1',
-        productName: 'Laptop Pro 15"',
-        quantity: 1,
-        price: 1299.99,
-        term: 6,
-        userId: '1', // John Doe
-        orderId: 'order_1',
-      ),
-      CartItem(
-        id: 'cart_2',
-        productName: 'Wireless Headphones',
-        quantity: 2,
-        price: 149.99,
-        term: 12,
-        userId: '1', // John Doe
-        orderId: 'order_1',
-      ),
-      CartItem(
-        id: 'cart_3',
-        productName: 'Smartphone 128GB',
-        quantity: 1,
-        price: 699.99,
-        term: 9,
-        userId: '2', // Jane Smith
-        orderId: 'order_2',
-      ),
-      CartItem(
-        id: 'cart_4',
-        productName: 'Gaming Mouse',
-        quantity: 1,
-        price: 79.99,
-        term: 6,
-        userId: '3', // Mike Johnson
-        orderId: 'order_3',
-      ),
-      CartItem(
-        id: 'cart_5',
-        productName: 'Monitor 27" 4K',
-        quantity: 1,
-        price: 449.99,
-        term: 12,
-        userId: '3', // Mike Johnson
-        orderId: 'order_3',
-      ),
-      CartItem(
-        id: 'cart_6',
-        productName: 'Mechanical Keyboard',
-        quantity: 1,
-        price: 129.99,
-        term: 9,
-        userId: '4', // Sarah Wilson
-        orderId: 'order_4',
-      ),
-      CartItem(
-        id: 'cart_7',
-        productName: 'Tablet 10"',
-        quantity: 1,
-        price: 299.99,
-        term: 12,
-        userId: '5', // David Brown
-        orderId: 'order_5',
-      ),
-      CartItem(
-        id: 'cart_8',
-        productName: 'External SSD 1TB',
-        quantity: 2,
-        price: 89.99,
-        term: 6,
-        userId: '5', // David Brown
-        orderId: 'order_5',
-      ),
-    ];
+    return cartItems;
   }
 
+  static final CartItem iPhone_16 = CartItem(
+    id: 'cart_1',
+    quantity: 1,
+    term: 0,
+    userId: '1',
+    orderId: 'order_1',
+    product_id: 'prod_1',
+  );
+  static final CartItem iPhone_15 = CartItem(
+    id: 'cart_2',
+    quantity: 1,
+    term: 0,
+    userId: '1',
+    orderId: 'order_1',
+    product_id: 'prod_2',
+  );
+
+  static createCartItem(
+    String id,
+    String productName,
+    int quantity,
+    double price,
+    double term,
+    String userId,
+    String orderId,
+    String productId,
+  ) {
+    print(CartItem.iPhone_15);
+    print(CartItem.iPhone_16);
+    print(productId);
+    // Check if product already exists in cart
+    int existingItemIndex = cartItems.indexWhere(
+      (item) => item.product_id == productId,
+    );
+    print(existingItemIndex);
+    if (existingItemIndex != -1) {
+      // Product exists, increment quantity by 1
+      
+      cartItems[existingItemIndex].quantity += 1;
+    } else {
+      // Product doesn't exist, create new CartItem
+      CartItem(
+        id: id,
+        quantity: quantity,
+        term: term,
+        userId: userId,
+        orderId: orderId,
+        product_id: productId,
+      );
+    }
+  }
+  static decreaseCartItemQuantity(String productId) {
+    // Find the index of the item to decrease
+    int indexToDecrease = cartItems.indexWhere((item) => item.product_id == productId);
+    if (indexToDecrease != -1) {
+      // Decrease the quantity by 1
+      if (cartItems[indexToDecrease].quantity > 1) {
+        cartItems[indexToDecrease].quantity -= 1;
+      } 
+    }
+  }
+
+  static increaseCartItemQuantity(String productId) {
+    // Find the index of the item to increase
+    int indexToIncrease = cartItems.indexWhere((item) => item.product_id == productId);
+    if (indexToIncrease != -1) {
+      // Increase the quantity by 1
+      cartItems[indexToIncrease].quantity += 1;
+    }
+  }
+
+  static removeCurrentCartItem(String productId) {
+    // Find the index of the item to remove
+    int indexToRemove = cartItems.indexWhere((item) => item.product_id == productId);
+    if (indexToRemove != -1) {
+      // Remove the item from the list
+      cartItems.removeAt(indexToRemove);
+    }
+  }
   // Get mock cart items for a specific user
   static List<CartItem> getMockCartItemsByUserId(String userId) {
     return getMockCartItems().where((item) => item.userId == userId).toList();

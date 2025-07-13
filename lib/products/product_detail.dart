@@ -1,3 +1,4 @@
+import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/products/product_option.dart';
 import 'package:begining/screen/navigation.dart';
@@ -150,6 +151,16 @@ class ProductDetail extends StatelessWidget {
                   Expanded(
                     child: TextButton(
                       onPressed: () => {
+                        CartItem.createCartItem(
+                          'cart_${CartItem.cartItems.length + 1}',
+                          product.name,
+                          1,
+                          product.price,
+                          0.0,
+                          'user_1', // Assuming user ID is 'user_1'
+                          'order_1', // Assuming order ID is 'order_1'
+                          product.id,
+                        ),
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Add product to cart successfully!'),

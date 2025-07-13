@@ -1,4 +1,5 @@
 import 'package:begining/provider/carousel_provider.dart';
+import 'package:begining/provider/cart_provider.dart';
 import 'package:begining/provider/pincode_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:begining/provider/navigation_provider.dart';
@@ -12,7 +13,9 @@ void main() {
       providers: [ChangeNotifierProvider(create: (_) => NavigationProvider())
       , ChangeNotifierProvider(create: (_) => PasswordProvider()),
       ChangeNotifierProvider(create: (_) => PinCodeProvider()),
-      ChangeNotifierProvider(create: (_) => CarouselProvider())],
+      ChangeNotifierProvider(create: (_) => CarouselProvider()),
+      ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
       child: const MyApp(),
     ),
   );
