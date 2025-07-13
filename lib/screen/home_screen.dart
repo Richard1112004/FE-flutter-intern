@@ -1,6 +1,7 @@
 import 'package:begining/notification/notification.dart';
 import 'package:begining/products/iphone_15.dart';
 import 'package:begining/provider/carousel_provider.dart';
+import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/provider/password_provider.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   // Track the active index for the carousel
   const HomeScreen({super.key});
   static const urlImages = [
@@ -20,9 +21,24 @@ class HomeScreen extends StatelessWidget {
   ];
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentIndex(0);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final carouselProvider = Provider.of<CarouselProvider>(context);
+    final navigationProvider = Provider.of<NavigationProvider>(context);
     int activeIndex = carouselProvider.activeIndex;
+    // navigationProvider.setIndex(0, context); // Set the initial index to 0 for Home Screen
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -72,9 +88,9 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     CarouselSlider.builder(
-                      itemCount: urlImages.length,
+                      itemCount: HomeScreen.urlImages.length,
                       itemBuilder: (context, index, realIndex) {
-                        return buildImage(urlImages, index);
+                        return buildImage(HomeScreen.urlImages, index);
                       },
                       options: CarouselOptions(
                         height: 90,
@@ -397,7 +413,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget buildIndicator(int activeIndex) => AnimatedSmoothIndicator(
     activeIndex: activeIndex,
-    count: urlImages.length,
+    count: HomeScreen.urlImages.length,
     effect: const JumpingDotEffect(
       dotWidth: 10,
       dotHeight: 10,

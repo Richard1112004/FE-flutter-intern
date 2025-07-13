@@ -1,10 +1,28 @@
 import 'package:begining/order/orders.dart';
+import 'package:begining/profile/shipping_address.dart';
+import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:select_dialog/select_dialog.dart';
 
-class ViewCart extends StatelessWidget {
+class ViewCart extends StatefulWidget {
   const ViewCart({super.key});
+
+  @override
+  State<ViewCart> createState() => _ViewCartState();
+}
+
+class _ViewCartState extends State<ViewCart> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Set the current index to the cart screen
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentIndex(1);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final plans = [
@@ -102,7 +120,13 @@ class ViewCart extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             icon: Icon(Icons.edit, color: Colors.white),
                             onPressed: () {
-                              // Handle edit address action
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ShippingAddress(), // Replace with your address editing screen
+                                ),
+                              );
                             },
                           ),
                         ),

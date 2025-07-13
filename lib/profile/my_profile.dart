@@ -1,11 +1,31 @@
+import 'package:begining/cart/view_cart.dart';
+import 'package:begining/model/order.dart';
+import 'package:begining/order/orders.dart';
 import 'package:begining/profile/edit_my_profile.dart';
 import 'package:begining/profile/shipping_address.dart';
+import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MyProfile extends StatelessWidget {
+class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
+
+  @override
+  State<MyProfile> createState() => _MyProfileState();
+}
+
+class _MyProfileState extends State<MyProfile> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Set the current index to the profile section
+      Provider.of<NavigationProvider>(context, listen: false).setCurrentIndex(2);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,10 +99,10 @@ class MyProfile extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () => {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    // ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Orders()),
+                    ),
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -124,10 +144,10 @@ class MyProfile extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () => {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    // ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ViewCart()),
+                    ),
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
