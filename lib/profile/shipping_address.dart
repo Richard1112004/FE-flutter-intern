@@ -1,10 +1,19 @@
+import 'package:begining/model/user.dart';
 import 'package:flutter/material.dart';
 
 class ShippingAddress extends StatelessWidget {
   const ShippingAddress({super.key});
 
-    @override
+  @override
   Widget build(BuildContext context) {
+    final TextEditingController provinceController =
+        User.getMockUser().province != null
+        ? TextEditingController(text: User.getMockUser().province)
+        : TextEditingController();
+    final TextEditingController streetController =
+        User.getMockUser().street != null
+        ? TextEditingController(text: User.getMockUser().street)
+        : TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: Text('Shipping Address'),
@@ -23,6 +32,7 @@ class ShippingAddress extends StatelessWidget {
               Text('Shipping Address', style: TextStyle(fontSize: 16)),
               SizedBox(height: 20),
               TextField(
+                controller: provinceController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
@@ -39,11 +49,11 @@ class ShippingAddress extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: Color.fromARGB(255, 248, 248, 248),
-                  
                 ),
               ),
               SizedBox(height: 20),
               TextField(
+                controller: streetController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
@@ -60,23 +70,29 @@ class ShippingAddress extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: Color.fromARGB(255, 248, 248, 248),
-                  
                 ),
               ),
               SizedBox(height: 240),
               TextButton(
                 onPressed: () {
                   // Add your save logic here
+                  User user = User.getMockUser();
+                  user.province = provinceController.text;
+                  user.street = streetController.text;
+                  print(User.getMockUsers());
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Profile updated successfully!')),
                   );
+                  Navigator.pop(context);
                 },
                 child: Text('Save Changes'),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
                     Color(0xFF004CFF),
                   ),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  foregroundColor: MaterialStateProperty.all<Color>(
+                    Colors.white,
+                  ),
                   padding: MaterialStateProperty.all<EdgeInsets>(
                     EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                   ),

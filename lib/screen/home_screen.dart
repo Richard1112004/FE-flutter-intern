@@ -1,4 +1,5 @@
 import 'package:begining/model/product.dart';
+import 'package:begining/model/user.dart';
 import 'package:begining/notification/notification.dart';
 import 'package:begining/products/product_detail.dart';
 import 'package:begining/provider/carousel_provider.dart';
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget box(Product product) {
     return InkWell(
       onTap: () {
+        print(User.getMockUsers());
         Navigator.push(
           context,
           MaterialPageRoute(

@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             String email = emailController.text.trim();
                             String password = passwordController.text.trim();
-
+                            print(User.getMockUsers());
                             if (email.isEmpty || password.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -178,7 +178,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
 
                             if (authenticatedUser != null) {
-                              // Login successful
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Login successful!'),
+                                ),
+                              );
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

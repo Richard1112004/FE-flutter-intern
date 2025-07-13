@@ -18,7 +18,7 @@ class User {
     this.province = '',
     this.street = '',
   }) {
-     _allUsers.add(this);
+    _allUsers.add(this);
   }
 
   // get and set methods for name, email, password, phone, province, street
@@ -34,8 +34,6 @@ class User {
   set setProvince(String province) => this.province = province;
   String get getStreet => street;
   set setStreet(String street) => this.street = street;
-
-
 
   // Factory constructor for creating User from Map
   factory User.fromMap(Map<String, dynamic> map) {
@@ -60,28 +58,30 @@ class User {
   }
 
   static User getMockUser() {
-    try{
-      return _allUsers.last;
-    } 
-    catch (e) {
-      return e as User;
+    if (_allUsers.isEmpty) {
+      // Tạo user mặc định nếu danh sách rỗng
+      return User(
+        id: 'mock_id',
+        name: 'Default User',
+        email: 'default@example.com',
+        password: 'password123',
+        phone: '+84000000000',
+        province: 'ádasdasdasda',
+        street: 'ádasdasdasdasd',
+      );
     }
+    return _allUsers.last;
   }
+
   // Get a single mock user
   // create a user from email and password and phone number
   static User createUser(String email, String password, String phone) {
-    return User(
-      email: email,
-      password: password,
-      phone: phone,
-    );
+    return User(email: email, password: password, phone: phone);
   }
-
 
   static void clearAllUsers() {
     _allUsers.clear();
   }
-
 
   static User? authenticate(String email, String password) {
     for (var user in _allUsers) {

@@ -158,6 +158,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             phoneController.text,
                           ),
                           print(User.getMockUsers()),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Account created successfully!'),
+                            ),
+                          ),
                           Navigator.push(
                             context,
                             MaterialPageRoute(

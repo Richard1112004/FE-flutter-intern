@@ -97,7 +97,7 @@ class ProductDetail extends StatelessWidget {
                 left: 8.0,
                 right: 8.0,
                 top: 8.0,
-                bottom: 12.0,
+                bottom: 20.0,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -150,10 +150,12 @@ class ProductDetail extends StatelessWidget {
                   Expanded(
                     child: TextButton(
                       onPressed: () => {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                        // ),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Add product to cart successfully!'),
+                          ),
+                        ),
+                        Navigator.pop(context),
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(

@@ -9,9 +9,9 @@ class EditMyProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final passwordProvider = Provider.of<PasswordProvider>(context);
-    final TextEditingController emailController = TextEditingController(text: User.getMockUser().email);
-    final TextEditingController phoneController = TextEditingController(text: User.getMockUser().phone);
-    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = User.getMockUser().email != '' ? TextEditingController(text: User.getMockUser().email) : TextEditingController();
+    final TextEditingController phoneController = User.getMockUser().phone != '' ? TextEditingController(text: User.getMockUser().phone) : TextEditingController();
+    final TextEditingController nameController = User.getMockUser().name != '' ? TextEditingController(text: User.getMockUser().name) : TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Your Profile'),
@@ -155,6 +155,7 @@ class EditMyProfile extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Profile updated successfully!')),
                   );
+                  Navigator.pop(context);
                 },
                 child: Text('Save Changes'),
                 style: ButtonStyle(
