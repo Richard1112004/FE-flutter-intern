@@ -4,15 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:begining/provider/password_provider.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     final passwordProvider = Provider.of<PasswordProvider>(context);
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController phoneController = TextEditingController();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -115,7 +128,6 @@ class RegisterScreen extends StatelessWidget {
                         obscureText: false,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
-                          
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.all(
@@ -154,10 +166,10 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         },
                         style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 0, 76, 255)),
-                          foregroundColor: WidgetStatePropertyAll(
-                            Colors.white,
+                          backgroundColor: WidgetStatePropertyAll(
+                            Color.fromARGB(255, 0, 76, 255),
                           ),
+                          foregroundColor: WidgetStatePropertyAll(Colors.white),
                           shadowColor: WidgetStateProperty.all(
                             Colors.black.withOpacity(0.5),
                           ),
@@ -172,12 +184,16 @@ class RegisterScreen extends StatelessWidget {
                             const Size(double.infinity, 50),
                           ),
                         ),
-                        child: Text('Done', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                        child: Text(
+                          'Done',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
                       TextButton(
-                        onPressed: () => {
-                          Navigator.pop(context),
-                        },
+                        onPressed: () => {Navigator.pop(context)},
                         style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(Colors.white),
                           foregroundColor: WidgetStatePropertyAll(
@@ -190,7 +206,13 @@ class RegisterScreen extends StatelessWidget {
                             const Size(double.infinity, 50),
                           ),
                         ),
-                        child: Text('Cancel', style: TextStyle(fontSize: 16, color: Colors.grey[600])),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                          ),
+                        ),
                       ),
                     ],
                   ),

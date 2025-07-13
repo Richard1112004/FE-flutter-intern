@@ -1,5 +1,6 @@
+import 'package:begining/model/product.dart';
 import 'package:begining/notification/notification.dart';
-import 'package:begining/products/iphone_15.dart';
+import 'package:begining/products/product_detail.dart';
 import 'package:begining/provider/carousel_provider.dart';
 import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/provider/password_provider.dart';
@@ -29,8 +30,45 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<NavigationProvider>(context, listen: false).setCurrentIndex(0);
+      Provider.of<NavigationProvider>(
+        context,
+        listen: false,
+      ).setCurrentIndex(0);
     });
+  }
+
+  Widget box(Product product) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetail(product: product),
+          ), // Thay NewPage bằng trang bạn muốn chuyển đến
+        );
+      },
+      child: SizedBox(
+        width: 100,
+        child: Column(
+          children: [
+            Card(child: Image.asset(product.image)),
+            Text(
+              product.name,
+              style: TextStyle(fontSize: 16, fontFamily: 'Nunito Sans'),
+            ),
+            SizedBox(height: 20),
+            Text(
+              '${product.price}\$',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Raleway',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -39,367 +77,156 @@ class _HomeScreenState extends State<HomeScreen> {
     final navigationProvider = Provider.of<NavigationProvider>(context);
     int activeIndex = carouselProvider.activeIndex;
     // navigationProvider.setIndex(0, context); // Set the initial index to 0 for Home Screen
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: TextField(
-                      obscureText: false,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.all(Radius.circular(40.0)),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                Row(
+                  children: [
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: TextField(
+                        obscureText: false,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(40.0),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF007FFF)),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(40.0),
+                            ),
+                          ),
+                          focusColor: Color(0xFF007FFF),
+                          labelText: 'Search',
+                          labelStyle: TextStyle(
+                            color: Color.fromARGB(255, 210, 210, 210),
+                          ),
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 248, 248, 248),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF007FFF)),
-                          borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                        ),
-                        focusColor: Color(0xFF007FFF),
-                        labelText: 'Search',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 210, 210, 210),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 248, 248, 248),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.notification_add, color: Colors.black),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => NotificationPage()),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: Column(
-                  children: [
-                    CarouselSlider.builder(
-                      itemCount: HomeScreen.urlImages.length,
-                      itemBuilder: (context, index, realIndex) {
-                        return buildImage(HomeScreen.urlImages, index);
+                    IconButton(
+                      icon: Icon(Icons.notification_add, color: Colors.black),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NotificationPage(),
+                          ),
+                        );
                       },
-                      options: CarouselOptions(
-                        height: 90,
-                        autoPlay: true,
-                        enlargeCenterPage: true,
-                        aspectRatio: 16 / 9,
-                        viewportFraction: 0.8,
-                        initialPage: 0,
-                        enableInfiniteScroll: true,
-                        onPageChanged: (index, reason) {
-                          carouselProvider.setIndex(
-                            index,
-                          ); // Handle page change if needed
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: Column(
+                    children: [
+                      CarouselSlider.builder(
+                        itemCount: HomeScreen.urlImages.length,
+                        itemBuilder: (context, index, realIndex) {
+                          return buildImage(HomeScreen.urlImages, index);
                         },
+                        options: CarouselOptions(
+                          height: 90,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          aspectRatio: 16 / 9,
+                          viewportFraction: 0.8,
+                          initialPage: 0,
+                          enableInfiniteScroll: true,
+                          onPageChanged: (index, reason) {
+                            carouselProvider.setIndex(
+                              index,
+                            ); // Handle page change if needed
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    buildIndicator(activeIndex),
-                  ],
+                      SizedBox(height: 20),
+                      buildIndicator(activeIndex),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'New Items',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'New Items',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Container(
-                color: Color(0xFFF4F4F4),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Iphone15(),
-                                ), // Thay NewPage bằng trang bạn muốn chuyển đến
-                              );
-                            },
-                            child: SizedBox(
-                              width: 100,
-                              child: Column(
-                                children: [
-                                  Card(
-                                    child: Image.asset(
-                                      'assets/products/iphone_15.png',
-                                    ),
-                                  ),
-                                  Text(
-                                    'iPhone 15',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Nunito Sans',
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Text(
-                                    '\$999',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Raleway',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset(
-                                    'assets/products/iphone_16.png',
-                                  ),
-                                ),
-                                Text(
-                                  'iPhone 16',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$1099',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset('assets/products/Car.png'),
-                                ),
-                                Text(
-                                  'Car Model',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Roboto',
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$20,000',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset(
-                                    'assets/products/laptop.png',
-                                  ),
-                                ),
-                                Text(
-                                  'Laptop',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$1500',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                Container(
+                  color: Color(0xFFF4F4F4),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            box(Product.getMockProductById('prod_1')!),
+                            SizedBox(width: 20),
+                            box(Product.getMockProductById('prod_2')!),
+                            SizedBox(width: 20),
+                            box(Product.getMockProductById('prod_3')!),
+                            SizedBox(width: 20),
+                            box(Product.getMockProductById('prod_4')!),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                  ],
+                      SizedBox(height: 20),
+                    ],
+                  ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Products',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Products',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Container(
-                color: Color(0xFFF4F4F4),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset(
-                                    'assets/products/iphone_15.png',
-                                  ),
-                                ),
-                                Text(
-                                  'iPhone 15',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$999',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset(
-                                    'assets/products/iphone_16.png',
-                                  ),
-                                ),
-                                Text(
-                                  'iPhone 16',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$1099',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset('assets/products/Car.png'),
-                                ),
-                                Text(
-                                  'Car Model',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$20,000',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Image.asset(
-                                    'assets/products/laptop.png',
-                                  ),
-                                ),
-                                Text(
-                                  'Laptop',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'Nunito Sans',
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '\$1500',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                Container(
+                  color: Color(0xFFF4F4F4),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            box(Product.getMockProductById('prod_1')!),
+                            SizedBox(width: 20),
+                            box(Product.getMockProductById('prod_2')!),
+                            SizedBox(width: 20),
+                            box(Product.getMockProductById('prod_3')!),
+                            SizedBox(width: 20),
+                            box(Product.getMockProductById('prod_4')!),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                  ],
+                      SizedBox(height: 20),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: Navigation(),
       ),
-      bottomNavigationBar: Navigation(),
     );
   }
 

@@ -7,7 +7,7 @@ class Product {
   final int quantity;
 
   Product({
-    required this.id,
+    this.id = '',
     required this.name,
     required this.price,
     required this.image,
@@ -27,82 +27,58 @@ class Product {
     );
   }
 
+  // Predefined products
+  static final Product iphone15 = Product(
+    id: 'prod_1',
+    name: 'iPhone 15',
+    price: 999,
+    image: 'assets/products/iphone_15.png',
+    description:
+        '''Latest iPhone with 6.1-inch display, A16 Bionic chip, and 5G support. Available in multiple colors and storage options. Features a dual-camera system with improved low-light performance. Water and dust resistant with IP68 rating. Supports MagSafe accessories for easy attachment and wireless charging. Comes with iOS 17, offering new features and enhancements.''',
+    quantity: 25,
+  );
+
+  static final Product iphone16 = Product(
+    id: 'prod_2',
+    name: 'iPhone 16',
+    price: 1099,
+    image: 'assets/products/iphone_16.png',
+    description:
+        'Latest iPhone with 6.1-inch display, A17 Bionic chip, and improved camera system. Available in multiple colors and storage options. Features a dual-camera system with enhanced low-light performance and new photographic styles. Water and dust resistant with IP68 rating. Supports MagSafe accessories for easy attachment and wireless charging. Comes with iOS 18, offering new features and enhancements. Includes advanced security features and improved battery life. Supports 5G connectivity for faster download and streaming speeds. Enhanced Face ID technology for secure facial recognition. Offers a range of accessories including cases, chargers, and AirPods.',
+    quantity: 50,
+  );
+
+  static final Product carModel = Product(
+    id: 'prod_3',
+    name: 'Car Model',
+    price: 20000,
+    image: 'assets/products/Car.png',
+    description:
+        'A high-performance car with advanced safety features and luxury interior. Equipped with a powerful engine, state-of-the-art infotainment system, and premium sound system. Features include adaptive cruise control, lane-keeping assist, and automatic emergency braking. Offers spacious seating for five passengers and ample cargo space. Available in various colors and trims to suit your style. Comes with a comprehensive warranty and maintenance package. Includes advanced navigation system with real-time traffic updates and voice control. Supports smartphone integration for seamless connectivity. Offers a smooth and comfortable ride with responsive handling and performance. Environmentally friendly with low emissions and high fuel efficiency. Perfect for daily commuting or long road trips. Enjoy the latest in automotive technology and design with this exceptional car model. ',
+    quantity: 30,
+  );
+
+  static final Product laptop = Product(
+    id: 'prod_4',
+    name: 'Laptop',
+    price: 1500,
+    image: 'assets/products/laptop.png',
+    description:
+        'High-performance laptop with 16GB RAM, 512GB SSD, and Intel i7 processor. Ample storage and memory for multitasking and running demanding applications. Features a 15.6-inch Full HD display with vibrant colors and sharp details. Backlit keyboard for comfortable typing in low-light conditions. Lightweight and portable design, perfect for on-the-go professionals and students. Long-lasting battery life for all-day productivity without needing to recharge. Equipped with multiple USB ports, HDMI output, and an SD card reader for versatile connectivity options. Includes a high-definition webcam and dual microphones for clear video calls and online meetings. Pre-installed with the latest operating system and productivity software. Ideal for work, study, or entertainment purposes. Offers a sleek and modern design that fits any environment. Enhanced cooling system for optimal performance during intensive tasks. Supports fast charging technology for quick power-ups. Comes with a one-year warranty and customer support for peace of mind.',
+    quantity: 75,
+  );
+
+  // List of all predefined products
+  static final List<Product> _allProducts = [
+    iphone15,
+    iphone16,
+    carModel,
+    laptop,
+  ];
+
   // Mock data
   static List<Product> getMockProducts() {
-    return [
-      Product(
-        id: 'prod_1',
-        name: 'Laptop Pro 15"',
-        price: 1299.99,
-        image: 'https://example.com/images/laptop-pro.jpg',
-        description:
-            'High-performance laptop with 15-inch display, Intel i7 processor, 16GB RAM, and 512GB SSD.',
-        quantity: 25,
-      ),
-      Product(
-        id: 'prod_2',
-        name: 'Wireless Headphones',
-        price: 149.99,
-        image: 'https://example.com/images/wireless-headphones.jpg',
-        description:
-            'Premium wireless headphones with noise cancellation and 30-hour battery life.',
-        quantity: 50,
-      ),
-      Product(
-        id: 'prod_3',
-        name: 'Smartphone 128GB',
-        price: 699.99,
-        image: 'https://example.com/images/smartphone.jpg',
-        description:
-            'Latest smartphone with 6.1-inch display, 128GB storage, and advanced camera system.',
-        quantity: 30,
-      ),
-      Product(
-        id: 'prod_4',
-        name: 'Gaming Mouse',
-        price: 79.99,
-        image: 'https://example.com/images/gaming-mouse.jpg',
-        description:
-            'High-precision gaming mouse with RGB lighting and programmable buttons.',
-        quantity: 75,
-      ),
-      Product(
-        id: 'prod_5',
-        name: 'Monitor 27" 4K',
-        price: 449.99,
-        image: 'https://example.com/images/monitor-4k.jpg',
-        description:
-            '27-inch 4K UHD monitor with HDR support and USB-C connectivity.',
-        quantity: 20,
-      ),
-      Product(
-        id: 'prod_6',
-        name: 'Mechanical Keyboard',
-        price: 129.99,
-        image: 'https://example.com/images/mechanical-keyboard.jpg',
-        description:
-            'RGB mechanical gaming keyboard with Cherry MX switches and aluminum frame.',
-        quantity: 40,
-      ),
-      Product(
-        id: 'prod_7',
-        name: 'Tablet 10"',
-        price: 299.99,
-        image: 'https://example.com/images/tablet.jpg',
-        description:
-            '10-inch tablet with 64GB storage, WiFi connectivity, and all-day battery.',
-        quantity: 35,
-      ),
-      Product(
-        id: 'prod_8',
-        name: 'External SSD 1TB',
-        price: 89.99,
-        image: 'https://example.com/images/external-ssd.jpg',
-        description:
-            'Portable 1TB SSD with USB 3.2 interface and transfer speeds up to 1000MB/s.',
-        quantity: 60,
-      ),
-    ];
+    return _allProducts;
   }
 
   // Get a single mock product
