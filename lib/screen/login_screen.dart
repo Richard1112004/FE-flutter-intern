@@ -1,3 +1,4 @@
+import 'package:begining/model/CartItem.dart';
 import 'package:begining/screen/forgotpassword_screen.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -160,6 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         TextButton(
                           onPressed: () {
+                            print(CartItem.iPhone_15);
+                            print(CartItem.iPhone_16);
                             String email = emailController.text.trim();
                             String password = passwordController.text.trim();
                             print(User.getMockUsers());

@@ -1,3 +1,4 @@
+import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -158,6 +159,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             phoneController.text,
                           ),
                           print(User.getMockUsers()),
+                          print(CartItem.iPhone_15),
+                          print(CartItem.iPhone_16),
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('Account created successfully!'),

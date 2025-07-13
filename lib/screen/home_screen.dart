@@ -2,6 +2,7 @@ import 'package:begining/model/product.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/notification/notification.dart';
 import 'package:begining/products/product_detail.dart';
+import 'package:begining/profile/my_profile.dart';
 import 'package:begining/provider/carousel_provider.dart';
 import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/provider/password_provider.dart';
@@ -92,7 +93,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 30),
                 Row(
                   children: [
-                    SizedBox(width: 20),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyProfile(),
+                          ),
+                        );
+                      },
+                      child: Image(
+                        image: AssetImage('assets/profile/user.png'),
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
                     Expanded(
                       child: TextField(
                         obscureText: false,

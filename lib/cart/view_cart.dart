@@ -358,9 +358,7 @@ class _ViewCartState extends State<ViewCart> {
                   child: Container(
                     child: Column(
                       children: [
-                        cartItem(CartItem.iPhone_15, context),
-                        cartItem(CartItem.iPhone_16, context),
-                        for (int i = 2; i < CartItem.cartItems.length; i++)
+                        for (int i = 0; i < CartItem.cartItems.length; i++)
                           cartItem(CartItem.cartItems[i], context),
                       ],
                     ),
