@@ -18,12 +18,10 @@ class Orders extends StatelessWidget {
           Card(
             child: Image(
               image: AssetImage(
-                Product.getMockProductById(
-                  CartItem.getMockCartItemsByOrderId(order.id)[0].product_id,
-                )!.image,
+                order.image, // Assuming order.image is a valid asset path
               ),
-              // width: 200,
-              // height: 200,
+              width: 120,
+              height: 120,
             ),
           ),
           SizedBox(width: 10),
@@ -71,6 +69,12 @@ class Orders extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Orders'),
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, 'refresh'); 
+          },
+        ),
       ),
       body: Center(
         child: Padding(

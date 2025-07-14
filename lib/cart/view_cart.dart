@@ -20,6 +20,8 @@ class ViewCart extends StatefulWidget {
 
 class _ViewCartState extends State<ViewCart> {
   User user = User.getMockUser();
+  late CartProvider cartProvider;
+
   final plans = [
     {
       "duration": "6 months",
@@ -54,8 +56,20 @@ class _ViewCartState extends State<ViewCart> {
     });
   }
 
+  void _goToOrdersPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Orders()),
+    );
+
+    if (result == 'refresh') {
+      setState(() {
+        print('Cart has been refreshed after placing an order');
+      });
+    }
+  }
+
   Widget cartItem(CartItem cartItem, BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
     return Row(
       children: [
         Image(
@@ -119,8 +133,7 @@ class _ViewCartState extends State<ViewCart> {
                                 ),
                                 SizedBox(height: 10),
                                 Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       item["price"],
@@ -134,9 +147,7 @@ class _ViewCartState extends State<ViewCart> {
                                     Text(
                                       item["type"],
                                       style: TextStyle(
-                                        color: Colors.black.withOpacity(
-                                          0.6,
-                                        ),
+                                        color: Colors.black.withOpacity(0.6),
                                       ),
                                     ),
                                   ],
@@ -172,7 +183,9 @@ class _ViewCartState extends State<ViewCart> {
                   // ),
                 ),
                 child: Text(
-                  cartItem.term == 0 ? 'Choose' : cartItem.term.toInt().toString() + ' months',
+                  cartItem.term == 0
+                      ? 'Choose'
+                      : cartItem.term.toInt().toString() + ' months',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
               ),
@@ -233,6 +246,7 @@ class _ViewCartState extends State<ViewCart> {
 
   @override
   Widget build(BuildContext context) {
+    cartProvider = Provider.of<CartProvider>(context);
     final plans = [
       {
         "duration": "6 months",
@@ -357,12 +371,37 @@ class _ViewCartState extends State<ViewCart> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < CartItem.cartItems.length; i++)
-                          cartItem(CartItem.cartItems[i], context),
-                      ],
-                    ),
+                    child: CartItem.cartItems.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1,
+                                ),
+                                Text(
+                                  'No products in cart',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Nunito Sans',
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              for (
+                                int i = 0;
+                                i < CartItem.cartItems.length;
+                                i++
+                              )
+                                cartItem(CartItem.cartItems[i], context),
+                            ],
+                          ),
                   ),
                 ),
               ),
@@ -380,13 +419,7 @@ class _ViewCartState extends State<ViewCart> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Total \$${
-                                CartItem.cartItems.fold(
-                                  0.0,
-                                  (total, item) =>
-                                      total + Product.getMockProductById(item.product_id)!.price * item.quantity,
-                                ).toStringAsFixed(2)
-                              }',
+                              'Total \$${CartItem.cartItems.fold(0.0, (total, item) => total + Product.getMockProductById(item.product_id)!.price * item.quantity).toStringAsFixed(2)}',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -398,24 +431,35 @@ class _ViewCartState extends State<ViewCart> {
                           TextButton(
                             onPressed: () {
                               print(Order.orders);
+                              for (
+                                int i = 0;
+                                i < CartItem.cartItems.length;
+                                i++
+                              ) {
+                                CartItem.cartItems[i].orderId =
+                                    'order_${Order.orders.length + 1}';
+                              }
                               Order.createOrder(
                                 'order_${Order.orders.length + 1}',
                                 user.id,
                                 DateTime.now(),
+                                Product.getMockProductById(
+                                  CartItem.cartItems[0].product_id,
+                                )!.image,
                                 CartItem.cartItems.fold(
                                   0.0,
                                   (total, item) =>
-                                      total + Product.getMockProductById(item.product_id)!.price * item.quantity,
+                                      total +
+                                      Product.getMockProductById(
+                                            item.product_id,
+                                          )!.price *
+                                          item.quantity,
                                 ),
                                 'pending',
                               );
+                              CartItem.clearCartItems();
                               print(Order.orders);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Orders(),
-                                ),
-                              );
+                              _goToOrdersPage();
                             },
                             style: ButtonStyle(
                               backgroundColor: WidgetStatePropertyAll(

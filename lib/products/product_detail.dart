@@ -158,7 +158,7 @@ class ProductDetail extends StatelessWidget {
                           product.price,
                           0.0,
                           'user_1', // Assuming user ID is 'user_1'
-                          'order_1', // Assuming order ID is 'order_1'
+                          '', // Assuming order ID is 'order_1'
                           product.id,
                         ),
                         ScaffoldMessenger.of(context).showSnackBar(

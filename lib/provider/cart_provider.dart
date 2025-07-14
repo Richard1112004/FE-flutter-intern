@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class CartProvider with ChangeNotifier {
   String selectionPlan = 'Choose';
+  bool isCheckOut = false;
 
   void setSelectionPlan(String plan) {
     selectionPlan = plan;
@@ -28,6 +29,11 @@ class CartProvider with ChangeNotifier {
 
   void increaseCartItemQuantity(String product_id) {
     CartItem.increaseCartItemQuantity(product_id);
+    notifyListeners();
+  }
+
+  void switchToCheckout() {
+    isCheckOut = true;
     notifyListeners();
   }
 }

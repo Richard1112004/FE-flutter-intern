@@ -6,7 +6,7 @@ class CartItem {
   int quantity;
   double term;
   final String userId; // Added userId to link to User
-  final String orderId; // Added productId to link to Product
+  String orderId; // Added productId to link to Product
   final String product_id;
 
   static List<CartItem> cartItems = [];
@@ -50,7 +50,7 @@ class CartItem {
     quantity: 1,
     term: 0,
     userId: '1',
-    orderId: 'order_1',
+    orderId: '',
     product_id: 'prod_1',
   );
   static final CartItem iPhone_15 = CartItem(
@@ -58,7 +58,7 @@ class CartItem {
     quantity: 1,
     term: 0,
     userId: '1',
-    orderId: 'order_1',
+    orderId: '',
     product_id: 'prod_2',
   );
 
@@ -149,5 +149,9 @@ class CartItem {
   // Get a single mock cart item
   static CartItem getMockCartItem() {
     return getMockCartItems().first;
+  }
+
+  static clearCartItems() {
+    cartItems.clear();
   }
 }
