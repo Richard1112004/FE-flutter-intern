@@ -18,6 +18,12 @@ class ShippingAddress extends StatelessWidget {
       appBar: AppBar(
         title: Text('Shipping Address'),
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, 'refresh');
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
