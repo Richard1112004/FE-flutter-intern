@@ -8,48 +8,42 @@ class Orders extends StatelessWidget {
   Widget orderCard(Order order, BuildContext context) {
     print(Order.orders);
     print(CartItem.cartItems);
-    return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => OrderDetail()),
-      ),
-      child: Row(
-        children: [
-          Card(
-            child: Image(
-              image: AssetImage(
-                order.image, // Assuming order.image is a valid asset path
-              ),
-              width: 120,
-              height: 120,
+    return Row(
+      children: [
+        Card(
+          child: Image(
+            image: AssetImage(
+              order.image, // Assuming order.image is a valid asset path
             ),
+            width: 120,
+            height: 120,
           ),
-          SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Order ${order.id}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Raleway',
-                ),
+        ),
+        SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Order ${order.id}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Raleway',
               ),
-              SizedBox(height: 5),
-              Text(
-                'Order Date: ${order.createdAt.toLocal().toString().split(' ')[0]}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 5),
-              Text(
-                'Order Status: ${order.status}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            SizedBox(height: 5),
+            Text(
+              'Order Date: ${order.createdAt.toLocal().toString().split(' ')[0]}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(height: 5),
+            Text(
+              'Order Status: ${order.status}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -72,7 +66,7 @@ class Orders extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context, 'refresh'); 
+            Navigator.pop(context, 'refresh');
           },
         ),
       ),
@@ -96,6 +90,53 @@ class Orders extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
+              ),
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrderDetail()),
+                ),
+                child: Row(
+                  children: [
+                    Card(
+                      child: Image(
+                        image: AssetImage('assets/products/iphone_15.png'),
+                        width: 120,
+                        height: 120,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Order order_0',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Raleway',
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Order Date: 2025-07-14',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Order Status: shipping',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               ...List.generate(
                 Order.getMockOrders().length,

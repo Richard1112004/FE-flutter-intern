@@ -1,7 +1,9 @@
+import 'package:begining/model/notification.dart';
 import 'package:flutter/material.dart';
 
 class NotificationDetail extends StatelessWidget {
-  const NotificationDetail({super.key});
+  final NotificationModel notification;
+  const NotificationDetail({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {
@@ -9,6 +11,12 @@ class NotificationDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text('Notification Details'),
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, 'refresh');
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -17,17 +25,12 @@ class NotificationDetail extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                'Upconing Installment',
+                notification.title,
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 20),
-            Text('''Hi Phuc Hung,
-Your next installment payment of for Iphone 15 Pro Max is due on 15/06/2025.
-
-Avoid late fees! Thank you for your prompt payment.
-Need help? Contact us at 0912812382.
-''', style: TextStyle(fontSize: 20)),
+            SizedBox(height: 0),
+            Text(notification.message, style: TextStyle(fontSize: 20)),
             SizedBox(height: 20),
           ],
         ),

@@ -1,3 +1,4 @@
+import 'package:begining/model/notification.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/notification/notification.dart';
@@ -138,6 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       icon: Icon(Icons.notification_add, color: Colors.black),
                       onPressed: () {
+                        print(NotificationModel.welcomeNotification);
+                        print(NotificationModel.reminderNotification);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
