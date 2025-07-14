@@ -1,10 +1,72 @@
+import 'package:begining/model/CartItem.dart';
+import 'package:begining/model/order.dart';
+import 'package:begining/model/product.dart';
 import 'package:begining/order/order_detail_track.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatelessWidget {
+  Widget orderCard(Order order, BuildContext context) {
+    print(Order.orders);
+    print(CartItem.cartItems);
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => OrderDetail()),
+      ),
+      child: Row(
+        children: [
+          Card(
+            child: Image(
+              image: AssetImage(
+                Product.getMockProductById(
+                  CartItem.getMockCartItemsByOrderId(order.id)[0].product_id,
+                )!.image,
+              ),
+              // width: 200,
+              // height: 200,
+            ),
+          ),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Order ${order.id}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Raleway',
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Order Date: ${order.createdAt.toLocal().toString().split(' ')[0]}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Order Status: ${order.status}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   const Orders({super.key});
   @override
   Widget build(BuildContext context) {
+    final orders = Order.getMockOrders();
+    print('=== ORDERS DEBUG ===');
+    print('Total orders: ${orders.length}');
+
+    if (orders.isNotEmpty) {
+      print('First order ID: ${orders[0].id}');
+      print('First order status: ${orders[0].status}');
+      print('First order date: ${orders[0].createdAt}');
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),
@@ -31,81 +93,12 @@ class Orders extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Card(
-                    child: Image(
-                      image: AssetImage('assets/products/iphone_16.png'),
-                      // width: 200,
-                      // height: 200,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Order #92287157',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Raleway',
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'Order Date: 2023-10-01',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OrderDetail(),
-                    ), // Thay NewPage bằng trang bạn muốn chuyển đến
-                  );
-                },
-                child: Row(
+              ...List.generate(
+                Order.getMockOrders().length,
+                (i) => Column(
                   children: [
-                    Card(
-                      child: Image(
-                        image: AssetImage('assets/products/laptop.png'),
-                        width: 118,
-                        height: 110,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Order #92287158',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Raleway',
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Order Date: 2023-10-02',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
+                    SizedBox(height: 20),
+                    orderCard(Order.getMockOrders()[i], context),
                   ],
                 ),
               ),

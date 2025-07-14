@@ -34,6 +34,12 @@ class CartItem {
     );
   }
 
+  // String representation of CartItem
+  @override
+  String toString() {
+    return 'CartItem{id: $id, quantity: $quantity, term: $term, userId: $userId, orderId: $orderId, product_id: $product_id}';
+  }
+
   // Mock data
   static List<CartItem> getMockCartItems() {
     return cartItems;
@@ -76,7 +82,7 @@ class CartItem {
     print(existingItemIndex);
     if (existingItemIndex != -1) {
       // Product exists, increment quantity by 1
-      
+
       cartItems[existingItemIndex].quantity += 1;
     } else {
       // Product doesn't exist, create new CartItem
@@ -90,20 +96,25 @@ class CartItem {
       );
     }
   }
+
   static decreaseCartItemQuantity(String productId) {
     // Find the index of the item to decrease
-    int indexToDecrease = cartItems.indexWhere((item) => item.product_id == productId);
+    int indexToDecrease = cartItems.indexWhere(
+      (item) => item.product_id == productId,
+    );
     if (indexToDecrease != -1) {
       // Decrease the quantity by 1
       if (cartItems[indexToDecrease].quantity > 1) {
         cartItems[indexToDecrease].quantity -= 1;
-      } 
+      }
     }
   }
 
   static increaseCartItemQuantity(String productId) {
     // Find the index of the item to increase
-    int indexToIncrease = cartItems.indexWhere((item) => item.product_id == productId);
+    int indexToIncrease = cartItems.indexWhere(
+      (item) => item.product_id == productId,
+    );
     if (indexToIncrease != -1) {
       // Increase the quantity by 1
       cartItems[indexToIncrease].quantity += 1;
@@ -112,12 +123,15 @@ class CartItem {
 
   static removeCurrentCartItem(String productId) {
     // Find the index of the item to remove
-    int indexToRemove = cartItems.indexWhere((item) => item.product_id == productId);
+    int indexToRemove = cartItems.indexWhere(
+      (item) => item.product_id == productId,
+    );
     if (indexToRemove != -1) {
       // Remove the item from the list
       cartItems.removeAt(indexToRemove);
     }
   }
+
   // Get mock cart items for a specific user
   static List<CartItem> getMockCartItemsByUserId(String userId) {
     return getMockCartItems().where((item) => item.userId == userId).toList();
@@ -125,7 +139,11 @@ class CartItem {
 
   // Get mock cart items for a specific order
   static List<CartItem> getMockCartItemsByOrderId(String orderId) {
-    return getMockCartItems().where((item) => item.orderId == orderId).toList();
+    print('Searching for orderId: $orderId');
+    return getMockCartItems().where((item) {
+      print('Item orderId: ${item.orderId}');
+      return item.orderId == orderId;
+    }).toList();
   }
 
   // Get a single mock cart item

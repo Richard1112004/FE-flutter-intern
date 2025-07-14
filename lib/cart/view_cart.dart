@@ -1,4 +1,5 @@
 import 'package:begining/model/CartItem.dart';
+import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/order/orders.dart';
@@ -379,7 +380,13 @@ class _ViewCartState extends State<ViewCart> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Total \$2,199.00',
+                              'Total \$${
+                                CartItem.cartItems.fold(
+                                  0.0,
+                                  (total, item) =>
+                                      total + Product.getMockProductById(item.product_id)!.price * item.quantity,
+                                ).toStringAsFixed(2)
+                              }',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -390,7 +397,19 @@ class _ViewCartState extends State<ViewCart> {
                           Spacer(),
                           TextButton(
                             onPressed: () {
-                              print(User.getMockUsers());
+                              print(Order.orders);
+                              Order.createOrder(
+                                'order_${Order.orders.length + 1}',
+                                user.id,
+                                DateTime.now(),
+                                CartItem.cartItems.fold(
+                                  0.0,
+                                  (total, item) =>
+                                      total + Product.getMockProductById(item.product_id)!.price * item.quantity,
+                                ),
+                                'pending',
+                              );
+                              print(Order.orders);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
