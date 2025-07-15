@@ -1,11 +1,14 @@
+import 'package:begining/api/auth/in_out_with_gg.dart';
 import 'package:begining/cart/view_cart.dart';
 import 'package:begining/model/order.dart';
+import 'package:begining/model/user.dart';
 import 'package:begining/order/orders.dart';
 import 'package:begining/profile/edit_my_profile.dart';
 import 'package:begining/profile/shipping_address.dart';
 import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
+import 'package:begining/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -242,11 +245,13 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                   ),
                   child: TextButton(
-                    onPressed: () => {
+                    onPressed: () async {
+                      await AuthService.signOut(context);
+                      User.clearAllUsers();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      ),
+                        MaterialPageRoute(builder: (context) => const StartScreen()),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.white),

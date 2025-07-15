@@ -1,3 +1,4 @@
+import 'package:begining/api/auth/in_out_with_gg.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/provider/user_provider.dart';
@@ -16,33 +17,6 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  static final _googleSignIn = GoogleSignIn().signIn();
-
-
-  static Future<GoogleSignInAccount?>login () => _googleSignIn;
-
-  Future signIn() async {
-    final user = await login();
-    
-    if (user == null){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign in failed')),
-      );
-    }
-    else {
-      // Handle successful sign-in
-      print('User signed in: ${user.email}');
-      print(User.getMockUsers());
-      print(CartItem.iPhone_15);
-      print(CartItem.iPhone_16);
-      Provider.of<UserProvider>(context, listen: false).setUser(user);
-      
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +69,30 @@ class _StartScreenState extends State<StartScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: TextButton(
-                onPressed: signIn,
+                onPressed: () async {
+                  final user = await AuthService.signIn();
+
+                  if (user == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Sign in failed')),
+                    );
+                  } else {
+                    // Handle successful sign-in
+                    print('User signed in: ${user.email}');
+                    print(User.getMockUsers());
+                    print(CartItem.iPhone_15);
+                    print(CartItem.iPhone_16);
+                    Provider.of<UserProvider>(
+                      context,
+                      listen: false,
+                    ).setUser(user);
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  }
+                },
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.white),
                   foregroundColor: WidgetStatePropertyAll(

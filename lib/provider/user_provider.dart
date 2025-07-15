@@ -9,11 +9,13 @@ class UserProvider with ChangeNotifier {
 
   void setUser(GoogleSignInAccount? user) {
     _user = user;
-    User.createGoogleUser(
+    if (user != null) {
+      User.createGoogleUser(
         user?.email ?? '',
         user?.displayName ?? '',
         user?.photoUrl ?? '',
       );
+    }
     notifyListeners();
   }
 
