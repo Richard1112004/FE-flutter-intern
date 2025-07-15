@@ -1,8 +1,48 @@
+import 'package:begining/model/CartItem.dart';
+import 'package:begining/model/user.dart';
+import 'package:begining/provider/user_provider.dart';
+import 'package:begining/screen/home_screen.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/register_screen.dart';
 import 'package:flutter/material.dart';
-class StartScreen extends StatelessWidget {
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+
+class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
+
+  @override
+  State<StartScreen> createState() => _StartScreenState();
+}
+
+class _StartScreenState extends State<StartScreen> {
+  static final _googleSignIn = GoogleSignIn().signIn();
+
+
+  static Future<GoogleSignInAccount?>login () => _googleSignIn;
+
+  Future signIn() async {
+    final user = await login();
+    
+    if (user == null){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sign in failed')),
+      );
+    }
+    else {
+      // Handle successful sign-in
+      print('User signed in: ${user.email}');
+      print(User.getMockUsers());
+      print(CartItem.iPhone_15);
+      print(CartItem.iPhone_16);
+      Provider.of<UserProvider>(context, listen: false).setUser(user);
+      
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +70,18 @@ class StartScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: TextButton(
                 onPressed: () => {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const RegisterScreen(),
-                  )),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterScreen(),
+                    ),
+                  ),
                 },
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(
                     const Color.fromARGB(255, 0, 76, 255),
                   ),
-                  foregroundColor: WidgetStatePropertyAll(
-                    Colors.white,
-                  ),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white),
                   minimumSize: WidgetStatePropertyAll(
                     const Size(double.infinity, 50),
                   ),
@@ -54,13 +95,9 @@ class StartScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: TextButton(
-                onPressed: () => {
-                  
-                },
+                onPressed: signIn,
                 style: ButtonStyle(
-                  backgroundColor:  WidgetStatePropertyAll(
-                    Colors.white,
-                  ),
+                  backgroundColor: WidgetStatePropertyAll(Colors.white),
                   foregroundColor: WidgetStatePropertyAll(
                     const Color.fromARGB(255, 75, 75, 75),
                   ),
@@ -107,9 +144,12 @@ class StartScreen extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => {
-                    Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  )),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    ),
                   },
                   icon: const Icon(
                     Icons.arrow_circle_right_rounded,

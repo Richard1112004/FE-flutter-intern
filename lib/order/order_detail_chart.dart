@@ -1,10 +1,13 @@
+import 'package:begining/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailChart extends StatelessWidget {
   const OrderDetailChart({super.key});
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Order #92287158'),
@@ -21,7 +24,9 @@ class OrderDetailChart extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/profile/user.png'),
+                    backgroundImage: userProvider.isLoggedIn
+                        ? NetworkImage(userProvider.user!.photoUrl!)
+                        : AssetImage('assets/profile/user.png') as ImageProvider,
                     backgroundColor: Colors.white,
                   ),
                   SizedBox(width: 10),

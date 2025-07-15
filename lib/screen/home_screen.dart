@@ -7,14 +7,15 @@ import 'package:begining/profile/my_profile.dart';
 import 'package:begining/provider/carousel_provider.dart';
 import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/provider/password_provider.dart';
+import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
-  // Track the active index for the carousel
   const HomeScreen({super.key});
   static const urlImages = [
     Image(image: AssetImage('assets/home.png')),
@@ -79,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final carouselProvider = Provider.of<CarouselProvider>(context);
     final navigationProvider = Provider.of<NavigationProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
     int activeIndex = carouselProvider.activeIndex;
     // navigationProvider.setIndex(0, context); // Set the initial index to 0 for Home Screen
     return WillPopScope(
@@ -103,10 +105,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: Image(
-                        image: AssetImage('assets/profile/user.png'),
-                        width: 50,
-                        height: 50,
+                      child: ClipOval(
+
+                        child: userProvider.isLoggedIn
+                            ? Image(
+                                image: NetworkImage(userProvider.user!.photoUrl!),
+                                width: 30,
+                                height: 30,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/profile/user.png',
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     Expanded(

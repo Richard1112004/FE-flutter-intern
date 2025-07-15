@@ -2,7 +2,9 @@ import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/order/order_detail_track.dart';
+import 'package:begining/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Orders extends StatelessWidget {
   Widget orderCard(Order order, BuildContext context) {
@@ -51,6 +53,7 @@ class Orders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orders = Order.getMockOrders();
+    final userProvider = Provider.of<UserProvider>(context);
     print('=== ORDERS DEBUG ===');
     print('Total orders: ${orders.length}');
 
@@ -81,7 +84,9 @@ class Orders extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/profile/user.png'),
+                    backgroundImage: userProvider.isLoggedIn
+                        ? NetworkImage(userProvider.user!.photoUrl!)
+                        : AssetImage('assets/profile/user.png') as ImageProvider,
                     backgroundColor: Colors.white,
                   ),
                   SizedBox(width: 10),

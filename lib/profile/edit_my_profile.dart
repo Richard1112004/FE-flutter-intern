@@ -1,14 +1,18 @@
 import 'package:begining/model/user.dart';
 import 'package:begining/provider/password_provider.dart';
+import 'package:begining/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class EditMyProfile extends StatelessWidget {
-  const EditMyProfile({super.key});
+  final GoogleSignInAccount? user;
+  const EditMyProfile({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
     final passwordProvider = Provider.of<PasswordProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
     final TextEditingController emailController = User.getMockUser().email != '' ? TextEditingController(text: User.getMockUser().email) : TextEditingController();
     final TextEditingController phoneController = User.getMockUser().phone != '' ? TextEditingController(text: User.getMockUser().phone) : TextEditingController();
     final TextEditingController nameController = User.getMockUser().name != '' ? TextEditingController(text: User.getMockUser().name) : TextEditingController();
@@ -47,7 +51,9 @@ class EditMyProfile extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('assets/profile/user.png'),
+                      backgroundImage: userProvider.isLoggedIn
+                          ? NetworkImage(userProvider.user!.photoUrl!)
+                          : AssetImage('assets/profile/user.png') as ImageProvider,
                       backgroundColor: Colors.white,
                     ),
                     Positioned(

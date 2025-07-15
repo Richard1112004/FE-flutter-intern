@@ -247,6 +247,7 @@ class _ViewCartState extends State<ViewCart> {
   @override
   Widget build(BuildContext context) {
     cartProvider = Provider.of<CartProvider>(context);
+    print(CartItem.cartItems);
     final plans = [
       {
         "duration": "6 months",

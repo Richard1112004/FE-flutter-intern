@@ -6,6 +6,7 @@ class User {
   String phone;
   String province;
   String street;
+  String photoUrl;
 
   static List<User> _allUsers = [];
 
@@ -13,10 +14,11 @@ class User {
     this.id = '1',
     this.name = '',
     required this.email,
-    required this.password,
-    required this.phone,
+    this.password = '',
+    this.phone = '',
     this.province = '',
     this.street = '',
+    this.photoUrl = 'assets/profile/user.png',
   }) {
     _allUsers.add(this);
   }
@@ -42,6 +44,7 @@ class User {
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       password: map['password'] ?? '',
+      photoUrl: map['photoUrl'] ?? '',
       phone: map['phone'] ?? '',
       province: map['province'] ?? '',
       street: map['street'] ?? '',
@@ -77,6 +80,10 @@ class User {
   // create a user from email and password and phone number
   static User createUser(String email, String password, String phone) {
     return User(email: email, password: password, phone: phone);
+  }
+  static User createGoogleUser(
+      String email, String name, String photoUrl) {
+    return User(email: email, name: name, photoUrl: photoUrl);
   }
 
   static void clearAllUsers() {

@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("com.google.gms.google-services") // ✅ đúng
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -15,6 +15,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    signingConfigs {
+        getByName("debug"){
+            keyAlias = "my-key-alias"
+            keyPassword = "1234565213"
+            storeFile = file("C:/Users/dell/Desktop/BKnam3ki3/task on company/begining/android/app/my-release-key.jks")
+            storePassword = "1234565213"
+        }
+    }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
@@ -24,7 +33,7 @@ android {
         applicationId = "com.example.begining"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
