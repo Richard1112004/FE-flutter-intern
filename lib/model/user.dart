@@ -99,6 +99,15 @@ class User {
     return null; // Return null if no user matches
   }
 
+  static User? verifyEmail(String email) {
+    for (var user in _allUsers) {
+      if (user.email == email) {
+        return user; // Return the user if email matches
+      }
+    }
+    return null; // Return null if no user matches
+  }
+
   static bool userExists(String email) {
     for (var user in _allUsers) {
       if (user.email == email) {
@@ -106,5 +115,14 @@ class User {
       }
     }
     return false; // No user with this email found
+  }
+
+  static User? getUserByEmail(String email) {
+    for (var user in _allUsers) {
+      if (user.email == email) {
+        return user; // Return the user if email matches
+      }
+    }
+    return null; // Return null if no user matches
   }
 }

@@ -1,3 +1,4 @@
+import 'package:begining/model/user.dart';
 import 'package:begining/screen/forgotpasswordselect_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +6,7 @@ class ForgotpasswordScreen extends StatelessWidget {
   const ForgotpasswordScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -35,6 +37,7 @@ class ForgotpasswordScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
@@ -58,14 +61,28 @@ class ForgotpasswordScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextButton(
-                      onPressed: () => {
+                      onPressed: () {
+                        User? user = User.verifyEmail(emailController.text);
+                        if (user == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Email not found'),
+                            ),
+                          );
+                          return;
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Email sent to ${user.email}'),
+                          ),
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
                                 const ForgotpasswordselectScreen(),
                           ),
-                        ),
+                        );
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(

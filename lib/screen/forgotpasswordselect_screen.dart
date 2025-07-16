@@ -53,7 +53,7 @@ class ForgotpasswordselectScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Password Recovery',
+                      'OTP',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

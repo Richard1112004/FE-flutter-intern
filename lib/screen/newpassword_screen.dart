@@ -1,11 +1,34 @@
+import 'package:begining/model/user.dart';
+import 'package:begining/provider/password_provider.dart';
+import 'package:begining/provider/repeat_password_provider.dart';
 import 'package:begining/screen/home_screen.dart';
+import 'package:begining/screen/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class NewpasswordScreen extends StatelessWidget {
+class NewpasswordScreen extends StatefulWidget {
   const NewpasswordScreen({super.key});
 
   @override
+  State<NewpasswordScreen> createState() => _NewpasswordScreenState();
+}
+
+class _NewpasswordScreenState extends State<NewpasswordScreen> {
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController repeatPasswordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    repeatPasswordController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
+    final newPasswordProvider = Provider.of<PasswordProvider>(context);
+    final repeatPasswordProvider = Provider.of<RepeatPasswordProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -32,7 +55,8 @@ class NewpasswordScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: TextField(
-                  obscureText: false,
+                  controller: newPasswordController,
+                  obscureText: !newPasswordProvider.currentIndex,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -50,6 +74,20 @@ class NewpasswordScreen extends StatelessWidget {
                     ),
                     filled: true,
                     fillColor: Color.fromARGB(255, 248, 248, 248),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        newPasswordProvider.currentIndex
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        weight: 5,
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        newPasswordProvider.setIndex(
+                          !newPasswordProvider.currentIndex,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -57,7 +95,8 @@ class NewpasswordScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: TextField(
-                  obscureText: true,
+                  controller: repeatPasswordController,
+                  obscureText: !repeatPasswordProvider.currentIndex,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -74,6 +113,20 @@ class NewpasswordScreen extends StatelessWidget {
                     ),
                     filled: true,
                     fillColor: Color.fromARGB(255, 248, 248, 248),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        repeatPasswordProvider.currentIndex
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        weight: 5,
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        repeatPasswordProvider.setIndex(
+                          !repeatPasswordProvider.currentIndex,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -81,11 +134,44 @@ class NewpasswordScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: TextButton(
-                  onPressed: () => {
+                  onPressed: () {
+                    if (newPasswordController.text.isEmpty ||
+                        repeatPasswordController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Please fill in all fields')),
+                      );
+                      return;
+                    } else if (newPasswordController.text !=
+                        repeatPasswordController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Passwords do not match')),
+                      );
+                      return;
+                    } else {
+                      User? user = User.getUserByEmail(
+                        User.getMockUser().email,
+                      );
+                      if (user == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('User not found')),
+                        );
+                        return;
+                      }
+                      user.password = newPasswordController.text;
+                      print(User.getMockUser()); // For debugging purposes
+                      // Handle password change logic here
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Password changed successfully'),
+                        ),
+                      );
+                    }
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    ),
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(
@@ -95,7 +181,9 @@ class NewpasswordScreen extends StatelessWidget {
                     shadowColor: WidgetStateProperty.all(
                       Colors.black.withOpacity(0.5),
                     ),
-                    elevation: WidgetStateProperty.resolveWith<double>((states) {
+                    elevation: WidgetStateProperty.resolveWith<double>((
+                      states,
+                    ) {
                       return states.contains(WidgetState.pressed)
                           ? 0.0
                           : 2.0; // Nhấn thì bóng biến mất

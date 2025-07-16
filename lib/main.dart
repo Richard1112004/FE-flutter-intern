@@ -1,6 +1,7 @@
 import 'package:begining/provider/carousel_provider.dart';
 import 'package:begining/provider/cart_provider.dart';
 import 'package:begining/provider/pincode_provider.dart';
+import 'package:begining/provider/repeat_password_provider.dart';
 import 'package:begining/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:begining/provider/navigation_provider.dart';
@@ -20,7 +21,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => CarouselProvider()),
       ChangeNotifierProvider(create: (_) => CartProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()
-      )
+      ),
+      ChangeNotifierProvider(create: (_) => RepeatPasswordProvider()),
       ],
       child: const MyApp(),
     ),

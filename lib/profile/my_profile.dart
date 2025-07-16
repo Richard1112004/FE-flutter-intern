@@ -247,7 +247,7 @@ class _MyProfileState extends State<MyProfile> {
                   child: TextButton(
                     onPressed: () async {
                       await AuthService.signOut(context);
-                      User.clearAllUsers();
+                      // User.clearAllUsers();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const StartScreen()),
