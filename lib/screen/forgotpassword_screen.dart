@@ -7,14 +7,12 @@ import 'package:provider/provider.dart';
 
 class ForgotpasswordScreen extends StatefulWidget {
   const ForgotpasswordScreen({super.key});
-
   @override
   State<ForgotpasswordScreen> createState() => _ForgotpasswordScreenState();
 }
 
 class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
   final TextEditingController emailController = TextEditingController();
-
   Future<bool> sendOTP(String email, PinCodeProvider pinCodeProvider) async {
     EmailAuth emailAuth = EmailAuth(sessionName: "Password Recovery");
     pinCodeProvider.setEmailAuth(emailAuth);
@@ -35,9 +33,16 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final PinCodeProvider pinCodeProvider = Provider.of<PinCodeProvider>(context, listen: false);
+    final PinCodeProvider pinCodeProvider = Provider.of<PinCodeProvider>(
+      context,
+      listen: true,
+    );
+    print('-----------------------------');
+    print(pinCodeProvider.isValid);
+    print('-----------------------------');
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -65,6 +70,10 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
                     'Enter your email to recover your password',
                     style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
+                  // Text(
+                  //   'Invalid OTP. Please try again.',
+                  //   style: TextStyle(fontSize: 16, color: Colors.red),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextField(
@@ -93,15 +102,17 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
                     padding: const EdgeInsets.all(12.0),
                     child: TextButton(
                       onPressed: () async {
-                        // User? user = User.verifyEmail(emailController.text);
-                        // if (user == null) {
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //     SnackBar(content: Text('Email not found')),
-                        //   );
-                        //   return;
-                        // }
-                        bool otpSent =
-                            await sendOTP(emailController.text, pinCodeProvider); // <-- Gọi hàm có return bool
+                        User? user = User.verifyEmail(emailController.text);
+                        if (user == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Email not found')),
+                          );
+                          return;
+                        }
+                        bool otpSent = await sendOTP(
+                          emailController.text,
+                          pinCodeProvider,
+                        ); // <-- Gọi hàm có return bool
 
                         if (otpSent) {
                           Navigator.push(
@@ -120,18 +131,18 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
                             ),
                           );
                         }
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(
-                        //     content: Text('Email sent to ${user.email}'),
-                        //   ),
-                        // );
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         const ForgotpasswordselectScreen(),
-                        //   ),
-                        // );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Email sent to ${user.email}'),
+                          ),
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const ForgotpasswordselectScreen(),
+                          ),
+                        );
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(

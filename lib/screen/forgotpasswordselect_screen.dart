@@ -29,9 +29,7 @@ class ForgotpasswordselectScreen extends StatelessWidget {
       Future.delayed(Duration.zero, () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => const NewpasswordScreen(),
-          ),
+          MaterialPageRoute(builder: (context) => const NewpasswordScreen()),
         );
       });
     }
@@ -60,10 +58,15 @@ class ForgotpasswordselectScreen extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    Text(
-                      'Enter 4-digits code we sent you on email',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
+                    pincode.isValid
+                        ? Text(
+                            'Enter your 4-digit code',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          )
+                        : Text(
+                            'Invalid OTP. Please try again.',
+                            style: TextStyle(fontSize: 16, color: Colors.red),
+                          ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

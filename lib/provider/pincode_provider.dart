@@ -5,6 +5,7 @@ class PinCodeProvider with ChangeNotifier {
   String _enteredPin = '';
   bool _isPinVisible = false;
   bool _isCompleted = false;
+  bool _isValid = true;
   EmailAuth _emailAuth = EmailAuth(sessionName: "Password Recovery");
   String _email = '';
 
@@ -14,16 +15,21 @@ class PinCodeProvider with ChangeNotifier {
   bool get isCompleted => _isCompleted;
   EmailAuth get emailAuthInstance => _emailAuth;
   String get email => _email;
+  bool get isValid => _isValid;
 
   void addDigit(int digit) {
     if (_enteredPin.length < 4) {
       _enteredPin += digit.toString();
       if (_enteredPin.length == 4) {
         if (isValidPin(_enteredPin)) {
+          print('true');
           _isCompleted = true;
         } else {
           // Handle invalid pin case
+          print('false');
+          _isValid = false;
           _enteredPin = '';
+          print('rebuilding');
           notifyListeners();
           return;
         }
@@ -31,6 +37,7 @@ class PinCodeProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   bool isValidPin(String pin) {
     print('Validating pin: $pin');

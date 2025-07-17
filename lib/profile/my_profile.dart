@@ -6,6 +6,7 @@ import 'package:begining/order/orders.dart';
 import 'package:begining/profile/edit_my_profile.dart';
 import 'package:begining/profile/shipping_address.dart';
 import 'package:begining/provider/navigation_provider.dart';
+import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:begining/screen/start_screen.dart';
@@ -31,6 +32,7 @@ class _MyProfileState extends State<MyProfile> {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         // Prevent the back button from navigating away
@@ -246,7 +248,10 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                   child: TextButton(
                     onPressed: () async {
-                      await AuthService.signOut(context);
+                      if (userProvider.isLoggedIn) {
+                        // If user is logged in, sign out
+                        await AuthService.signOut(context);
+                      } 
                       // User.clearAllUsers();
                       Navigator.push(
                         context,
