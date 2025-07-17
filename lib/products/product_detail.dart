@@ -119,7 +119,7 @@ class ProductDetail extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Iphone15Options(),
+                            builder: (context) => Iphone15Options(product: product,),
                           ),
                         ),
                       },

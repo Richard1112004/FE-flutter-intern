@@ -33,7 +33,6 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final PinCodeProvider pinCodeProvider = Provider.of<PinCodeProvider>(
@@ -109,6 +108,31 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
                           );
                           return;
                         }
+                        showDialog(
+                          context: context,
+                          barrierDismissible:
+                              false, // Không cho phép đóng bằng cách tap ngoài
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: Row(
+                                children: [
+                                  CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF007FFF),
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  Expanded(
+                                    child: Text(
+                                      'Sending OTP to your email...',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
                         bool otpSent = await sendOTP(
                           emailController.text,
                           pinCodeProvider,

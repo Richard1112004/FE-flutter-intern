@@ -1,8 +1,11 @@
+import 'package:begining/model/product.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
 
 class Iphone15Options extends StatelessWidget {
-  const Iphone15Options({super.key});
+  const Iphone15Options({super.key, required this.product});
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class Iphone15Options extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                      image: const AssetImage('assets/products/iphone_16.png'),
+                      image: AssetImage(product.image),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -41,7 +44,7 @@ class Iphone15Options extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      '\$ 1,199',
+                      '\$${product.price.toString()}',
                       style: TextStyle(
                         fontSize: 20,
                         fontFamily: 'Raleway',
@@ -98,13 +101,13 @@ class Iphone15Options extends StatelessWidget {
                               ),
                               columns: [
                                 DataColumn(label: Text('Product Price')),
-                                DataColumn(label: Text('\$ 1500')),
+                                DataColumn(label: Text(product.price.toString())),
                               ],
                               rows: [
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Down payment'))),
-                                    DataCell(Text('\$ 150')),
+                                    DataCell(Text((product.price/10).toString())),
                                   ],
                                 ),
                                 DataRow(
@@ -122,19 +125,19 @@ class Iphone15Options extends StatelessWidget {
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Monthly Payment'))),
-                                    DataCell(Text('\$ 230')),
+                                    DataCell(Text(((product.price-(product.price/10))/6+5).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Difference'))),
-                                    DataCell(Text('\$ 110')),
+                                    DataCell(Text((((product.price-(product.price/10))/6+5)*6-9/10*product.price).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Total Payment'))),
-                                    DataCell(Text('\$ 1610')),
+                                    DataCell(Text((((product.price-(product.price/10))/6+5)*6-9/10*product.price+product.price).toStringAsFixed(2))),
                                   ],
                                 ),
                               ],
@@ -173,19 +176,19 @@ class Iphone15Options extends StatelessWidget {
                               ),
                               columns: [
                                 DataColumn(label: Text('Product Price')),
-                                DataColumn(label: Text('\$ 1500')),
+                                DataColumn(label: Text(product.price.toString())),
                               ],
                               rows: [
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Down payment'))),
-                                    DataCell(Text('\$ 150')),
+                                    DataCell(Text((product.price/10).toString())),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Term'))),
-                                    DataCell(Text('6 months')),
+                                    DataCell(Text('9 months')),
                                   ],
                                 ),
                                 DataRow(
@@ -197,19 +200,19 @@ class Iphone15Options extends StatelessWidget {
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Monthly Payment'))),
-                                    DataCell(Text('\$ 230')),
+                                    DataCell(Text(((product.price/10)/9+10).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Difference'))),
-                                    DataCell(Text('\$ 110')),
+                                    DataCell(Text((((product.price-(product.price/10))/9+10)*9-9/10*product.price).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Total Payment'))),
-                                    DataCell(Text('\$ 1610')),
+                                    DataCell(Text((((product.price-(product.price/10))/9+10)*9-9/10*product.price+product.price).toStringAsFixed(2))),
                                   ],
                                 ),
                               ],
@@ -248,19 +251,19 @@ class Iphone15Options extends StatelessWidget {
                               ),
                               columns: [
                                 DataColumn(label: Text('Product Price')),
-                                DataColumn(label: Text('\$ 1500')),
+                                DataColumn(label: Text(product.price.toString())),
                               ],
                               rows: [
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Down payment'))),
-                                    DataCell(Text('\$ 150')),
+                                    DataCell(Text((product.price/10).toString())),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Term'))),
-                                    DataCell(Text('6 months')),
+                                    DataCell(Text('12 months')),
                                   ],
                                 ),
                                 DataRow(
@@ -272,19 +275,19 @@ class Iphone15Options extends StatelessWidget {
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Monthly Payment'))),
-                                    DataCell(Text('\$ 230')),
+                                    DataCell(Text(((product.price/10)/12+15).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Difference'))),
-                                    DataCell(Text('\$ 110')),
+                                    DataCell(Text((((product.price-(product.price/10))/12+15)*12-9/10*product.price).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Total Payment'))),
-                                    DataCell(Text('\$ 1610')),
+                                    DataCell(Text(((((product.price-(product.price/10))/12+15)*12-9/10*product.price+product.price).toStringAsFixed(2)))),
                                   ],
                                 ),
                               ],

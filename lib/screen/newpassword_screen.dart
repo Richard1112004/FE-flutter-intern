@@ -94,7 +94,7 @@ class _NewpasswordScreenState extends State<NewpasswordScreen> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: TextField(
+                child: TextFormField(
                   controller: repeatPasswordController,
                   obscureText: !repeatPasswordProvider.currentIndex,
                   decoration: InputDecoration(
