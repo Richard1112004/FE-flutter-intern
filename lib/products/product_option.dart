@@ -200,7 +200,7 @@ class Iphone15Options extends StatelessWidget {
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Monthly Payment'))),
-                                    DataCell(Text(((product.price/10)/9+10).toStringAsFixed(2))),
+                                    DataCell(Text(((product.price - product.price/10)/9+10).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
@@ -275,7 +275,7 @@ class Iphone15Options extends StatelessWidget {
                                 DataRow(
                                   cells: [
                                     DataCell(Text(('Monthly Payment'))),
-                                    DataCell(Text(((product.price/10)/12+15).toStringAsFixed(2))),
+                                    DataCell(Text(((product.price - product.price/10)/12+15).toStringAsFixed(2))),
                                   ],
                                 ),
                                 DataRow(
