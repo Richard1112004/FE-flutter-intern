@@ -26,7 +26,10 @@ class _MyProfileState extends State<MyProfile> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Set the current index to the profile section
-      Provider.of<NavigationProvider>(context, listen: false).setCurrentIndex(2);
+      Provider.of<NavigationProvider>(
+        context,
+        listen: false,
+      ).setCurrentIndex(2);
     });
   }
 
@@ -66,7 +69,9 @@ class _MyProfileState extends State<MyProfile> {
                     onPressed: () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const EditMyProfile()),
+                        MaterialPageRoute(
+                          builder: (context) => const EditMyProfile(),
+                        ),
                       ),
                     },
                     style: ButtonStyle(
@@ -156,7 +161,9 @@ class _MyProfileState extends State<MyProfile> {
                     onPressed: () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ViewCart()),
+                        MaterialPageRoute(
+                          builder: (context) => const ViewCart(),
+                        ),
                       ),
                     },
                     style: ButtonStyle(
@@ -201,7 +208,9 @@ class _MyProfileState extends State<MyProfile> {
                     onPressed: () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ShippingAddress()),
+                        MaterialPageRoute(
+                          builder: (context) => const ShippingAddress(),
+                        ),
                       ),
                     },
                     style: ButtonStyle(
@@ -248,15 +257,176 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                   child: TextButton(
                     onPressed: () async {
-                      if (userProvider.isLoggedIn) {
-                        // If user is logged in, sign out
-                        await AuthService.signOut(context);
-                      } 
-                      // User.clearAllUsers();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const StartScreen()),
+                      // Hiển thị popup xác nhận logout
+                      bool? shouldLogout = await showDialog<bool>(
+                        context: context,
+                        barrierDismissible:
+                            false, // Không cho phép đóng bằng cách tap ngoài
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            title: Row(
+                              children: [
+                                Icon(Icons.logout, color: Colors.red, size: 24),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            content: Text(
+                              'Are you sure you want to log out of this account?',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(
+                                    context,
+                                  ).pop(false); // Trả về false (Cancel)
+                                },
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.grey[600],
+                                ),
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(
+                                    context,
+                                  ).pop(true); // Trả về true (Logout)
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       );
+
+                      // Nếu user chọn logout (shouldLogout == true)
+                      if (shouldLogout == true) {
+                        // Hiển thị loading dialog trong quá trình logout
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              backgroundColor: Colors.transparent,
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.red,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      'Logging out...',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+
+                        try {
+                          if (userProvider.isLoggedIn) {
+                            // If user is logged in, sign out
+                            await AuthService.signOut(context);
+                          }
+
+                          // Đóng loading dialog
+                          Navigator.of(context).pop();
+
+                          // User.clearAllUsers();
+
+                          // Hiển thị thông báo thành công
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.white),
+                                  SizedBox(width: 10),
+                                  Text('Successfully logged out'),
+                                ],
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+
+                          // Chuyển về màn hình start
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const StartScreen(),
+                            ),
+                            (Route<dynamic> route) =>
+                                false, // Xóa tất cả các route trước đó
+                          );
+                        } catch (e) {
+                          // Đóng loading dialog nếu có lỗi
+                          Navigator.of(context).pop();
+
+                          // Hiển thị thông báo lỗi
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  Icon(Icons.error, color: Colors.white),
+                                  SizedBox(width: 10),
+                                  Text('Logout failed. Please try again.'),
+                                ],
+                              ),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+
+                          print('Logout error: $e');
+                        }
+                      }
+                      // Nếu user chọn Cancel (shouldLogout == false hoặc null), không làm gì cả
                     },
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -291,18 +461,11 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text('Richard Shop', 
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 Text(
-                  'Version 1.0.0',
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
+                  'Richard Shop',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                Text('Version 1.0.0', style: TextStyle(fontSize: 13)),
               ],
             ),
           ),
