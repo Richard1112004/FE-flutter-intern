@@ -54,7 +54,16 @@ class _NewpasswordScreenState extends State<NewpasswordScreen> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: TextField(
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your new password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
                   controller: newPasswordController,
                   obscureText: !newPasswordProvider.currentIndex,
                   keyboardType: TextInputType.emailAddress,
@@ -95,6 +104,18 @@ class _NewpasswordScreenState extends State<NewpasswordScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please repeat your new password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    if (value != newPasswordController.text) {
+                      return 'Passwords do not match';
+                    }
+                    return null;
+                  },
                   controller: repeatPasswordController,
                   obscureText: !repeatPasswordProvider.currentIndex,
                   decoration: InputDecoration(

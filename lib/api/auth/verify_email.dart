@@ -78,7 +78,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               child: TextButton(
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(
-                    Color.fromARGB(255, 18, 17, 0),
+                    Color.fromARGB(255, 0, 76, 255),
                   ),
                   foregroundColor: WidgetStatePropertyAll(Colors.white),
                   shadowColor: WidgetStatePropertyAll(
