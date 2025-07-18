@@ -1,5 +1,6 @@
 import 'package:begining/model/user.dart';
 import 'package:begining/provider/password_provider.dart';
+import 'package:begining/provider/pincode_provider.dart';
 import 'package:begining/provider/repeat_password_provider.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:begining/screen/login_screen.dart';
@@ -30,7 +31,10 @@ class _NewpasswordScreenState extends State<NewpasswordScreen> {
   Widget build(BuildContext context) {
     final newPasswordProvider = Provider.of<PasswordProvider>(context);
     final repeatPasswordProvider = Provider.of<RepeatPasswordProvider>(context);
-
+    final PinCodeProvider pinCodeProvider = Provider.of<PinCodeProvider>(
+      context,
+      listen: true,
+    );
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -162,7 +166,7 @@ class _NewpasswordScreenState extends State<NewpasswordScreen> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         User? user = User.getUserByEmail(
-                          User.getMockUser().email,
+                          pinCodeProvider.email,
                         );
                         if (user == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
