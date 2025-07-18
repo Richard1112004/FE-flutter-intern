@@ -3,8 +3,10 @@ import 'package:begining/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OrderDetail extends StatelessWidget {
-  const OrderDetail({super.key});
+class OrderDetailTrack extends StatelessWidget {
+  const OrderDetailTrack({super.key, required this.productName});
+  final String productName;
+
   Widget _buildTimelineItem({
     required String description,
     required bool isCompleted,
@@ -94,7 +96,7 @@ class OrderDetail extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order #92287158'),
+        title: Text(productName),
         backgroundColor: Colors.white,
       ),
       body: Center(
@@ -115,7 +117,7 @@ class OrderDetail extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'Track you order',
+                    'Track product',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
@@ -127,7 +129,7 @@ class OrderDetail extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                OrderDetailChart(),
+                                OrderDetailChart(productName: productName),
                           ),
                         );
                     },
@@ -144,6 +146,7 @@ class OrderDetail extends StatelessWidget {
                       ), // Kích thước tối thiểu
                     ),
                   ),
+                  SizedBox(width: 0),
                   IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(Icons.fire_truck, color: Colors.white),

@@ -1,6 +1,7 @@
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
+import 'package:begining/order/order_detail.dart';
 import 'package:begining/order/order_detail_track.dart';
 import 'package:begining/provider/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -10,42 +11,50 @@ class Orders extends StatelessWidget {
   Widget orderCard(Order order, BuildContext context) {
     print(Order.orders);
     print(CartItem.cartItems);
-    return Row(
-      children: [
-        Card(
-          child: Image(
-            image: AssetImage(
-              order.image, // Assuming order.image is a valid asset path
-            ),
-            width: 120,
-            height: 120,
-          ),
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderDetail(order: order),
         ),
-        SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Order ${order.id}',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Raleway',
+      ),
+      child: Row(
+        children: [
+          Card(
+            child: Image(
+              image: AssetImage(
+                order.image[0], // Assuming order.image is a valid asset path
               ),
+              width: 120,
+              height: 120,
             ),
-            SizedBox(height: 5),
-            Text(
-              'Order Date: ${order.createdAt.toLocal().toString().split(' ')[0]}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(height: 5),
-            Text(
-              'Order Status: ${order.status}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ],
+          ),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Order ${order.id}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Raleway',
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Order Date: ${order.createdAt.toLocal().toString().split(' ')[0]}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Order Status: ${order.status}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

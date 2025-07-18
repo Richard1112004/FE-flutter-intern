@@ -461,9 +461,12 @@ class _ViewCartState extends State<ViewCart> {
                                   'order_${Order.orders.length + 1}',
                                   user.id,
                                   DateTime.now(),
-                                  Product.getMockProductById(
-                                    CartItem.cartItems[0].product_id,
-                                  )!.image,
+                                  CartItem.cartItems
+                                      .map((item) => Product.getMockProductById(item.product_id)!.image)
+                                      .toList(),
+                                  CartItem.cartItems
+                                      .map((item) => item.product_id)
+                                      .toList(),
                                   CartItem.cartItems.fold(
                                     0.0,
                                     (total, item) =>

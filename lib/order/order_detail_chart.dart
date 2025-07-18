@@ -4,13 +4,15 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailChart extends StatelessWidget {
-  const OrderDetailChart({super.key});
+  const OrderDetailChart({super.key, required this.productName});
+  final String productName;
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order #92287158'),
+        title: Text(productName),
         backgroundColor: Colors.white,
       ),
       body: Center(
@@ -31,7 +33,7 @@ class OrderDetailChart extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'Chart order',
+                    'Chart product',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
@@ -42,7 +44,7 @@ class OrderDetailChart extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => OrderDetailChart(),
+                          builder: (context) => OrderDetailChart(productName: productName,),
                         ),
                       );
                     },

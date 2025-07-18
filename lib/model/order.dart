@@ -4,7 +4,8 @@ class Order {
   final DateTime createdAt;
   final double total;
   final String status;
-  final String image;
+  final List<String> image;
+  List<String> productID = [];
   static List<Order> orders = [];
 
   Order({
@@ -14,6 +15,7 @@ class Order {
     required this.total,
     required this.image,
     required this.status,
+    required this.productID,
   }) {
     orders.add(this);
   }
@@ -26,6 +28,7 @@ class Order {
       createdAt: DateTime.parse(
         map['createdAt'] ?? DateTime.now().toIso8601String(),
       ),
+      productID: List<String>.from(map['productID'] ?? []),
       image: map['image'] ?? '',
       total: map['total']?.toDouble() ?? 0.0,
       status: map['status'] ?? '',
@@ -47,7 +50,8 @@ class Order {
     String id,
     String userId,
     DateTime createdAt,
-    String image,
+    List<String> image,
+    List<String> productID,
     double total,
     String status,
   ) {
@@ -56,6 +60,7 @@ class Order {
       userId: userId,
       createdAt: createdAt,
       image: image,
+      productID: productID,
       total: total,
       status: status,
     );
