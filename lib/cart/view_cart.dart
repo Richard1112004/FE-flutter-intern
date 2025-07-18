@@ -22,23 +22,34 @@ class _ViewCartState extends State<ViewCart> {
   User user = User.getMockUser();
   late CartProvider cartProvider;
 
-  final plans = [
-    {
-      "duration": "6 months",
-      "price": "\$230 per month",
-      "type": "0% installment plan",
-    },
-    {
-      "duration": "9 months",
-      "price": "\$155 per month",
-      "type": "0% installment plan",
-    },
-    {
-      "duration": "12 months",
-      "price": "\$117 per month",
-      "type": "0% installment plan",
-    },
-  ];
+  List<Map<String, dynamic>> getPlansForProduct(CartItem cartItem) {
+    Product product = Product.getMockProductById(cartItem.product_id)!;
+    double price = product.price * cartItem.quantity;
+    
+    return [
+      {
+        "duration": "6 months",
+        "price": '\$${((product.price-(product.price/10))/6+5).toStringAsFixed(2)} per month',
+        "type": "0% installment plan",
+        "originalPrice": price,
+        "months": 6,
+      },
+      {
+        "duration": "9 months", 
+        "price": '\$${((product.price-(product.price/10))/9+10).toStringAsFixed(2)} per month',
+        "type": "0% installment plan",
+        "originalPrice": price,
+        "months": 9,
+      },
+      {
+        "duration": "12 months",
+        "price": '\$${((product.price-(product.price/10))/12+15).toStringAsFixed(2)} per month',
+        "type": "0% installment plan",
+        "originalPrice": price,
+        "months": 12,
+      },
+    ];
+  }
   @override
   void initState() {
     super.initState();
@@ -108,7 +119,7 @@ class _ViewCartState extends State<ViewCart> {
                   SelectDialog.showModal<Map<String, dynamic>>(
                     context,
                     label: "Installment options",
-                    items: plans,
+                    items: getPlansForProduct(cartItem),
                     itemBuilder: (context, item, _) {
                       return Padding(
                         padding: const EdgeInsets.all(5.0),
