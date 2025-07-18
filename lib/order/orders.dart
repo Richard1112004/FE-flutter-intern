@@ -82,86 +82,88 @@ class Orders extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: userProvider.isLoggedIn
-                        ? NetworkImage(userProvider.user!.photoUrl!)
-                        : AssetImage('assets/profile/user.png') as ImageProvider,
-                    backgroundColor: Colors.white,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'History of Orders',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OrderDetail()),
-                ),
-                child: Row(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Card(
-                      child: Image(
-                        image: AssetImage('assets/products/iphone_15.png'),
-                        width: 120,
-                        height: 120,
-                      ),
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: userProvider.isLoggedIn
+                          ? NetworkImage(userProvider.user!.photoUrl!)
+                          : AssetImage('assets/profile/user.png') as ImageProvider,
+                      backgroundColor: Colors.white,
                     ),
                     SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Order order_0',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Raleway',
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Order Date: 2025-07-14',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Order Status: shipping',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'History of Orders',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-              ),
-              ...List.generate(
-                Order.getMockOrders().length,
-                (i) => Column(
-                  children: [
-                    SizedBox(height: 20),
-                    orderCard(Order.getMockOrders()[i], context),
-                  ],
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OrderDetail()),
+                  ),
+                  child: Row(
+                    children: [
+                      Card(
+                        child: Image(
+                          image: AssetImage('assets/products/iphone_15.png'),
+                          width: 120,
+                          height: 120,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Order order_0',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Raleway',
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            'Order Date: 2025-07-14',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            'Order Status: shipping',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                ...List.generate(
+                  Order.getMockOrders().length,
+                  (i) => Column(
+                    children: [
+                      SizedBox(height: 20),
+                      orderCard(Order.getMockOrders()[i], context),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

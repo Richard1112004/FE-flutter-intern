@@ -95,30 +95,32 @@ class OrderDetail extends StatelessWidget {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: userProvider.isLoggedIn
-                      ? NetworkImage(userProvider.user!.photoUrl!)
-                      : AssetImage('assets/profile/user.png') as ImageProvider,
-                  backgroundColor: Colors.white,
-                ),
-                SizedBox(width: 20),
-                Text(
-                  'Products',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            ...(_buildOrderProducts(context)),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: userProvider.isLoggedIn
+                        ? NetworkImage(userProvider.user!.photoUrl!)
+                        : AssetImage('assets/profile/user.png') as ImageProvider,
+                    backgroundColor: Colors.white,
+                  ),
+                  SizedBox(width: 20),
+                  Text(
+                    'Products',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              ...(_buildOrderProducts(context)),
+            ],
+          ),
         ),
       ),
     );
