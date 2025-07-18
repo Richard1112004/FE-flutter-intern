@@ -193,7 +193,7 @@ class OrderDetailChart extends StatelessWidget {
                               ),
                               SizedBox(width: 5),
                               Text(
-                                '10/04/2025',
+                                '10/05/2025',
                                 style: TextStyle(fontSize: 14),
                               ),
                             ],
@@ -215,7 +215,7 @@ class OrderDetailChart extends StatelessWidget {
                               ),
                               SizedBox(width: 5),
                               Text(
-                                '10/04/2025',
+                                '10/06/2025',
                                 style: TextStyle(fontSize: 14),
                               ),
                             ],
@@ -237,7 +237,7 @@ class OrderDetailChart extends StatelessWidget {
                               ),
                               SizedBox(width: 5),
                               Text(
-                                '10/04/2025',
+                                '10/07/2025',
                                 style: TextStyle(fontSize: 14),
                               ),
                             ],
@@ -259,7 +259,7 @@ class OrderDetailChart extends StatelessWidget {
                               ),
                               SizedBox(width: 5),
                               Text(
-                                '10/04/2025',
+                                '10/08/2025',
                                 style: TextStyle(fontSize: 14),
                               ),
                             ],
