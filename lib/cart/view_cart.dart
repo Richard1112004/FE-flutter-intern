@@ -449,6 +449,18 @@ class _ViewCartState extends State<ViewCart> {
                             onPressed: () {
                               print(Order.orders);
                               if (!isCartEmpty) {
+                                for(int i = 0; i < CartItem.cartItems.length; i++) {
+                                  if (CartItem.cartItems[i].term == 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Please choose a plan for all products',
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  } 
+                                }
                                 for (
                                   int i = 0;
                                   i < CartItem.cartItems.length;
