@@ -25,31 +25,35 @@ class _ViewCartState extends State<ViewCart> {
   List<Map<String, dynamic>> getPlansForProduct(CartItem cartItem) {
     Product product = Product.getMockProductById(cartItem.product_id)!;
     double price = product.price * cartItem.quantity;
-    
+
     return [
       {
         "duration": "6 months",
-        "price": '\$${((product.price-(product.price/10))/6+5).toStringAsFixed(2)} per month',
+        "price":
+            '\$${((product.price - (product.price / 10)) / 6 + 5).toStringAsFixed(2)} per month',
         "type": "0% installment plan",
         "originalPrice": price,
         "months": 6,
       },
       {
-        "duration": "9 months", 
-        "price": '\$${((product.price-(product.price/10))/9+10).toStringAsFixed(2)} per month',
+        "duration": "9 months",
+        "price":
+            '\$${((product.price - (product.price / 10)) / 9 + 10).toStringAsFixed(2)} per month',
         "type": "0% installment plan",
         "originalPrice": price,
         "months": 9,
       },
       {
         "duration": "12 months",
-        "price": '\$${((product.price-(product.price/10))/12+15).toStringAsFixed(2)} per month',
+        "price":
+            '\$${((product.price - (product.price / 10)) / 12 + 15).toStringAsFixed(2)} per month',
         "type": "0% installment plan",
         "originalPrice": price,
         "months": 12,
       },
     ];
   }
+
   @override
   void initState() {
     super.initState();
@@ -258,6 +262,7 @@ class _ViewCartState extends State<ViewCart> {
   @override
   Widget build(BuildContext context) {
     cartProvider = Provider.of<CartProvider>(context);
+    bool isCartEmpty = CartItem.cartItems.isEmpty;
     print(CartItem.cartItems);
     final plans = [
       {
@@ -443,34 +448,36 @@ class _ViewCartState extends State<ViewCart> {
                           TextButton(
                             onPressed: () {
                               print(Order.orders);
-                              for (
-                                int i = 0;
-                                i < CartItem.cartItems.length;
-                                i++
-                              ) {
-                                CartItem.cartItems[i].orderId =
-                                    'order_${Order.orders.length + 1}';
+                              if (!isCartEmpty) {
+                                for (
+                                  int i = 0;
+                                  i < CartItem.cartItems.length;
+                                  i++
+                                ) {
+                                  CartItem.cartItems[i].orderId =
+                                      'order_${Order.orders.length + 1}';
+                                }
+                                Order.createOrder(
+                                  'order_${Order.orders.length + 1}',
+                                  user.id,
+                                  DateTime.now(),
+                                  Product.getMockProductById(
+                                    CartItem.cartItems[0].product_id,
+                                  )!.image,
+                                  CartItem.cartItems.fold(
+                                    0.0,
+                                    (total, item) =>
+                                        total +
+                                        Product.getMockProductById(
+                                              item.product_id,
+                                            )!.price *
+                                            item.quantity,
+                                  ),
+                                  'pending',
+                                );
+                                CartItem.clearCartItems();
+                                print(Order.orders);
                               }
-                              Order.createOrder(
-                                'order_${Order.orders.length + 1}',
-                                user.id,
-                                DateTime.now(),
-                                Product.getMockProductById(
-                                  CartItem.cartItems[0].product_id,
-                                )!.image,
-                                CartItem.cartItems.fold(
-                                  0.0,
-                                  (total, item) =>
-                                      total +
-                                      Product.getMockProductById(
-                                            item.product_id,
-                                          )!.price *
-                                          item.quantity,
-                                ),
-                                'pending',
-                              );
-                              CartItem.clearCartItems();
-                              print(Order.orders);
                               _goToOrdersPage();
                             },
                             style: ButtonStyle(
@@ -492,13 +499,21 @@ class _ViewCartState extends State<ViewCart> {
                                 const Size(120, 40),
                               ),
                             ),
-                            child: Text(
-                              'Checkout',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
+                            child: isCartEmpty
+                                ? Text(
+                                    'View Orders',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  )
+                                : Text(
+                                    'Checkout',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
