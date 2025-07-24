@@ -8,6 +8,7 @@ import 'package:begining/provider/carousel_provider.dart';
 import 'package:begining/provider/navigation_provider.dart';
 import 'package:begining/provider/password_provider.dart';
 import 'package:begining/provider/user_provider.dart';
+import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -100,27 +101,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => MyProfile(),
-                          ),
+                          MaterialPageRoute(builder: (context) => MyProfile()),
                         );
                       },
-                      child: ClipOval(
-
-                        child: userProvider.isLoggedIn
-                            ? Image(
-                                image: NetworkImage(userProvider.user!.photoUrl!),
-                                width: 30,
-                                height: 30,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset(
-                                'assets/profile/user.png',
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              ),
-                      ),
+                      child: userProvider.isLoggedIn
+                          ? ClipOval(
+                              child: userProvider.isLoggedGoogle
+                                  ? Image(
+                                      image: NetworkImage(
+                                        userProvider.user!.photoUrl!,
+                                      ),
+                                      width: 30,
+                                      height: 30,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'assets/profile/user.png',
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                            )
+                          : SizedBox.shrink(),
                     ),
                     Expanded(
                       child: TextField(
@@ -154,12 +156,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         print(NotificationModel.welcomeNotification);
                         print(NotificationModel.reminderNotification);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NotificationPage(),
-                          ),
-                        );
+                        if (!userProvider.isLoggedIn) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationPage(),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],

@@ -110,7 +110,7 @@ class OrderDetailTrack extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: userProvider.isLoggedIn
+                    backgroundImage: userProvider.isLoggedGoogle
                         ? NetworkImage(userProvider.user!.photoUrl!)
                         : AssetImage('assets/profile/user.png') as ImageProvider,
                     backgroundColor: Colors.white,

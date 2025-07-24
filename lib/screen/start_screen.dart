@@ -46,7 +46,7 @@ class _StartScreenState extends State<StartScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const RegisterScreen(),
+                      builder: (context) => const HomeScreen(),
                     ),
                   ),
                 },

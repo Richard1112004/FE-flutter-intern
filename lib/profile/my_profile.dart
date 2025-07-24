@@ -370,7 +370,7 @@ class _MyProfileState extends State<MyProfile> {
                         );
 
                         try {
-                          if (userProvider.isLoggedIn) {
+                          if (userProvider.isLoggedGoogle) {
                             // If user is logged in, sign out
                             await AuthService.signOut(context);
                           }

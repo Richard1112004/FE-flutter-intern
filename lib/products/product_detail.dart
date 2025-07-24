@@ -1,8 +1,11 @@
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/products/product_option.dart';
+import 'package:begining/provider/user_provider.dart';
+import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetail extends StatelessWidget {
   final Product product;
@@ -10,6 +13,7 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -150,7 +154,16 @@ class ProductDetail extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: TextButton(
-                      onPressed: () => {
+                      onPressed: ()  {
+                        if (!userProvider.isLoggedIn){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                          );
+                          return;
+                        }
                         CartItem.createCartItem(
                           'cart_${CartItem.cartItems.length + 1}',
                           product.name,
@@ -160,13 +173,13 @@ class ProductDetail extends StatelessWidget {
                           'user_1', // Assuming user ID is 'user_1'
                           '', // Assuming order ID is 'order_1'
                           product.id,
-                        ),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Add product to cart successfully!'),
                           ),
-                        ),
-                        Navigator.pop(context),
+                        );
+                        Navigator.pop(context);
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(

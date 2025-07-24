@@ -108,7 +108,7 @@ class User {
     return null; // Return null if no user matches
   }
 
-  static bool userExists(String email) {
+  static bool userExistsEmail(String email) {
     for (var user in _allUsers) {
       if (user.email == email) {
         return true; // User with this email already exists
@@ -124,5 +124,9 @@ class User {
       }
     }
     return null; // Return null if no user matches
+  }
+
+  static bool userExistsCheck() {
+    return _allUsers.isNotEmpty; // Check if there are any users
   }
 }

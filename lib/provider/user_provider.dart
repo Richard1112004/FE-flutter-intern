@@ -24,5 +24,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool get isLoggedIn => _user != null;
+  bool get isLoggedGoogle => _user != null;
+
+  bool get isLoggedIn => User.userExistsCheck();
 }

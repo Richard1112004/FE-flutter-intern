@@ -1,6 +1,7 @@
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/screen/forgotpassword_screen.dart';
 import 'package:begining/screen/home_screen.dart';
+import 'package:begining/screen/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:begining/provider/password_provider.dart';
@@ -139,25 +140,44 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotpasswordScreen(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RegisterScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Register',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                 ),
                               ),
-                            },
-                            child: Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
+                            ),
+                            TextButton(
+                              onPressed: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotpasswordScreen(),
+                                  ),
+                                ),
+                              },
+                              child: Text(
+                                'Forgot Password?',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                         TextButton(
                           onPressed: () {
@@ -182,9 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             if (authenticatedUser != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Login successful!'),
-                                ),
+                                SnackBar(content: Text('Login successful!')),
                               );
                               Navigator.push(
                                 context,
