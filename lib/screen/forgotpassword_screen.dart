@@ -19,7 +19,7 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
     print('Sending OTP to: $email');
     pinCodeProvider.setEmail(email);
     final remote = {
-      "server": "https://6c587a8dcdc2.ngrok-free.app",
+      "server": "https://4d49291451f2.ngrok-free.app",
       "serverKey": "RDhShW",
     };
     if (await emailAuth.config(remote)) {
@@ -111,7 +111,7 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
                         showDialog(
                           context: context,
                           barrierDismissible:
-                              false, // Không cho phép đóng bằng cách tap ngoài
+                              false,
                           builder: (BuildContext context) {
                             return AlertDialog(
                               content: Row(

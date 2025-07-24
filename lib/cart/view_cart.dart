@@ -366,13 +366,20 @@ class _ViewCartState extends State<ViewCart> {
                               padding: EdgeInsets.zero,
                               icon: Icon(Icons.edit, color: Colors.white),
                               onPressed: () {
-                                Navigator.push(
+                                final result = Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         const ShippingAddress(), // Replace with your address editing screen
                                   ),
                                 );
+                                result.then((value) {
+                                  if (value == 'refresh') {
+                                    setState(() {
+                                      print('Shipping address updated');
+                                    });
+                                  }
+                                });
                               },
                             ),
                           ),

@@ -89,7 +89,7 @@ class ShippingAddress extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Profile updated successfully!')),
                   );
-                  Navigator.pop(context);
+                  Navigator.pop(context, 'refresh');
                 },
                 child: Text('Save Changes'),
                 style: ButtonStyle(

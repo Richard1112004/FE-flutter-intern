@@ -2,7 +2,6 @@ import 'package:begining/model/user.dart';
 import 'package:begining/provider/password_provider.dart';
 import 'package:begining/provider/pincode_provider.dart';
 import 'package:begining/provider/repeat_password_provider.dart';
-import 'package:begining/screen/home_screen.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

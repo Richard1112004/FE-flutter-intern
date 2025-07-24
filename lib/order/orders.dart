@@ -142,7 +142,7 @@ class Orders extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            'Order Status: shipping',
+                            'Order Status: shipped',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,

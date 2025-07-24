@@ -19,10 +19,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   @override
   void initState() {
     super.initState();
-    // Kiểm tra ngay khi màn hình mở
-    // Debug: Kiểm tra user hiện tại
     checkEmailVerified();
-    // Kiểm tra định kỳ mỗi 3 giây
     timer = Timer.periodic(
       const Duration(seconds: 3),
       (_) => checkEmailVerified(),
@@ -34,7 +31,6 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     final verified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
     if (verified) {
       timer?.cancel();
-      // Chuyển đến màn hình chính (ví dụ: HomeScreen)
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => HomeScreen()),

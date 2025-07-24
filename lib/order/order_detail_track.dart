@@ -45,14 +45,14 @@ class OrderDetailTrack extends StatelessWidget {
                       ? Icon(Icons.check, color: Colors.white, size: 16)
                       : Icon(Icons.close, color: Colors.white, size: 16),
                 ),
-                if (isFirst)
-                  Container(
-                    width: 10,
-                    height: 10,
-                    color: isCompleted
-                        ? Color(0xFF007FFF)
-                        : const Color.fromARGB(255, 190, 43, 33),
-                  ),
+                // if (isFirst)
+                //   Container(
+                //     width: 10,
+                //     height: 10,
+                //     color: isCompleted
+                //         ? Color(0xFF007FFF)
+                //         : const Color.fromARGB(255, 190, 43, 33),
+                //   ),
                 if (!isLast)
                   Container(
                     width: 10,

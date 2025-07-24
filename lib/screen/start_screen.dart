@@ -6,7 +6,6 @@ import 'package:begining/screen/home_screen.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/register_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class StartScreen extends StatefulWidget {
