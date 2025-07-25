@@ -3,6 +3,7 @@ import 'package:begining/provider/cart_provider.dart';
 import 'package:begining/provider/pincode_provider.dart';
 import 'package:begining/provider/repeat_password_provider.dart';
 import 'package:begining/provider/user_provider.dart';
+import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:begining/provider/navigation_provider.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const StartScreen(),
+      home: const HomeScreen(),
       theme: ThemeData(scaffoldBackgroundColor: Colors.white,
       fontFamily: 'Poppins',),
       debugShowCheckedModeBanner: false,
