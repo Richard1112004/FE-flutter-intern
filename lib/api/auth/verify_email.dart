@@ -1,9 +1,15 @@
 // File: lib/screens/verify_email_screen.dart
 import 'dart:async';
 
+import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:begining/model/user.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
@@ -26,11 +32,64 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     );
   }
 
+  Future<void> saveUserToBackend(User firebaseUser) async {
+    final url = Uri.parse(
+      'https://1bcb1b01beee.ngrok-free.app/api/v1/user/register',
+    );
+
+    final requestBody = {
+      'email': firebaseUser.email,
+      'password': firebaseUser.password,
+      'phone': firebaseUser.phone,
+    };
+
+    print('📤 [Request] Sending to $url');
+    print('📤 [Request Body] $requestBody');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestBody),
+      );
+
+      print('📥 [Response Code] ${response.statusCode}');
+      print('📥 [Raw Body] ${response.body}');
+
+      if (response.statusCode == 200) {
+        print('✅ User saved to backend successfully.');
+      } else {
+        try {
+          final error = jsonDecode(response.body);
+          print(
+            '❌ [Server Error] ${error['message'] ?? 'Unknown error message'}',
+          );
+        } catch (e) {
+          print('❌ [Decode Error] Response không phải JSON:');
+          print(response.body);
+        }
+      }
+    } catch (e) {
+      print('❌ [Network Error] Không kết nối được đến server: $e');
+      print(
+        '👉 Gợi ý: Kiểm tra lại ngrok URL có đang chạy không? Có dùng đúng http/https không?',
+      );
+    }
+  }
+
   Future<void> checkEmailVerified() async {
-    await FirebaseAuth.instance.currentUser?.reload();
-    final verified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await firebase.FirebaseAuth.instance.currentUser?.reload();
+    final user = firebase.FirebaseAuth.instance.currentUser;
+    final verified = user?.emailVerified ?? false;
     if (verified) {
       timer?.cancel();
+      final user = User.createUser(
+        userProvider.email,
+        userProvider.password,
+        userProvider.phone,
+      );
+      await saveUserToBackend(user);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => HomeScreen()),
@@ -95,7 +154,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 ),
                 onPressed: () {
                   // Gửi lại email xác thực
-                  FirebaseAuth.instance.currentUser?.sendEmailVerification();
+                  firebase.FirebaseAuth.instance.currentUser
+                      ?.sendEmailVerification();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Re-verification email sent')),
                   );

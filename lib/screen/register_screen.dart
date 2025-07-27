@@ -2,6 +2,7 @@ import 'package:begining/api/auth/sign_up.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/user.dart';
+import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
   @override
   void dispose() {
     emailController.dispose();
@@ -27,15 +29,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  Future<void> _submitForm() async {
+  Future<void> _submitForm(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       try {
+        userProvider.setEmail(emailController.text);
+        userProvider.setPassword(passwordController.text);
+        userProvider.setPhone(phoneController.text);
         await SignUp().signUp(context, emailController.text, passwordController.text);
-        User.createUser(
-          emailController.text,
-          passwordController.text,
-          phoneController.text,
-        );
         print(User.getMockUsers());
         print(CartItem.iPhone_15);
         print(CartItem.iPhone_16);
@@ -53,6 +54,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         SizedBox(height: 20),
                         TextButton(
-                          onPressed: () async => {await _submitForm()},
+                          onPressed: () async => {await _submitForm(context)},
                           style: ButtonStyle(
                             backgroundColor: WidgetStatePropertyAll(
                               Color.fromARGB(255, 0, 76, 255),
