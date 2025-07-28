@@ -1,3 +1,4 @@
+import 'package:begining/api/auth/login_API.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/screen/forgotpassword_screen.dart';
 import 'package:begining/screen/home_screen.dart';
@@ -17,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final login = LoginAPI();
   @override
   void dispose() {
     // Clean up controllers when widget is disposed
@@ -180,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             print(CartItem.iPhone_15);
                             print(CartItem.iPhone_16);
                             String email = emailController.text.trim();
@@ -195,12 +197,37 @@ class _LoginScreenState extends State<LoginScreen> {
                               return;
                             }
 
-                            User? authenticatedUser = User.authenticate(
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                content: Row(
+                                  children: [
+                                    CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Color.fromARGB(255, 0, 76, 255),
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                      child: Text(
+                                        'Logging in...',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                            final success = await login.loginUserEmailPass(
                               email,
                               password,
                             );
-
-                            if (authenticatedUser != null) {
+                            Navigator.of(context).pop(); 
+                            if (success) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Login successful!')),
                               );
