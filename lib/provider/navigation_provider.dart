@@ -4,6 +4,7 @@ import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
 class NavigationProvider with ChangeNotifier {
@@ -15,10 +16,11 @@ class NavigationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setIndex(int index, BuildContext context) {
+  Future<void> setIndex(int index, BuildContext context) async {
     _currentIndex = index;
 
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
     switch (index) {
       case 0:
         // Navigate to Home Screen
@@ -29,15 +31,14 @@ class NavigationProvider with ChangeNotifier {
         break;
       case 1:
         // Navigate to Cart Screen
-        if (!userProvider.isLoggedIn) {
+        if (!isLoggedIn) {
           // If user is not logged in, show a message or redirect to login
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const LoginScreen()),
           );
           return;
-        }
-        else {
+        } else {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ViewCart()),
@@ -46,7 +47,7 @@ class NavigationProvider with ChangeNotifier {
         break;
       case 2:
         // Navigate to Profile Screen
-        if (!userProvider.isLoggedIn) {
+        if (!isLoggedIn) {
           // If user is not logged in, show a message or redirect to login
           Navigator.push(
             context,

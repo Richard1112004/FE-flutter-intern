@@ -383,7 +383,8 @@ class _MyProfileState extends State<MyProfile> {
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.remove(
                             'auth_token',
-                          ); // xoá token khỏi bộ nhớ
+                          ); 
+                          await prefs.setBool('is_logged_in', false);
                           // Hiển thị thông báo thành công
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

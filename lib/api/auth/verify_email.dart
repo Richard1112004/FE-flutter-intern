@@ -52,7 +52,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         isloading = true;
       });
       final success1 = await register.saveUserToBackend(user);
-      final success2 = await login.loginUser(user);
+      final success2 = await login.loginUser(user.email, user.password);
       setState(() {
         isloading = false;
       });

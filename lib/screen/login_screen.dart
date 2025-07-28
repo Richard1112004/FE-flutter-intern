@@ -222,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             );
-                            final success = await login.loginUserEmailPass(
+                            final success = await login.loginUser(
                               email,
                               password,
                             );

@@ -6,6 +6,7 @@ import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetail extends StatelessWidget {
   final Product product;
@@ -13,7 +14,6 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -154,8 +154,10 @@ class ProductDetail extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: TextButton(
-                      onPressed: ()  {
-                        if (!userProvider.isLoggedIn){
+                      onPressed: () async  {
+                        final prefs = await SharedPreferences.getInstance();
+                        final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+                        if (!isLoggedIn) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
