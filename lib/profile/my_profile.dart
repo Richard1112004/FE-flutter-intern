@@ -12,6 +12,7 @@ import 'package:begining/screen/navigation.dart';
 import 'package:begining/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -379,7 +380,10 @@ class _MyProfileState extends State<MyProfile> {
                           Navigator.of(context).pop();
 
                           // User.clearAllUsers();
-
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.remove(
+                            'auth_token',
+                          ); // xoá token khỏi bộ nhớ
                           // Hiển thị thông báo thành công
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
