@@ -222,11 +222,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             );
+                            // final user = User.createUser(
+                            //   userProvider.email,
+                            //   userProvider.password,
+                            //   userProvider.phone,
+                            // );
                             final success = await login.loginUser(
                               email,
                               password,
                             );
-                            Navigator.of(context).pop(); 
+                            Navigator.of(context).pop();
                             if (success) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Login successful!')),

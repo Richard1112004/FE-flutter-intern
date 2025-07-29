@@ -5,6 +5,7 @@ import 'package:begining/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -47,6 +48,7 @@ class AuthService {
   }
 
   static Future<GoogleSignInAccount?> signIn() async {
+    final String baseUrl = dotenv.env['BASE_URL'] ?? '';
     try {
       print('🔑 Bắt đầu đăng nhập Google...');
       final account = await _googleSignIn.signIn();
@@ -62,7 +64,7 @@ class AuthService {
 
       print('📤 Gửi idToken lên server... ${idToken}');
       final response = await http.post(
-        Uri.parse('https://02f4504e54e1.ngrok-free.app/api/v1/user/google'),
+        Uri.parse('${baseUrl}/api/v1/user/google'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'idToken': idToken}),
       );
@@ -71,6 +73,8 @@ class AuthService {
         final data = jsonDecode(response.body);
         final jwtToken = data['data']; // backend trả về key 'data'
         print('✅ Nhận JWT Token thành công: $jwtToken');
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('is_logged_in', true);
       } else {
         print(
           '⚠️ Đăng nhập thất bại: ${response.statusCode}, body: ${response.body}',

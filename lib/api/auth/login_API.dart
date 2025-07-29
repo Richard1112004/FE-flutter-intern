@@ -41,6 +41,10 @@ class LoginAPI {
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('auth_token', token);
           final tokenTest = prefs.getString('auth_token');
+          final user = User.getMockUser();
+          await prefs.setString('user', jsonEncode(user.toJson()));
+          final userString = prefs.getString('user');
+          print('📦 User saved: $userString');
           print('📦 Token saved: $tokenTest');
 
           prefs.setBool('is_logged_in', true);

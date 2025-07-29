@@ -50,6 +50,20 @@ class User {
       street: map['street'] ?? '',
     );
   }
+
+  // Convert User to Map
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'password': password,
+      'photoUrl': photoUrl,
+      'phone': phone,
+      'province': province,
+      'street': street,
+    };
+  }
   @override
   String toString() {
     return 'User{id: $id, name: $name, email: $email, password: $password, phone: $phone, province: $province, street: $street}';

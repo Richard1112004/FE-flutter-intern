@@ -3,6 +3,7 @@ import 'package:begining/profile/my_profile.dart';
 import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/home_screen.dart';
 import 'package:begining/screen/login_screen.dart';
+import 'package:begining/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class NavigationProvider with ChangeNotifier {
           // If user is not logged in, show a message or redirect to login
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            MaterialPageRoute(builder: (context) => const StartScreen()),
           );
           return;
         } else {
@@ -51,7 +52,7 @@ class NavigationProvider with ChangeNotifier {
           // If user is not logged in, show a message or redirect to login
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            MaterialPageRoute(builder: (context) => const StartScreen()),
           );
         } else {
           Navigator.push(

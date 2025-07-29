@@ -4,6 +4,7 @@ import 'package:begining/products/product_option.dart';
 import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
+import 'package:begining/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -161,7 +162,7 @@ class ProductDetail extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
+                              builder: (context) => StartScreen(),
                             ),
                           );
                           return;

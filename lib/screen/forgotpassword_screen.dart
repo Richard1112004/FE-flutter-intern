@@ -4,6 +4,7 @@ import 'package:begining/screen/forgotpasswordselect_screen.dart';
 import 'package:email_auth/email_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ForgotpasswordScreen extends StatefulWidget {
   const ForgotpasswordScreen({super.key});
@@ -14,12 +15,13 @@ class ForgotpasswordScreen extends StatefulWidget {
 class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
   final TextEditingController emailController = TextEditingController();
   Future<bool> sendOTP(String email, PinCodeProvider pinCodeProvider) async {
+    final String SecondaryUrl = dotenv.env['SECONDARY_URL'] ?? '';
     EmailAuth emailAuth = EmailAuth(sessionName: "Password Recovery");
     pinCodeProvider.setEmailAuth(emailAuth);
     print('Sending OTP to: $email');
     pinCodeProvider.setEmail(email);
     final remote = {
-      "server": "https://4d49291451f2.ngrok-free.app",
+      "server": SecondaryUrl,
       "serverKey": "RDhShW",
     };
     if (await emailAuth.config(remote)) {

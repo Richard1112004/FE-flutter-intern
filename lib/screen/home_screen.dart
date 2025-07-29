@@ -10,11 +10,13 @@ import 'package:begining/provider/password_provider.dart';
 import 'package:begining/provider/user_provider.dart';
 import 'package:begining/screen/login_screen.dart';
 import 'package:begining/screen/navigation.dart';
+import 'package:begining/screen/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,9 +33,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoggedIn = false; // <- thêm biến này
   @override
   void initState() {
     super.initState();
+    _loadLoginState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<NavigationProvider>(
         context,
@@ -41,7 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ).setCurrentIndex(0);
     });
   }
-
+  Future<void> _loadLoginState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final loggedIn = prefs.getBool('is_logged_in') ?? false;
+    setState(() {
+      isLoggedIn = loggedIn;
+      print('Is logged in: $isLoggedIn');
+    });
+  }
   Widget box(Product product) {
     return InkWell(
       onTap: () {
@@ -104,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(builder: (context) => MyProfile()),
                         );
                       },
-                      child: userProvider.isLoggedIn
+                      child: isLoggedIn
                           ? ClipOval(
                               child: userProvider.isLoggedGoogle
                                   ? Image(
@@ -153,14 +164,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     IconButton(
                       icon: Icon(Icons.notification_add, color: Colors.black),
-                      onPressed: () {
+                      onPressed: () async {
                         print(NotificationModel.welcomeNotification);
                         print(NotificationModel.reminderNotification);
-                        if (!userProvider.isLoggedIn) {
+                        final prefs = await SharedPreferences.getInstance();
+                        final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+                        if (!isLoggedIn) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
+                              builder: (context) => StartScreen(),
                             ),
                           );
                         } else {
