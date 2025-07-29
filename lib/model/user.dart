@@ -92,8 +92,8 @@ class User {
 
   // Get a single mock user
   // create a user from email and password and phone number
-  static User createUser(String email, String password, String phone) {
-    return User(email: email, password: password, phone: phone);
+  static User createUser(String email, String password, String? phone) {
+    return User(email: email, password: password, phone: phone!);
   }
   static User createGoogleUser(
       String email, String name, String photoUrl) {

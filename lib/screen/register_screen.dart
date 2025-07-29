@@ -30,12 +30,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _submitForm(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       try {
-        userProvider.setEmail(emailController.text);
-        userProvider.setPassword(passwordController.text);
-        userProvider.setPhone(phoneController.text);
+        User.createUser(
+          emailController.text,
+          passwordController.text,
+          phoneController.text,
+        );
         await SignUp().signUp(context, emailController.text, passwordController.text);
         print(User.getMockUsers());
         print(CartItem.iPhone_15);

@@ -187,6 +187,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             print(CartItem.iPhone_16);
                             String email = emailController.text.trim();
                             String password = passwordController.text.trim();
+                            final user = User.createUser(
+                              email,
+                              password,
+                              null, // Phone number can be null
+                            );
                             print(User.getMockUsers());
                             if (email.isEmpty || password.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -228,8 +233,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             //   userProvider.phone,
                             // );
                             final success = await login.loginUser(
-                              email,
-                              password,
+                              user.email,
+                              user.password,
                             );
                             Navigator.of(context).pop();
                             if (success) {

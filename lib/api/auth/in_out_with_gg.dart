@@ -75,6 +75,7 @@ class AuthService {
         print('✅ Nhận JWT Token thành công: $jwtToken');
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('is_logged_in', true);
+        await prefs.setBool('isLoggedGoogle', true);
       } else {
         print(
           '⚠️ Đăng nhập thất bại: ${response.statusCode}, body: ${response.body}',
