@@ -3,10 +3,12 @@ import 'package:begining/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 class LoginAPI {
+  final String baseUrl = dotenv.env['BASE_URL'] ?? '';
   Future<bool> loginUser(String email, String password) async {
     final url = Uri.parse(
-      'https://02f4504e54e1.ngrok-free.app/api/v1/auth/user/login',
+      '$baseUrl/api/v1/auth/user/login',
     );
 
     final requestBody = {

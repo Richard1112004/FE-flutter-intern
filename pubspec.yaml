@@ -47,6 +47,7 @@ dev_dependencies:
   http: ^1.4.0
   shared_preferences: ^2.3.2
   flutter_launcher_icons: "^0.14.4"
+  flutter_dotenv: ^5.0.2
   flutter_native_splash: ^2.4.6
   fl_chart: ^1.0.0
 
@@ -99,6 +100,7 @@ flutter:
     - assets/products/laptop.png
     - assets/products/iphone_16_bigger.png
     - assets/profile/user.png
+    - .env
   fonts:
     - family: Roboto
       fonts:

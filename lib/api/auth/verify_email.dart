@@ -39,8 +39,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   Future<void> checkEmailVerified() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     await firebase.FirebaseAuth.instance.currentUser?.reload();
-    final user = firebase.FirebaseAuth.instance.currentUser;
-    final verified = user?.emailVerified ?? false;
+    final userFireBase = firebase.FirebaseAuth.instance.currentUser;
+    final verified = userFireBase?.emailVerified ?? false;
     if (verified) {
       timer?.cancel();
       final user = User.createUser(
@@ -51,7 +51,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       setState(() {
         isloading = true;
       });
-      final success1 = await register.saveUserToBackend(user);
+      final success1 = await register.saveUserToBackend(userFireBase, userProvider.password, userProvider.phone);
       final success2 = await login.loginUser(user.email, user.password);
       setState(() {
         isloading = false;

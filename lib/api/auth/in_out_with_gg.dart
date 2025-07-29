@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:begining/provider/user_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class AuthService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -45,11 +48,38 @@ class AuthService {
 
   static Future<GoogleSignInAccount?> signIn() async {
     try {
+      print('🔑 Bắt đầu đăng nhập Google...');
       final account = await _googleSignIn.signIn();
-      print('Sign in result: ${account?.email ?? 'null'}');
+      print('📧 Sign in result: ${account?.email ?? 'null'}');
+
+      final ggauth = await account?.authentication;
+      final idToken = ggauth?.idToken;
+
+      if (idToken == null) {
+        print('❌ Không lấy được idToken từ Google');
+        return null;
+      }
+
+      print('📤 Gửi idToken lên server... ${idToken}');
+      final response = await http.post(
+        Uri.parse('https://02f4504e54e1.ngrok-free.app/api/v1/user/google'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'idToken': idToken}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final jwtToken = data['data']; // backend trả về key 'data'
+        print('✅ Nhận JWT Token thành công: $jwtToken');
+      } else {
+        print(
+          '⚠️ Đăng nhập thất bại: ${response.statusCode}, body: ${response.body}',
+        );
+      }
+
       return account;
     } catch (error) {
-      print('Sign in error: $error');
+      print('🔥 Sign in error: $error');
       return null;
     }
   }

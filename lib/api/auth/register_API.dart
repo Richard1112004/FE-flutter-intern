@@ -2,18 +2,21 @@ import 'package:begining/model/user.dart';
 import 'package:begining/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
 class RegisterAPI {
-  Future<bool> saveUserToBackend(User firebaseUser) async {
+  final String baseUrl = dotenv.env['BASE_URL'] ?? '';
+  Future<bool> saveUserToBackend(firebase.User? firebaseUser, String password, String phone) async {
     final url = Uri.parse(
-      'https://02f4504e54e1.ngrok-free.app/api/v1/user/register',
+      '$baseUrl/api/v1/user/firebase',
     );
 
     final requestBody = {
-      'email': firebaseUser.email,
-      'password': firebaseUser.password,
-      'phone': firebaseUser.phone,
+      'idToken': await firebaseUser?.getIdToken(),
+      'phone': phone,
+      'password': password,
     };
 
     print('📤 [Request] Sending to $url');
