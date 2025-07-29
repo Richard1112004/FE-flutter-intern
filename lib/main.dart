@@ -41,6 +41,8 @@ class MyApp extends StatelessWidget {
   Future<User?> getUser() async {
   final prefs = await SharedPreferences.getInstance();
   final userString = prefs.getString('user');
+  print(prefs.getBool('is_logged_in'));
+  print(prefs.getBool('isLoggedGoogle'));
   if (userString != null) {
     print('📦 User found in SharedPreferences: $userString');
     final Map<String, dynamic> userMap = jsonDecode(userString);

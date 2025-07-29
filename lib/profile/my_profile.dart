@@ -371,7 +371,9 @@ class _MyProfileState extends State<MyProfile> {
                         );
 
                         try {
-                          if (userProvider.isLoggedGoogle) {
+                          final prefs = await SharedPreferences.getInstance();
+                          final isLoggedInGoogle = prefs.getBool('isLoggedGoogle');
+                          if (isLoggedInGoogle == true) {
                             // If user is logged in, sign out
                             await AuthService.signOut(context);
                           }
@@ -380,11 +382,12 @@ class _MyProfileState extends State<MyProfile> {
                           Navigator.of(context).pop();
 
                           // User.clearAllUsers();
-                          final prefs = await SharedPreferences.getInstance();
+                          
                           await prefs.remove(
                             'auth_token',
                           ); 
                           await prefs.setBool('is_logged_in', false);
+                          await prefs.setBool('isLoggedGoogle', false);
                           // Hiển thị thông báo thành công
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
