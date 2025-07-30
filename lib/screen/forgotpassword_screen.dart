@@ -1,3 +1,4 @@
+import 'package:begining/api/auth/forgot_API.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/provider/pincode_provider.dart';
 import 'package:begining/screen/forgotpasswordselect_screen.dart';
@@ -14,6 +15,7 @@ class ForgotpasswordScreen extends StatefulWidget {
 
 class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
   final TextEditingController emailController = TextEditingController();
+  final ForgotApi forgotApi = ForgotApi();
   Future<bool> sendOTP(String email, PinCodeProvider pinCodeProvider) async {
     final String SecondaryUrl = dotenv.env['SECONDARY_URL'] ?? '';
     EmailAuth emailAuth = EmailAuth(sessionName: "Password Recovery");
@@ -34,6 +36,7 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
       return false;
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +106,18 @@ class _ForgotpasswordScreenState extends State<ForgotpasswordScreen> {
                     padding: const EdgeInsets.all(12.0),
                     child: TextButton(
                       onPressed: () async {
-                        User? user = User.verifyEmail(emailController.text);
-                        if (user == null) {
+                        bool checkEmail = await forgotApi.checkUserExists(emailController.text);
+                        if (!checkEmail) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Email not found')),
                           );
                           return;
                         }
+                        final user = User.createUser(
+                          emailController.text,
+                          '', // Password is not needed for forgot password
+                          '', // Phone is not needed for forgot password
+                        );
                         showDialog(
                           context: context,
                           barrierDismissible:

@@ -1,3 +1,4 @@
+import 'package:begining/api/auth/forgot_API.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/provider/password_provider.dart';
 import 'package:begining/provider/pincode_provider.dart';
@@ -18,6 +19,7 @@ class _NewpasswordScreenState extends State<NewpasswordScreen> {
   final TextEditingController repeatPasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ForgotApi forgotApi = ForgotApi();
 
   @override
   void dispose() {
@@ -164,16 +166,19 @@ class _NewpasswordScreenState extends State<NewpasswordScreen> {
                   child: TextButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        User? user = User.getUserByEmail(
-                          pinCodeProvider.email,
+                        String token = forgotApi.createJwtToken(
+                          id: '123456',
+                          email: User.getMockUser().email,
+                          role: 'RESET-PASSWORD',
+                          secretKeyBase64: 'OXw1wTarwY2cYEAcT6orRLhKKMCPMMmiCeXvuGDpm8w=',
+                          ttlMillis: 3600000, // 1 hour
                         );
-                        if (user == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('User not found')),
-                          );
-                          return;
-                        }
-                        user.password = newPasswordController.text;
+                        print('📦Generated JWT Token: $token'); // For debugging purposes
+                        forgotApi.resetPassword(
+                          token: token,
+                          newPassword: newPasswordController.text,
+                        );
+                        User.getMockUser().password = newPasswordController.text;
                         print(User.getMockUser()); // For debugging purposes
                         // Handle password change logic here
                         ScaffoldMessenger.of(context).showSnackBar(
