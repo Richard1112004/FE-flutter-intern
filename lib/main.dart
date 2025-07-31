@@ -15,21 +15,40 @@ import 'package:begining/provider/password_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart'; // <-- thêm dòng này
+import 'dart:io';
 
 void main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); 
+  await Firebase.initializeApp();
+  // ======= 🔹 Thêm đoạn ghi log =======
+  final dir = await getApplicationDocumentsDirectory();
+  print('📂 Log directory: ${dir.path}');
+  final logFile = File('${dir.path}/app_log.txt');
+
+
+  debugPrint = (String? message, {int? wrapWidth}) {
+    if (message != null) {
+      logFile.writeAsStringSync(
+        '${DateTime.now()} - $message\n',
+        mode: FileMode.append,
+        flush: true,
+      );
+    }
+    print(message); // vẫn in ra console
+  };
+  // ===================================
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => NavigationProvider())
-      , ChangeNotifierProvider(create: (_) => PasswordProvider()),
-      ChangeNotifierProvider(create: (_) => PinCodeProvider()),
-      ChangeNotifierProvider(create: (_) => CarouselProvider()),
-      ChangeNotifierProvider(create: (_) => CartProvider()),
-      ChangeNotifierProvider(create: (_) => UserProvider()
-      ),
-      ChangeNotifierProvider(create: (_) => RepeatPasswordProvider()),
+      providers: [
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
+        ChangeNotifierProvider(create: (_) => PasswordProvider()),
+        ChangeNotifierProvider(create: (_) => PinCodeProvider()),
+        ChangeNotifierProvider(create: (_) => CarouselProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => RepeatPasswordProvider()),
       ],
       child: const MyApp(),
     ),
@@ -39,23 +58,21 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   Future<User?> getUser() async {
-  final prefs = await SharedPreferences.getInstance();
-  final userString = prefs.getString('user');
-  print(prefs.getBool('is_logged_in'));
-  print(prefs.getBool('isLoggedGoogle'));
-  if (userString != null) {
-    print('📦 User found in SharedPreferences: $userString');
-    final Map<String, dynamic> userMap = jsonDecode(userString);
-    return User.fromMap(userMap);
+    final prefs = await SharedPreferences.getInstance();
+    final userString = prefs.getString('user');
+    print(prefs.getBool('is_logged_in'));
+    print(prefs.getBool('isLoggedGoogle'));
+    if (userString != null) {
+      print('📦 User found in SharedPreferences: $userString');
+      final Map<String, dynamic> userMap = jsonDecode(userString);
+      return User.fromMap(userMap);
+    }
+    print('📦 No user found in SharedPreferences.');
+    return null;
   }
-  print('📦 No user found in SharedPreferences.');
-  return null;
-}
 
-  
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       home: FutureBuilder<User?>(
         future: getUser(),
@@ -66,13 +83,14 @@ class MyApp extends StatelessWidget {
             return const Center(child: Text('Error loading user data'));
           } else {
             return HomeScreen(); // User is logged in
-          } 
+          }
         },
       ),
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white,
-      fontFamily: 'Poppins',),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Poppins',
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
