@@ -89,9 +89,9 @@ class Product {
   }
 
   // Get mock product by ID
-  static Product? getMockProductById(String productId) {
+  static Product? getMockProductById(int productId) {
     try {
-      return getMockProducts().firstWhere((product) => product.id.toString() == productId);
+      return getMockProducts().firstWhere((product) => product.id == productId);
     } catch (e) {
       return null;
     }

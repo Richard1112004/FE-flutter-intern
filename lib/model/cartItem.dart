@@ -1,13 +1,15 @@
 // First, you need to define CartItem and Order classes
+import 'dart:ffi';
+
 import 'package:provider/provider.dart';
 
 class CartItem {
-  final String id;
+  final int id;
   int quantity;
   double term;
-  final String userId; // Added userId to link to User
-  String orderId; // Added productId to link to Product
-  final String product_id;
+  final int userId; // Added userId to link to User
+  int? orderId; // Added productId to link to Product
+  final int product_id;
 
   static List<CartItem> cartItems = [];
 
@@ -22,15 +24,14 @@ class CartItem {
     cartItems.add(this);
   }
 
-  // Factory constructor for creating CartItem from Map
   factory CartItem.fromMap(Map<String, dynamic> map) {
     return CartItem(
-      id: map['id'] ?? '',
+      id: map['id'] ?? 0,
       quantity: map['quantity'] ?? 0,
-      term: map['term']?.toDouble() ?? 0.0,
-      userId: map['userId'] ?? '',
-      orderId: map['orderId'] ?? '',
-      product_id: map['product_id'] ?? '',
+      term: (map['term'] ?? 0).toDouble(),
+      userId: map['user']?['id'] ?? 0,
+      orderId: map['order']?['id'],
+      product_id: map['product']?['id'] ?? 0,
     );
   }
 
@@ -46,31 +47,31 @@ class CartItem {
   }
 
   static final CartItem iPhone_16 = CartItem(
-    id: 'cart_1',
+    id: 1,
     quantity: 1,
-    term: 0,
-    userId: '1',
-    orderId: '',
-    product_id: 'prod_1',
+    term: 0.0,
+    userId: 1,
+    orderId: 1,
+    product_id: 1,
   );
   static final CartItem iPhone_15 = CartItem(
-    id: 'cart_2',
+    id: 2,
     quantity: 1,
-    term: 0,
-    userId: '1',
-    orderId: '',
-    product_id: 'prod_2',
+    term: 0.0,
+    userId: 1,
+    orderId: 2,
+    product_id: 2,
   );
 
   static createCartItem(
-    String id,
+    int id,
     String productName,
     int quantity,
     double price,
     double term,
-    String userId,
-    String orderId,
-    String productId,
+    int userId,
+    int orderId,
+    int productId,
   ) {
     print(CartItem.iPhone_15);
     print(CartItem.iPhone_16);
@@ -97,7 +98,7 @@ class CartItem {
     }
   }
 
-  static decreaseCartItemQuantity(String productId) {
+  static decreaseCartItemQuantity(int productId) {
     // Find the index of the item to decrease
     int indexToDecrease = cartItems.indexWhere(
       (item) => item.product_id == productId,
@@ -110,7 +111,7 @@ class CartItem {
     }
   }
 
-  static increaseCartItemQuantity(String productId) {
+  static increaseCartItemQuantity(int productId) {
     // Find the index of the item to increase
     int indexToIncrease = cartItems.indexWhere(
       (item) => item.product_id == productId,
@@ -121,7 +122,7 @@ class CartItem {
     }
   }
 
-  static removeCurrentCartItem(String productId) {
+  static removeCurrentCartItem(int productId) {
     // Find the index of the item to remove
     int indexToRemove = cartItems.indexWhere(
       (item) => item.product_id == productId,
@@ -133,12 +134,12 @@ class CartItem {
   }
 
   // Get mock cart items for a specific user
-  static List<CartItem> getMockCartItemsByUserId(String userId) {
+  static List<CartItem> getMockCartItemsByUserId(int userId) {
     return getMockCartItems().where((item) => item.userId == userId).toList();
   }
 
   // Get mock cart items for a specific order
-  static List<CartItem> getMockCartItemsByOrderId(String orderId) {
+  static List<CartItem> getMockCartItemsByOrderId(int orderId) {
     print('Searching for orderId: $orderId');
     return getMockCartItems().where((item) {
       print('Item orderId: ${item.orderId}');

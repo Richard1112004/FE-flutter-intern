@@ -34,12 +34,14 @@ class OrderDetail extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Text(
-              'Name: ${Product.getMockProductById(order?.productID[index] ?? '')?.name ?? productName}',
+              // 'Name: ${Product.getMockProductById(order?.productID[index] ?? '')?.name ?? productName}',
+              'test',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 5),
             Text(
-              'Price: \$${Product.getMockProductById(order?.productID[index] ?? '')?.price.toStringAsFixed(2) ?? productPrice.toStringAsFixed(2)}',
+              // 'Price: \$${Product.getMockProductById(order?.productID[index] ?? '')?.price.toStringAsFixed(2) ?? productPrice.toStringAsFixed(2)}',
+              'test',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway'),
             ),
           ],

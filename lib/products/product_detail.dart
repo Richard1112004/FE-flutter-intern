@@ -1,3 +1,4 @@
+import 'package:begining/api/cart/cart_API.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/products/product_option.dart';
@@ -15,6 +16,7 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      final CartAPI cartAPI = CartAPI();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -167,16 +169,7 @@ class ProductDetail extends StatelessWidget {
                           );
                           return;
                         }
-                        CartItem.createCartItem(
-                          'cart_${CartItem.cartItems.length + 1}',
-                          product.name,
-                          1,
-                          product.price,
-                          0.0,
-                          'user_1', // Assuming user ID is 'user_1'
-                          '', // Assuming order ID is 'order_1'
-                          product.id.toString(),
-                        );
+                        await cartAPI.addToCart(product.id);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Add product to cart successfully!'),

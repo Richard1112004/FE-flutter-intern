@@ -3,8 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 class ProductAPI {
-
-
   Future<List<Product>> fetchProducts() async {
   final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/product/all";
 

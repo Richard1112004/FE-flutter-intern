@@ -17,17 +17,17 @@ class CartProvider with ChangeNotifier {
     return selectionPlan;
   }
 
-  removeCartItem(String productId) {
+  removeCartItem(int productId) {
     CartItem.removeCurrentCartItem(productId);
     notifyListeners();
   }
 
-  void decreaseCartItemQuantity(String product_id) {
+  void decreaseCartItemQuantity(int product_id) {
     CartItem.decreaseCartItemQuantity(product_id);
     notifyListeners();
   }
 
-  void increaseCartItemQuantity(String product_id) {
+  void increaseCartItemQuantity(int product_id) {
     CartItem.increaseCartItemQuantity(product_id);
     notifyListeners();
   }

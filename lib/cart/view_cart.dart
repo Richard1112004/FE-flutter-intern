@@ -474,7 +474,7 @@ class _ViewCartState extends State<ViewCart> {
                                   i++
                                 ) {
                                   CartItem.cartItems[i].orderId =
-                                      'order_${Order.orders.length + 1}';
+                                      Order.orders.length + 1;
                                 }
                                 Order.createOrder(
                                   'order_${Order.orders.length + 1}',

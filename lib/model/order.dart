@@ -5,7 +5,7 @@ class Order {
   final double total;
   final String status;
   final List<String> image;
-  List<String> productID = [];
+  List<int> productID = [];
   static List<Order> orders = [];
 
   Order({
@@ -28,7 +28,7 @@ class Order {
       createdAt: DateTime.parse(
         map['createdAt'] ?? DateTime.now().toIso8601String(),
       ),
-      productID: List<String>.from(map['productID'] ?? []),
+      productID: List<int>.from(map['productID'] ?? []),
       image: map['image'] ?? '',
       total: map['total']?.toDouble() ?? 0.0,
       status: map['status'] ?? '',
@@ -51,7 +51,7 @@ class Order {
     String userId,
     DateTime createdAt,
     List<String> image,
-    List<String> productID,
+    List<int> productID,
     double total,
     String status,
   ) {
