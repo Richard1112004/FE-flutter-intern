@@ -1,5 +1,7 @@
+import 'dart:ffi';
+
 class Product {
-  final String id;
+  final int id;
   final String name;
   final double price;
   final String image;
@@ -7,7 +9,7 @@ class Product {
   final int quantity;
 
   Product({
-    this.id = '',
+    this.id = 0,
     required this.name,
     required this.price,
     required this.image,
@@ -18,7 +20,7 @@ class Product {
   // Factory constructor for creating Product from Map
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['id'] ?? '',
+      id: map['id'] ?? 0,
       name: map['name'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       image: map['image'] ?? '',
@@ -29,7 +31,7 @@ class Product {
 
   // Predefined products
   static final Product iphone15 = Product(
-    id: 'prod_1',
+    id: 1,
     name: 'iPhone 15',
     price: 999,
     image: 'assets/products/iphone_15.png',
@@ -39,7 +41,7 @@ class Product {
   );
 
   static final Product iphone16 = Product(
-    id: 'prod_2',
+    id: 2,
     name: 'iPhone 16',
     price: 1099,
     image: 'assets/products/iphone_16.png',
@@ -49,7 +51,7 @@ class Product {
   );
 
   static final Product carModel = Product(
-    id: 'prod_3',
+    id: 3,
     name: 'Car Model',
     price: 20000,
     image: 'assets/products/Car.png',
@@ -59,7 +61,7 @@ class Product {
   );
 
   static final Product laptop = Product(
-    id: 'prod_4',
+    id: 4,
     name: 'Laptop',
     price: 1500,
     image: 'assets/products/laptop.png',
@@ -89,7 +91,7 @@ class Product {
   // Get mock product by ID
   static Product? getMockProductById(String productId) {
     try {
-      return getMockProducts().firstWhere((product) => product.id == productId);
+      return getMockProducts().firstWhere((product) => product.id.toString() == productId);
     } catch (e) {
       return null;
     }

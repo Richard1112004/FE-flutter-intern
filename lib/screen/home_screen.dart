@@ -1,3 +1,4 @@
+import 'package:begining/api/product/product_API.dart';
 import 'package:begining/model/notification.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/model/user.dart';
@@ -34,9 +35,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedIn = false; // <- thêm biến này
+  final ProductAPI productAPI = ProductAPI();
+  late Future<List<Product>> _productsFuture;
   @override
   void initState() {
     super.initState();
+    _productsFuture = productAPI.fetchProducts(); 
     _loadLoginState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<NavigationProvider>(
@@ -45,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ).setCurrentIndex(0);
     });
   }
+
   Future<void> _loadLoginState() async {
     final prefs = await SharedPreferences.getInstance();
     final loggedIn = prefs.getBool('is_logged_in') ?? false;
@@ -53,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Is logged in: $isLoggedIn');
     });
   }
+
   Widget box(Product product) {
     return InkWell(
       onTap: () {
@@ -168,7 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         print(NotificationModel.welcomeNotification);
                         print(NotificationModel.reminderNotification);
                         final prefs = await SharedPreferences.getInstance();
-                        final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+                        final isLoggedIn =
+                            prefs.getBool('is_logged_in') ?? false;
                         if (!isLoggedIn) {
                           Navigator.push(
                             context,
@@ -232,16 +239,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 20),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            box(Product.getMockProductById('prod_1')!),
-                            SizedBox(width: 20),
-                            box(Product.getMockProductById('prod_2')!),
-                            SizedBox(width: 20),
-                            box(Product.getMockProductById('prod_3')!),
-                            SizedBox(width: 20),
-                            box(Product.getMockProductById('prod_4')!),
-                          ],
+                        child: FutureBuilder<List<Product>>(
+                          future: _productsFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text('Error: ${snapshot.error}'),
+                              );
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return Center(
+                                child: Text('No products available'),
+                              );
+                            } else {
+                              final products = snapshot.data!;
+                              return Row(
+                                children: [
+                                  for (var product in products) ...[
+                                    box(product),
+                                    SizedBox(width: 20),
+                                  ],
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ),
                       SizedBox(height: 20),
@@ -262,16 +286,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 20),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            box(Product.getMockProductById('prod_1')!),
-                            SizedBox(width: 20),
-                            box(Product.getMockProductById('prod_2')!),
-                            SizedBox(width: 20),
-                            box(Product.getMockProductById('prod_3')!),
-                            SizedBox(width: 20),
-                            box(Product.getMockProductById('prod_4')!),
-                          ],
+                        child: FutureBuilder<List<Product>>(
+                          future: _productsFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text('Error: ${snapshot.error}'),
+                              );
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return Center(
+                                child: Text('No products available'),
+                              );
+                            } else {
+                              final products = snapshot.data!;
+                              return Row(
+                                children: [
+                                  for (var product in products) ...[
+                                    box(product),
+                                    SizedBox(width: 20),
+                                  ],
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ),
                       SizedBox(height: 20),
