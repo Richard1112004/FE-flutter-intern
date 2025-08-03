@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:begining/api/cart/cart_API.dart';
+import 'package:begining/api/instalmentPlan/plan_API.dart';
 import 'package:begining/api/order/order_API.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
@@ -25,6 +28,7 @@ class _ViewCartState extends State<ViewCart> {
   late CartProvider cartProvider;
   final CartAPI cartAPI = CartAPI();
   final OrderApi orderAPI = OrderApi();
+  final PlanApi planAPI = PlanApi();
   Future<void> fetchCartItems() async {
     try {
       await cartAPI.getCartItems();
@@ -527,6 +531,24 @@ class _ViewCartState extends State<ViewCart> {
                                   if (cartItem.orderId != null)
                                     continue; // Skip if already assigned
                                   cartItem.orderId = orderId;
+                                  final startDate = DateTime.now();
+                                  final endDate = DateTime(
+                                    startDate.year,
+                                    startDate.month + cartItem.term.toInt(),
+                                    startDate.day,
+                                  );
+                                  planAPI.createInstallmentPlan(
+                                    cartItemId: cartItem.id,
+                                    totalMonth: cartItem.term.toInt(),
+                                    installmentAmount:
+                                        Product.getMockProductById(
+                                          cartItem.product_id,
+                                        )!.price,
+                                    lateFee: 0.0,
+                                    status: "PENDING",
+                                    startDate: startDate,
+                                    endDate: endDate,
+                                  );
 
                                   // Update lên server
                                   await cartAPI.updateCartItemOrderIdClear(
@@ -535,6 +557,7 @@ class _ViewCartState extends State<ViewCart> {
                                     true,
                                   );
                                 }
+
                                 // for (
                                 //   int i = 0;
                                 //   i < CartItem.cartItems.length;
