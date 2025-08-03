@@ -1,5 +1,5 @@
 import 'package:begining/api/auth/id_token.dart';
-import 'package:begining/model/cartItem.dart';
+import 'package:begining/model/CartItem.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -35,13 +35,11 @@ class CartAPI {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> data = responseData['data'];
 
-        CartItem cartItem = CartItem.fromMap(data);
+        CartItem.fromMap(data);
 
-        print("Item added to cart: ${cartItem.toString()}");
+        // CartItem.cartItems.add(cartItem);
 
-        CartItem.cartItems.add(cartItem);
-
-        print("Item added to cart successfully: ${cartItem.id}");
+        print("Cart items after addition: ${CartItem.cartItems}");
       } else {
         print("Failed to add item to cart: ${response.statusCode}");
         print("Response body: ${response.body}");
@@ -52,4 +50,42 @@ class CartAPI {
       throw Exception("Failed to add item to cart");
     }
   }
+
+  Future<List<CartItem>> getCartItems() async {
+    final String? rawUserId = await _idToken.getUserIdFromToken();
+    final int? userId = rawUserId != null ? int.tryParse(rawUserId) : null;
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = await prefs.getString('auth_token');
+    try {
+      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/cart-item/all";
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final List<dynamic> data = responseData['data'];
+
+        CartItem.cartItems.clear();
+        for (var item in data) {
+          CartItem.fromMap(item);
+        }
+
+        return CartItem.cartItems;
+      } else {
+        print("Failed to fetch cart items: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to fetch cart items");
+      }
+    } catch (e) {
+      print("Error fetching cart items: $e");
+      throw Exception("Failed to fetch cart items");
+    }
+  }
+
 }

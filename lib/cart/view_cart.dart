@@ -1,3 +1,4 @@
+import 'package:begining/api/cart/cart_API.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
@@ -21,6 +22,15 @@ class ViewCart extends StatefulWidget {
 class _ViewCartState extends State<ViewCart> {
   User user = User.getMockUser();
   late CartProvider cartProvider;
+  final CartAPI cartAPI = CartAPI();
+  Future<void> fetchCartItems() async {
+    try {
+      await cartAPI.getCartItems();
+      setState(() {});
+    } catch (e) {
+      print('Error loading cart items: $e');
+    }
+  }
 
   List<Map<String, dynamic>> getPlansForProduct(CartItem cartItem) {
     Product product = Product.getMockProductById(cartItem.product_id)!;
@@ -59,6 +69,7 @@ class _ViewCartState extends State<ViewCart> {
     super.initState();
     try {
       user = User.getMockUser();
+      fetchCartItems();
     } catch (e) {
       print('Error loading user: $e');
     }
@@ -422,8 +433,23 @@ class _ViewCartState extends State<ViewCart> {
                                 int i = 0;
                                 i < CartItem.cartItems.length;
                                 i++
-                              )
-                                cartItem(CartItem.cartItems[i], context),
+                              ) ...[
+                                Builder(
+                                  builder: (context) {
+                                    final item = CartItem.cartItems[i];
+                                    print(
+                                      "Cart Item #$i -> "
+                                      "ID: ${item.id}, "
+                                      "Product ID: ${item.product_id}, "
+                                      "Quantity: ${item.quantity}, "
+                                      "Term: ${item.term}, "
+                                      "User ID: ${item.userId}, "
+                                      "Order ID: ${item.orderId}",
+                                    );
+                                    return cartItem(item, context);
+                                  },
+                                ),
+                              ],
                             ],
                           ),
                   ),
@@ -456,7 +482,11 @@ class _ViewCartState extends State<ViewCart> {
                             onPressed: () {
                               print(Order.orders);
                               if (!isCartEmpty) {
-                                for(int i = 0; i < CartItem.cartItems.length; i++) {
+                                for (
+                                  int i = 0;
+                                  i < CartItem.cartItems.length;
+                                  i++
+                                ) {
                                   if (CartItem.cartItems[i].term == 0) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -466,7 +496,7 @@ class _ViewCartState extends State<ViewCart> {
                                       ),
                                     );
                                     return;
-                                  } 
+                                  }
                                 }
                                 for (
                                   int i = 0;
@@ -481,7 +511,11 @@ class _ViewCartState extends State<ViewCart> {
                                   user.id,
                                   DateTime.now(),
                                   CartItem.cartItems
-                                      .map((item) => Product.getMockProductById(item.product_id)!.image)
+                                      .map(
+                                        (item) => Product.getMockProductById(
+                                          item.product_id,
+                                        )!.image,
+                                      )
                                       .toList(),
                                   CartItem.cartItems
                                       .map((item) => item.product_id)

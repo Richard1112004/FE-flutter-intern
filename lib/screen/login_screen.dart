@@ -183,8 +183,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         TextButton(
                           onPressed: () async {
-                            print(CartItem.iPhone_15);
-                            print(CartItem.iPhone_16);
                             String email = emailController.text.trim();
                             String password = passwordController.text.trim();
                             final user = User.createUser(

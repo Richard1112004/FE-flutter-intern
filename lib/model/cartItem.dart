@@ -46,22 +46,6 @@ class CartItem {
     return cartItems;
   }
 
-  static final CartItem iPhone_16 = CartItem(
-    id: 1,
-    quantity: 1,
-    term: 0.0,
-    userId: 1,
-    orderId: 1,
-    product_id: 1,
-  );
-  static final CartItem iPhone_15 = CartItem(
-    id: 2,
-    quantity: 1,
-    term: 0.0,
-    userId: 1,
-    orderId: 2,
-    product_id: 2,
-  );
 
   static createCartItem(
     int id,
@@ -73,9 +57,6 @@ class CartItem {
     int orderId,
     int productId,
   ) {
-    print(CartItem.iPhone_15);
-    print(CartItem.iPhone_16);
-    print(productId);
     // Check if product already exists in cart
     int existingItemIndex = cartItems.indexWhere(
       (item) => item.product_id == productId,

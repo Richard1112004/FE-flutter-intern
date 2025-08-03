@@ -39,8 +39,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         await SignUp().signUp(context, emailController.text, passwordController.text);
         print(User.getMockUsers());
-        print(CartItem.iPhone_15);
-        print(CartItem.iPhone_16);
         // ScaffoldMessenger.of(context).showSnackBar(
         //   const SnackBar(content: Text('Account created successfully!')),
         // );

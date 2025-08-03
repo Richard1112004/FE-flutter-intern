@@ -79,8 +79,6 @@ class _StartScreenState extends State<StartScreen> {
                     // Handle successful sign-in
                     print('User signed in: ${user.email}');
                     print(User.getMockUsers());
-                    print(CartItem.iPhone_15);
-                    print(CartItem.iPhone_16);
                     Provider.of<UserProvider>(
                       context,
                       listen: false,
