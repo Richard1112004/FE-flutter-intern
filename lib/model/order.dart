@@ -1,21 +1,17 @@
 class Order {
-  String id;
+  int id;
   final String userId;
   final DateTime createdAt;
   final double total;
   final String status;
-  final List<String> image;
-  List<int> productID = [];
   static List<Order> orders = [];
 
   Order({
-    this.id = '',
+    this.id = 0,
     required this.userId,
     required this.createdAt,
     required this.total,
-    required this.image,
     required this.status,
-    required this.productID,
   }) {
     orders.add(this);
   }
@@ -23,14 +19,10 @@ class Order {
   // Factory constructor for creating Order from Map
   factory Order.fromMap(Map<String, dynamic> map) {
     return Order(
-      id: map['id'] ?? '',
-      userId: map['userId'] ?? '',
-      createdAt: DateTime.parse(
-        map['createdAt'] ?? DateTime.now().toIso8601String(),
-      ),
-      productID: List<int>.from(map['productID'] ?? []),
-      image: map['image'] ?? '',
-      total: map['total']?.toDouble() ?? 0.0,
+      id: map['id'] ?? 0,
+      userId: map['user']?['id']?.toString() ?? '',
+      createdAt: DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
+      total: (map['total'] ?? 0).toDouble(),
       status: map['status'] ?? '',
     );
   }
@@ -45,9 +37,8 @@ class Order {
     return orders;
   }
 
-
   static createOrder(
-    String id,
+    int id,
     String userId,
     DateTime createdAt,
     List<String> image,
@@ -59,8 +50,6 @@ class Order {
       id: id,
       userId: userId,
       createdAt: createdAt,
-      image: image,
-      productID: productID,
       total: total,
       status: status,
     );

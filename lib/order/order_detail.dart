@@ -1,3 +1,4 @@
+import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/order/order_detail_track.dart';
@@ -14,7 +15,7 @@ class OrderDetail extends StatelessWidget {
         Card(
           child: Image(
             image: AssetImage(
-              order?.image[index] ?? imagePath,
+             imagePath,
             ),
             width: 120,
             height: 120,
@@ -34,14 +35,12 @@ class OrderDetail extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Text(
-              // 'Name: ${Product.getMockProductById(order?.productID[index] ?? '')?.name ?? productName}',
-              'test',
+              'Name: $productName',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 5),
             Text(
-              // 'Price: \$${Product.getMockProductById(order?.productID[index] ?? '')?.price.toStringAsFixed(2) ?? productPrice.toStringAsFixed(2)}',
-              'test',
+              'Price: \$${productPrice.toStringAsFixed(2)}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway'),
             ),
           ],
@@ -73,10 +72,16 @@ class OrderDetail extends StatelessWidget {
     ];
   } else {
     // Nếu có order, hiển thị products thực tế
+    final List<Product> products = CartItem.getMockCartItemsByOrderId(order!.id)
+    .map((item) => Product.getMockProductById(item.product_id))
+    .whereType<Product>() // lọc bỏ các giá trị null
+    .toList();
+
+
     List<Widget> widgets = [];
-    for (int i = 0; i < (order!.image.length); i++) {
-      widgets.add(orderProduct(order, i, '', '', 0.0));
-      if (i < order!.image.length - 1) {
+    for (int i = 0; i < products.length; i++) {
+      widgets.add(orderProduct(order, i, products[i].image, products[i].name, products[i].price));
+      if (i < products.length - 1) {
         widgets.add(SizedBox(height: 20));
       }
     }

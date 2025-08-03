@@ -10,6 +10,7 @@ class CartItem {
   final int userId; // Added userId to link to User
   int? orderId; // Added productId to link to Product
   final int product_id;
+  bool clear = false; // Flag to indicate if the item should be cleared
 
   static List<CartItem> cartItems = [];
 
@@ -20,6 +21,7 @@ class CartItem {
     required this.userId, // Initialize userId
     required this.orderId, // Initialize orderId
     required this.product_id,
+    required this.clear,
   }) {
     cartItems.add(this);
   }
@@ -32,6 +34,7 @@ class CartItem {
       userId: map['user']?['id'] ?? 0,
       orderId: map['order']?['id'],
       product_id: map['product']?['id'] ?? 0,
+      clear: map['clear'] ?? false,
     );
   }
 
@@ -46,37 +49,6 @@ class CartItem {
     return cartItems;
   }
 
-  static createCartItem(
-    int id,
-    String productName,
-    int quantity,
-    double price,
-    double term,
-    int userId,
-    int orderId,
-    int productId,
-  ) {
-    // Check if product already exists in cart
-    int existingItemIndex = cartItems.indexWhere(
-      (item) => item.product_id == productId,
-    );
-    print(existingItemIndex);
-    if (existingItemIndex != -1) {
-      // Product exists, increment quantity by 1
-
-      cartItems[existingItemIndex].quantity += 1;
-    } else {
-      // Product doesn't exist, create new CartItem
-      CartItem(
-        id: id,
-        quantity: quantity,
-        term: term,
-        userId: userId,
-        orderId: orderId,
-        product_id: productId,
-      );
-    }
-  }
 
   static decreaseCartItemQuantity(int productId) {
     // Find the index of the item to decrease

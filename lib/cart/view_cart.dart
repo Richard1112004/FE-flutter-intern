@@ -1,4 +1,5 @@
 import 'package:begining/api/cart/cart_API.dart';
+import 'package:begining/api/order/order_API.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
@@ -23,6 +24,7 @@ class _ViewCartState extends State<ViewCart> {
   User user = User.getMockUser();
   late CartProvider cartProvider;
   final CartAPI cartAPI = CartAPI();
+  final OrderApi orderAPI = OrderApi();
   Future<void> fetchCartItems() async {
     try {
       await cartAPI.getCartItems();
@@ -186,14 +188,17 @@ class _ViewCartState extends State<ViewCart> {
                     },
                     onChange: (selectedPlan) async {
                       String durationString = selectedPlan["duration"];
-                      double selectedTerm= double.parse(
+                      double selectedTerm = double.parse(
                         durationString.split(' ')[0],
                       ); // Extract "6" and convert to 6.0
 
                       setState(() {
                         cartItem.term = selectedTerm;
                       });
-                      await cartAPI.updateCartItem(cartItem.id, selectedTerm.toInt());
+                      await cartAPI.updateCartItemTerm(
+                        cartItem.id,
+                        selectedTerm.toInt(),
+                      );
                     },
                   ),
                 },
@@ -329,7 +334,10 @@ class _ViewCartState extends State<ViewCart> {
                       184,
                     ), // Màu nền
                     child: Text(
-                      CartItem.cartItems.length.toString(),
+                      CartItem.cartItems
+                          .where((item) => !item.clear)
+                          .length
+                          .toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -433,16 +441,13 @@ class _ViewCartState extends State<ViewCart> {
                           )
                         : Column(
                             children: [
-                              for (
-                                int i = 0;
-                                i < CartItem.cartItems.length;
-                                i++
-                              ) ...[
+                              for (final item in CartItem.cartItems.where(
+                                (item) => item.clear == false,
+                              )) ...[
                                 Builder(
                                   builder: (context) {
-                                    final item = CartItem.cartItems[i];
                                     print(
-                                      "Cart Item #$i -> "
+                                      "Cart Item -> "
                                       "ID: ${item.id}, "
                                       "Product ID: ${item.product_id}, "
                                       "Quantity: ${item.quantity}, "
@@ -473,7 +478,7 @@ class _ViewCartState extends State<ViewCart> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Total \$${CartItem.cartItems.fold(0.0, (total, item) => total + Product.getMockProductById(item.product_id)!.price * item.quantity).toStringAsFixed(2)}',
+                              'Total \$${CartItem.cartItems.where((item) => !item.clear).fold(0.0, (total, item) => total + Product.getMockProductById(item.product_id)!.price * item.quantity).toStringAsFixed(2)}',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -483,7 +488,7 @@ class _ViewCartState extends State<ViewCart> {
                           ),
                           Spacer(),
                           TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               print(Order.orders);
                               if (!isCartEmpty) {
                                 for (
@@ -502,40 +507,69 @@ class _ViewCartState extends State<ViewCart> {
                                     return;
                                   }
                                 }
-                                for (
-                                  int i = 0;
-                                  i < CartItem.cartItems.length;
-                                  i++
-                                ) {
-                                  CartItem.cartItems[i].orderId =
-                                      Order.orders.length + 1;
+                                final orderResponse = await orderAPI
+                                    .createOrder(
+                                      status: "PENDING",
+                                      total: CartItem.cartItems
+                                          .where((item) => !item.clear)
+                                          .fold(
+                                            0.0,
+                                            (total, item) =>
+                                                total +
+                                                Product.getMockProductById(
+                                                      item.product_id,
+                                                    )!.price *
+                                                    item.quantity,
+                                          ),
+                                    );
+                                final orderId = orderResponse['data']['id'];
+                                for (final cartItem in CartItem.cartItems) {
+                                  if (cartItem.orderId != null)
+                                    continue; // Skip if already assigned
+                                  cartItem.orderId = orderId;
+
+                                  // Update lên server
+                                  await cartAPI.updateCartItemOrderIdClear(
+                                    cartItem.id,
+                                    orderId,
+                                    true,
+                                  );
                                 }
-                                Order.createOrder(
-                                  'order_${Order.orders.length + 1}',
-                                  user.id,
-                                  DateTime.now(),
-                                  CartItem.cartItems
-                                      .map(
-                                        (item) => Product.getMockProductById(
-                                          item.product_id,
-                                        )!.image,
-                                      )
-                                      .toList(),
-                                  CartItem.cartItems
-                                      .map((item) => item.product_id)
-                                      .toList(),
-                                  CartItem.cartItems.fold(
-                                    0.0,
-                                    (total, item) =>
-                                        total +
-                                        Product.getMockProductById(
-                                              item.product_id,
-                                            )!.price *
-                                            item.quantity,
-                                  ),
-                                  'pending',
-                                );
-                                CartItem.clearCartItems();
+                                // for (
+                                //   int i = 0;
+                                //   i < CartItem.cartItems.length;
+                                //   i++
+                                // ) {
+                                //   CartItem.cartItems[i].orderId =
+                                //       Order.orders.length + 1;
+                                // }
+                                // Order.createOrder(
+                                //   Order.orders.length + 1,
+                                //   user.id,
+                                //   DateTime.now(),
+                                //   CartItem.cartItems
+                                //       .map(
+                                //         (item) => Product.getMockProductById(
+                                //           item.product_id,
+                                //         )!.image,
+                                //       )
+                                //       .toList(),
+                                //   CartItem.cartItems
+                                //       .map((item) => item.product_id)
+                                //       .toList(),
+                                //   CartItem.cartItems.fold(
+                                //     0.0,
+                                //     (total, item) =>
+                                //         total +
+                                //         Product.getMockProductById(
+                                //               item.product_id,
+                                //             )!.price *
+                                //             item.quantity,
+                                //   ),
+                                //   'pending',
+                                // );
+                                // CartItem.clearCartItems();
+
                                 print(Order.orders);
                               }
                               _goToOrdersPage();

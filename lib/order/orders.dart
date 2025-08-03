@@ -1,3 +1,4 @@
+import 'package:begining/api/order/order_API.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
@@ -9,21 +10,21 @@ import 'package:provider/provider.dart';
 
 class Orders extends StatelessWidget {
   Widget orderCard(Order order, BuildContext context) {
-    print(Order.orders);
+    print("Order.orders: ${Order.orders}");
     print(CartItem.cartItems);
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => OrderDetail(order: order),
-        ),
+        MaterialPageRoute(builder: (context) => OrderDetail(order: order)),
       ),
       child: Row(
         children: [
           Card(
             child: Image(
               image: AssetImage(
-                order.image[0], // Assuming order.image is a valid asset path
+                Product.getMockProductById(
+                  CartItem.getMockCartItemsByOrderId(order.id)[0].product_id,
+                )!.image,
               ),
               width: 120,
               height: 120,
@@ -62,15 +63,16 @@ class Orders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orders = Order.getMockOrders();
+    final OrderApi orderApi = OrderApi();
     final userProvider = Provider.of<UserProvider>(context);
-    print('=== ORDERS DEBUG ===');
-    print('Total orders: ${orders.length}');
+    // print('=== ORDERS DEBUG ===');
+    // print('Total orders: ${orders.length}');
 
-    if (orders.isNotEmpty) {
-      print('First order ID: ${orders[0].id}');
-      print('First order status: ${orders[0].status}');
-      print('First order date: ${orders[0].createdAt}');
-    }
+    // if (orders.isNotEmpty) {
+    //   print('First order ID: ${orders[0].id}');
+    //   print('First order status: ${orders[0].status}');
+    //   print('First order date: ${orders[0].createdAt}');
+    // }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),
@@ -96,71 +98,93 @@ class Orders extends StatelessWidget {
                       radius: 30,
                       backgroundImage: userProvider.isLoggedGoogle
                           ? NetworkImage(userProvider.user!.photoUrl!)
-                          : AssetImage('assets/profile/user.png') as ImageProvider,
+                          : AssetImage('assets/profile/user.png')
+                                as ImageProvider,
                       backgroundColor: Colors.white,
                     ),
                     SizedBox(width: 10),
                     Text(
                       'History of Orders',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
-                InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OrderDetail()),
-                  ),
-                  child: Row(
-                    children: [
-                      Card(
-                        child: Image(
-                          image: AssetImage('assets/products/iphone_15.png'),
-                          width: 120,
-                          height: 120,
+                // InkWell(
+                //   onTap: () => Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => OrderDetail()),
+                //   ),
+                //   child: Row(
+                //     children: [
+                //       Card(
+                //         child: Image(
+                //           image: AssetImage('assets/products/iphone_15.png'),
+                //           width: 120,
+                //           height: 120,
+                //         ),
+                //       ),
+                //       SizedBox(width: 10),
+                //       Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           Text(
+                //             'Order order_0',
+                //             style: TextStyle(
+                //               fontSize: 18,
+                //               fontWeight: FontWeight.bold,
+                //               fontFamily: 'Raleway',
+                //             ),
+                //           ),
+                //           SizedBox(height: 5),
+                //           Text(
+                //             'Order Date: 2025-07-14',
+                //             style: TextStyle(
+                //               fontSize: 18,
+                //               fontWeight: FontWeight.w500,
+                //             ),
+                //           ),
+                //           SizedBox(height: 5),
+                //           Text(
+                //             'Order Status: shipped',
+                //             style: TextStyle(
+                //               fontSize: 18,
+                //               fontWeight: FontWeight.w500,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                FutureBuilder<List<Order>>(
+                  future: orderApi.getAllOrders(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ));
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('No orders available'));
+                    } else {
+                      final orders = snapshot.data!;
+                      return Column(
+                        children: List.generate(
+                          orders.length,
+                          (i) => Column(
+                            children: [
+                              orderCard(orders[i], context),
+                              SizedBox(height: 20),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Order order_0',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Raleway',
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Order Date: 2025-07-14',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Order Status: shipped',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                ...List.generate(
-                  Order.getMockOrders().length,
-                  (i) => Column(
-                    children: [
-                      SizedBox(height: 20),
-                      orderCard(Order.getMockOrders()[i], context),
-                    ],
-                  ),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
