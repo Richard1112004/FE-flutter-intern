@@ -184,12 +184,16 @@ class _ViewCartState extends State<ViewCart> {
                         ),
                       );
                     },
-                    onChange: (selectedPlan) {
+                    onChange: (selectedPlan) async {
                       String durationString = selectedPlan["duration"];
-                      cartItem.term = double.parse(
+                      double selectedTerm= double.parse(
                         durationString.split(' ')[0],
                       ); // Extract "6" and convert to 6.0
-                      cartProvider.setSelectionPlan(selectedPlan["duration"]);
+
+                      setState(() {
+                        cartItem.term = selectedTerm;
+                      });
+                      await cartAPI.updateCartItem(cartItem.id, selectedTerm.toInt());
                     },
                   ),
                 },

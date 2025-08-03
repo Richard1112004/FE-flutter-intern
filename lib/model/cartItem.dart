@@ -46,7 +46,6 @@ class CartItem {
     return cartItems;
   }
 
-
   static createCartItem(
     int id,
     String productName,
@@ -117,6 +116,14 @@ class CartItem {
   // Get mock cart items for a specific user
   static List<CartItem> getMockCartItemsByUserId(int userId) {
     return getMockCartItems().where((item) => item.userId == userId).toList();
+  }
+
+  static CartItem? getMockCartItemById(int id) {
+    try {
+      return getMockCartItems().firstWhere((item) => item.id == id);
+    } catch (e) {
+      return null;
+    }
   }
 
   // Get mock cart items for a specific order

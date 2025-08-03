@@ -88,4 +88,36 @@ class CartAPI {
     }
   }
 
+  Future<void> updateCartItem(int cartItemId, int term) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    try {
+      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/cart-item/$cartItemId";
+
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+        body: jsonEncode({
+          "term": term
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        print("Cart item updated successfully: ${responseData['message']}");
+      } else {
+        print("Failed to update cart item: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to update cart item");
+      }
+    } catch (e) {
+      print("Error updating cart item: $e");
+      throw Exception("Failed to update cart item");
+    }
+  }
 }
