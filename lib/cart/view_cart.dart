@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:begining/api/cart/cart_API.dart';
 import 'package:begining/api/instalmentPlan/plan_API.dart';
 import 'package:begining/api/order/order_API.dart';
+import 'package:begining/api/payment/paymentAPI.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
+import 'package:begining/model/payment.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/order/orders.dart';
@@ -29,6 +31,7 @@ class _ViewCartState extends State<ViewCart> {
   final CartAPI cartAPI = CartAPI();
   final OrderApi orderAPI = OrderApi();
   final PlanApi planAPI = PlanApi();
+  final Paymentapi paymentAPI = Paymentapi();
   Future<void> fetchCartItems() async {
     try {
       await cartAPI.getCartItems();
@@ -99,6 +102,26 @@ class _ViewCartState extends State<ViewCart> {
         print('Cart has been refreshed after placing an order');
       });
     }
+  }
+
+  double calculateInstallmentAmount(double price, int term) {
+    double amount;
+
+    switch (term) {
+      case 6:
+        amount = ((price - (price / 10)) / 6) + 5;
+        break;
+      case 9:
+        amount = ((price - (price / 10)) / 9) + 10;
+        break;
+      case 12:
+        amount = ((price - (price / 10)) / 12) + 15;
+        break;
+      default:
+        amount = price; // fallback nếu term không nằm trong 6, 9, 12
+    }
+
+    return double.parse(amount.toStringAsFixed(2));
   }
 
   Widget cartItem(CartItem cartItem, BuildContext context) {
@@ -537,17 +560,33 @@ class _ViewCartState extends State<ViewCart> {
                                     startDate.month + cartItem.term.toInt(),
                                     startDate.day,
                                   );
-                                  planAPI.createInstallmentPlan(
-                                    cartItemId: cartItem.id,
-                                    totalMonth: cartItem.term.toInt(),
-                                    installmentAmount:
-                                        Product.getMockProductById(
-                                          cartItem.product_id,
-                                        )!.price,
-                                    lateFee: 0.0,
+                                  final installmentPlan = await planAPI
+                                      .createInstallmentPlan(
+                                        cartItemId: cartItem.id,
+                                        totalMonth: cartItem.term.toInt(),
+                                        installmentAmount:
+                                            Product.getMockProductById(
+                                              cartItem.product_id,
+                                            )!.price,
+                                        lateFee: 0.0,
+                                        status: "PENDING",
+                                        startDate: startDate,
+                                        endDate: endDate,
+                                      );
+                                  final dueDate = DateTime(
+                                    startDate.year,
+                                    startDate.month + 1,
+                                    startDate.day,
+                                  );
+                                  final price = Product.getMockProductById(
+                                    cartItem.product_id,
+                                  )!.price;
+                                  paymentAPI.createPayment(
+                                    installmentPlanId:
+                                        installmentPlan['data']['id'],
+                                    amount: calculateInstallmentAmount(price, cartItem.term.toInt()),
                                     status: "PENDING",
-                                    startDate: startDate,
-                                    endDate: endDate,
+                                    dueDate: dueDate,
                                   );
 
                                   // Update lên server
