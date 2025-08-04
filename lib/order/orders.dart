@@ -1,3 +1,4 @@
+import 'package:begining/api/instalmentPlan/plan_API.dart';
 import 'package:begining/api/order/order_API.dart';
 import 'package:begining/model/CartItem.dart';
 import 'package:begining/model/order.dart';
@@ -17,6 +18,7 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
   final OrderApi orderApi = OrderApi();
+  final PlanApi planApi = PlanApi();
   Future<List<Order>> _fetchOrder() async {
     await orderApi.getAllOrders();
     return Order.getMockOrders();
@@ -28,6 +30,7 @@ class _OrdersState extends State<Orders> {
   void initState() {
     super.initState();
     _futureOrders = _fetchOrder();
+    planApi.getAllInstallmentPlans();
   }
 
   Widget orderCard(Order order, BuildContext context) {

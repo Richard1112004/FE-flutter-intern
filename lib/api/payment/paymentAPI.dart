@@ -51,4 +51,36 @@ class Paymentapi {
       throw Exception("Failed to create payment");
     }
   }
+
+  Future<List<Payment>> getPayments(int installment_plan_id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/payment/$installment_plan_id";
+
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        Payment.payments.clear(); // Clear previous payments
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final List<dynamic> data = responseData['data'];
+        print("Payments fetched successfully: $data");
+        final dataReturned = data.map((item) => Payment.fromMap(item)).toList();
+        print("All Payments: ${Payment.payments}");
+        return dataReturned;
+      } else {
+        throw Exception("Failed to fetch payments: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error fetching payments: $e");
+    }
+  }
 }

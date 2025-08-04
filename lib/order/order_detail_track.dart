@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailTrack extends StatelessWidget {
-  const OrderDetailTrack({super.key, required this.productName});
+  const OrderDetailTrack({super.key, required this.productName, required this.installment_plan_id});
   final String productName;
+  final int installment_plan_id;
 
   Widget _buildTimelineItem({
     required String description,
@@ -93,6 +94,8 @@ class OrderDetailTrack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Building OrderDetailTrack for $productName" 
+        " with installment_plan_id: $installment_plan_id");
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -129,7 +132,7 @@ class OrderDetailTrack extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                OrderDetailChart(productName: productName),
+                                OrderDetailChart(productName: productName, installment_plan_id: installment_plan_id),
                           ),
                         );
                     },

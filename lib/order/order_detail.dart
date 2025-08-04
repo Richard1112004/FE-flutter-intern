@@ -1,4 +1,5 @@
 import 'package:begining/model/CartItem.dart';
+import 'package:begining/model/installment.dart';
 import 'package:begining/model/order.dart';
 import 'package:begining/model/product.dart';
 import 'package:begining/order/order_detail_track.dart';
@@ -53,24 +54,41 @@ class OrderDetail extends StatelessWidget {
     );
   }
 
+  Map<String, List<dynamic>> getProductsAndInstallmentsByOrder(int orderId) {
+    final cartItems = CartItem.getMockCartItemsByOrderId(orderId);
+
+    final List<Product> products = cartItems
+        .map((item) => Product.getMockProductById(item.product_id))
+        .whereType<Product>()
+        .toList();
+
+    final List<Installment> installments = cartItems
+        .map((item) => Installment.getInstallmentsByCartItemId(item.id))
+        .toList();
+
+    return {'products': products, 'installments': installments};
+  }
+
   List<Widget> _buildOrderProducts(BuildContext context) {
     // Luôn dùng dữ liệu thật
-    final List<Product> products = CartItem.getMockCartItemsByOrderId(order!.id)
-        .map((item) => Product.getMockProductById(item.product_id))
-        .whereType<Product>() // bỏ null
-        .toList();
+    final data = getProductsAndInstallmentsByOrder(order!.id);
+    final List<Product> products = data['products'] as List<Product>;
+    final List<Installment> installments =
+        data['installments'] as List<Installment>;
 
     List<Widget> widgets = [];
 
     for (int i = 0; i < products.length; i++) {
+      final product = products[i];
+      final installment = installments[i];
+
       final productWidget = orderProduct(
         order,
         i,
-        products[i].image,
-        products[i].name,
-        products[i].price,
+        product.image,
+        product.name,
+        product.price,
       );
-
       // Nếu đơn hàng là SHIPPED thì bọc trong InkWell
       widgets.add(
         order?.status == "SHIPPED"
@@ -79,7 +97,7 @@ class OrderDetail extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        OrderDetailTrack(productName: products[i].name),
+                        OrderDetailTrack(productName: products[i].name, installment_plan_id: installment.id),
                   ),
                 ),
                 child: productWidget,

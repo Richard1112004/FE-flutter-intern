@@ -1,5 +1,6 @@
 import 'package:begining/api/auth/id_token.dart';
 import 'package:begining/model/CartItem.dart';
+import 'package:begining/model/installment.dart';
 import 'package:begining/model/order.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -43,9 +44,9 @@ class PlanApi {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
-        print("Installment plan created successfully: $responseData");
-        return responseData;
+        final installmentResponse = jsonDecode(response.body);
+        print("Installment plan created successfully: $installmentResponse");
+        return installmentResponse;
       } else {
         print("Failed to create installment plan: ${response.statusCode}");
         print("Response body: ${response.body}");
@@ -54,6 +55,39 @@ class PlanApi {
     } catch (e) {
       print("Error creating installment plan: $e");
       throw Exception("Failed to create installment plan");
+    }
+  }
+
+  Future<List<Installment>> getAllInstallmentPlans() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    final String apiUrl =
+        "${dotenv.env['BASE_URL']}/api/v1/installment-plan/all";
+
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final List<dynamic> data = responseData['data'];
+        final List<Installment> installments = data.map((item) => Installment.fromMap(item)).toList();
+        print("Installment.installments: ${Installment.installments}");
+        return installments;
+      } else {
+        throw Exception(
+          "Failed to fetch installment plans: ${response.statusCode}",
+        );
+      }
+    } catch (e) { 
+      throw Exception("Error fetching installment plans: $e");
     }
   }
 }

@@ -33,4 +33,8 @@ class Payment {
   String toString() {
     return 'Payment{id: $id, amount: \$${amount.toStringAsFixed(2)}, installment_plan_id: $installment_plan_id, status: $status, due_date: $due_date, paid_date: $paid_date}';
   }
+
+  static void clearPayments() {
+    payments.clear();
+  }
 }
