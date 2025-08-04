@@ -56,7 +56,8 @@ class Paymentapi {
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = prefs.getString('auth_token');
 
-    final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/payment/$installment_plan_id";
+    final String apiUrl =
+        "${dotenv.env['BASE_URL']}/api/v1/payment/$installment_plan_id";
 
     try {
       final response = await http.get(
@@ -81,6 +82,43 @@ class Paymentapi {
       }
     } catch (e) {
       throw Exception("Error fetching payments: $e");
+    }
+  }
+
+  Future<void> updatePayment({
+    required int paymentId,
+    required String status,
+    required DateTime paidDate,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/payment/$paymentId";
+
+    try {
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+        body: jsonEncode({
+          "status": status,
+          "paid_date": paidDate.toIso8601String(), 
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Payment updated successfully: ${response.body}");
+      } else {
+        print("Failed to update payment: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to update payment");
+      }
+    } catch (e) {
+      print("Error updating payment: $e");
+      throw Exception("Failed to update payment");
     }
   }
 }

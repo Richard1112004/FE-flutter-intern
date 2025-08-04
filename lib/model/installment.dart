@@ -1,7 +1,7 @@
 class Installment {
   int id;
   final double installment_amount;
-  final double late_fee;
+  double late_fee;
   final DateTime due_date;
   final DateTime start_date;
   final int total_month;

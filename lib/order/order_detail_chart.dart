@@ -1,3 +1,4 @@
+import 'package:begining/api/instalmentPlan/plan_API.dart';
 import 'package:begining/api/payment/paymentAPI.dart';
 import 'package:begining/model/installment.dart';
 import 'package:begining/model/payment.dart';
@@ -22,6 +23,7 @@ class OrderDetailChart extends StatefulWidget {
 class _OrderDetailChartState extends State<OrderDetailChart> {
   bool isPaid = false; // Trạng thái thanh toán
   final Paymentapi paymentapi = Paymentapi();
+  final PlanApi planApi = PlanApi();
   @override
   void initState() {
     super.initState();
@@ -32,7 +34,12 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
     int newMonth = date.month + months;
     int yearOffset = (newMonth - 1) ~/ 12;
     int month = ((newMonth - 1) % 12) + 1;
-    return DateTime(date.year + yearOffset, month, date.day);
+    int year = date.year + yearOffset;
+
+    // Lấy ngày tối đa của tháng mới
+    int dayInMonth = DateTime(year, month + 1, 0).day;
+
+    return DateTime(year, month, date.day > dayInMonth ? dayInMonth : date.day);
   }
 
   int calculateMonthsPaid(List<Payment> payments, int installmentPlanId) {
@@ -70,7 +77,9 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
         future: paymentapi.getPayments(widget.installment_plan_id),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(
+              color: Colors.blueAccent,
+            ));
           }
 
           if (snapshot.hasError) {
@@ -81,7 +90,8 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
             return const Center(child: Text('No payment data available'));
           }
 
-          final payments = snapshot.data!;
+          final payments = snapshot.data!
+            ..sort((a, b) => a.due_date.compareTo(b.due_date));
           print("Payments fetched: ${payments}");
           final monthPaid = calculateMonthsPaid(
             payments,
@@ -273,7 +283,7 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Remaining Balance: \$${((Installment.getInstallmentById(widget.installment_plan_id).total_month - payments.length) * payments.first.amount).toStringAsFixed(2)}',
+                      'Remaining Balance: \$${(((Installment.getInstallmentById(widget.installment_plan_id).total_month - calculateMonthsPaid(payments, widget.installment_plan_id)) * payments.first.amount) + Installment.getInstallmentById(widget.installment_plan_id).late_fee).toStringAsFixed(2)} (late fee: \$${Installment.getInstallmentById(widget.installment_plan_id).late_fee.toStringAsFixed(2)})',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -292,42 +302,47 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                         DataColumn(label: Text('Amount')),
                         DataColumn(label: Text('Status')),
                       ],
-                      rows: List.generate(Installment.getInstallmentById(widget.installment_plan_id).total_month, (index) {
-                        final isPaid = index < payments.length;
-                        final dueDate = isPaid
-                            ? payments[index].due_date
-                            : addMonths(
-                                payments.last.due_date,
-                                index - payments.length + 1,
-                              );
-                        final amount = isPaid
-                            ? payments[index].amount
-                            : payments
-                                  .last
-                                  .amount; // lấy giá trị cuối cho các tháng sau
-                        final status = isPaid
-                            ? payments[index].status
-                            : 'Upcoming';
+                      rows: List.generate(
+                        Installment.getInstallmentById(
+                          widget.installment_plan_id,
+                        ).total_month,
+                        (index) {
+                          final isPaid = index < payments.length;
+                          final dueDate = isPaid
+                              ? payments[index].due_date
+                              : addMonths(
+                                  payments.last.due_date,
+                                  index - payments.length + 1,
+                                );
+                          final amount = isPaid
+                              ? payments[index].amount
+                              : payments
+                                    .last
+                                    .amount; // lấy giá trị cuối cho các tháng sau
+                          final status = isPaid
+                              ? payments[index].status
+                              : 'Upcoming';
 
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(dueDate.toString().split(' ')[0])),
-                            DataCell(Text('${amount.toStringAsFixed(2)}')),
-                            DataCell(
-                              Text(
-                                status,
-                                style: TextStyle(
-                                  color: isPaid
-                                      ? (status == "OVERDUE"
-                                            ? Colors.red
-                                            : Colors.green)
-                                      : Colors.grey,
+                          return DataRow(
+                            cells: [
+                              DataCell(Text(dueDate.toString().split(' ')[0])),
+                              DataCell(Text('${amount.toStringAsFixed(2)}')),
+                              DataCell(
+                                Text(
+                                  status,
+                                  style: TextStyle(
+                                    color: isPaid
+                                        ? (status == "OVERDUE"
+                                              ? Colors.red
+                                              : Colors.green)
+                                        : Colors.grey,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Center(
@@ -343,9 +358,22 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                             ),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          await paymentapi.updatePayment(
+                              paymentId: payments.where(
+                                (payment) =>
+                                    payment.installment_plan_id ==
+                                        widget.installment_plan_id &&
+                                    payment.status == 'OVERDUE',
+                              ).first.id,
+                              status: "PAID",
+                              paidDate: DateTime.now(),
+                            );
+                            await planApi.updateInstallmentPlanLateFee(
+                              planId: widget.installment_plan_id,
+                              lateFee: 0.0,
+                            );
                           setState(() {
-                            isPaid = true;
                           });
                         },
                         child: const Text(

@@ -78,7 +78,9 @@ class PlanApi {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final List<dynamic> data = responseData['data'];
-        final List<Installment> installments = data.map((item) => Installment.fromMap(item)).toList();
+        final List<Installment> installments = data
+            .map((item) => Installment.fromMap(item))
+            .toList();
         print("Installment.installments: ${Installment.installments}");
         return installments;
       } else {
@@ -86,8 +88,45 @@ class PlanApi {
           "Failed to fetch installment plans: ${response.statusCode}",
         );
       }
-    } catch (e) { 
+    } catch (e) {
       throw Exception("Error fetching installment plans: $e");
+    }
+  }
+
+  Future<void> updateInstallmentPlanLateFee({
+    required int planId,
+    required double lateFee,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    final String apiUrl =
+        "${dotenv.env['BASE_URL']}/api/v1/installment-plan/$planId";
+
+    try {
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+        body: jsonEncode({"lateFee": lateFee}),
+      );
+
+      if (response.statusCode == 200) {
+        print(
+          "Installment plan late fee updated successfully: ${response.body}",
+        );
+        Installment.getInstallmentById(planId).late_fee = lateFee;
+      } else {
+        print("Failed to update installment plan: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to update installment plan");
+      }
+    } catch (e) {
+      print("Error updating installment plan: $e");
+      throw Exception("Failed to update installment plan");
     }
   }
 }
