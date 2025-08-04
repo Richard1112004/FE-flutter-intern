@@ -8,7 +8,28 @@ import 'package:begining/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Orders extends StatelessWidget {
+class Orders extends StatefulWidget {
+  const Orders({super.key});
+
+  @override
+  State<Orders> createState() => _OrdersState();
+}
+
+class _OrdersState extends State<Orders> {
+  final OrderApi orderApi = OrderApi();
+  Future<List<Order>> _fetchOrder() async {
+    await orderApi.getAllOrders();
+    return Order.getMockOrders();
+  }
+
+  late Future<List<Order>> _futureOrders;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureOrders = _fetchOrder();
+  }
+
   Widget orderCard(Order order, BuildContext context) {
     print("Order.orders: ${Order.orders}");
     print(CartItem.cartItems);
@@ -59,11 +80,10 @@ class Orders extends StatelessWidget {
     );
   }
 
-  const Orders({super.key});
   @override
   Widget build(BuildContext context) {
     final orders = Order.getMockOrders();
-    final OrderApi orderApi = OrderApi();
+
     final userProvider = Provider.of<UserProvider>(context);
     // print('=== ORDERS DEBUG ===');
     // print('Total orders: ${orders.length}');
@@ -160,12 +180,12 @@ class Orders extends StatelessWidget {
                 //   ),
                 // ),
                 FutureBuilder<List<Order>>(
-                  future: orderApi.getAllOrders(),
+                  future: _futureOrders,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator(
-                        color: Colors.blue,
-                      ));
+                      return Center(
+                        child: CircularProgressIndicator(color: Colors.blue),
+                      );
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

@@ -309,7 +309,7 @@ class _ViewCartState extends State<ViewCart> {
   @override
   Widget build(BuildContext context) {
     cartProvider = Provider.of<CartProvider>(context);
-    bool isCartEmpty = CartItem.cartItems.isEmpty;
+    late bool isCartEmpty = CartItem.isEmpty();
     print(CartItem.cartItems);
     final plans = [
       {
@@ -445,7 +445,7 @@ class _ViewCartState extends State<ViewCart> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
-                    child: CartItem.cartItems.isEmpty
+                    child: isCartEmpty
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

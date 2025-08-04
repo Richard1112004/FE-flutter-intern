@@ -9,17 +9,17 @@ import 'package:provider/provider.dart';
 class OrderDetail extends StatelessWidget {
   final Order? order;
   const OrderDetail({super.key, this.order});
-  Widget orderProduct(Order? order, int index, String imagePath, String productName, double productPrice) {
+  Widget orderProduct(
+    Order? order,
+    int index,
+    String imagePath,
+    String productName,
+    double productPrice,
+  ) {
     return Row(
       children: [
         Card(
-          child: Image(
-            image: AssetImage(
-             imagePath,
-            ),
-            width: 120,
-            height: 120,
-          ),
+          child: Image(image: AssetImage(imagePath), width: 120, height: 120),
         ),
         SizedBox(width: 10),
         Column(
@@ -41,53 +41,60 @@ class OrderDetail extends StatelessWidget {
             SizedBox(height: 5),
             Text(
               'Price: \$${productPrice.toStringAsFixed(2)}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway'),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Raleway',
+              ),
             ),
           ],
         ),
       ],
     );
   }
-  List<Widget> _buildOrderProducts(BuildContext context) {
-  if (order == null) {
-    // Nếu order null, hiển thị mock data
-    return [
-      InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OrderDetailTrack(productName: 'Iphone 15'),
-          ),
-        ),
-        child: orderProduct(order, 0, 'assets/products/iphone_15.png', 'iPhone 15', 999.99)),
-      SizedBox(height: 20),
-      InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OrderDetailTrack(productName: 'Iphone 16'),
-          ),
-        ),
-        child: orderProduct(order, 0, 'assets/products/iphone_16.png', 'iPhone 16', 1099.99)),
-    ];
-  } else {
-    // Nếu có order, hiển thị products thực tế
-    final List<Product> products = CartItem.getMockCartItemsByOrderId(order!.id)
-    .map((item) => Product.getMockProductById(item.product_id))
-    .whereType<Product>() // lọc bỏ các giá trị null
-    .toList();
 
+  List<Widget> _buildOrderProducts(BuildContext context) {
+    // Luôn dùng dữ liệu thật
+    final List<Product> products = CartItem.getMockCartItemsByOrderId(order!.id)
+        .map((item) => Product.getMockProductById(item.product_id))
+        .whereType<Product>() // bỏ null
+        .toList();
 
     List<Widget> widgets = [];
+
     for (int i = 0; i < products.length; i++) {
-      widgets.add(orderProduct(order, i, products[i].image, products[i].name, products[i].price));
+      final productWidget = orderProduct(
+        order,
+        i,
+        products[i].image,
+        products[i].name,
+        products[i].price,
+      );
+
+      // Nếu đơn hàng là SHIPPED thì bọc trong InkWell
+      widgets.add(
+        order?.status == "SHIPPED"
+            ? InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        OrderDetailTrack(productName: products[i].name),
+                  ),
+                ),
+                child: productWidget,
+              )
+            : productWidget,
+      );
+
       if (i < products.length - 1) {
         widgets.add(SizedBox(height: 20));
       }
     }
+
     return widgets;
   }
-}
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -114,7 +121,8 @@ class OrderDetail extends StatelessWidget {
                     radius: 30,
                     backgroundImage: userProvider.isLoggedGoogle
                         ? NetworkImage(userProvider.user!.photoUrl!)
-                        : AssetImage('assets/profile/user.png') as ImageProvider,
+                        : AssetImage('assets/profile/user.png')
+                              as ImageProvider,
                     backgroundColor: Colors.white,
                   ),
                   SizedBox(width: 20),

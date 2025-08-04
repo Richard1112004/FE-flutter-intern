@@ -49,7 +49,6 @@ class CartItem {
     return cartItems;
   }
 
-
   static decreaseCartItemQuantity(int productId) {
     // Find the index of the item to decrease
     int indexToDecrease = cartItems.indexWhere(
@@ -61,6 +60,12 @@ class CartItem {
         cartItems[indexToDecrease].quantity -= 1;
       }
     }
+  }
+
+  static bool isEmpty() {
+    // Nếu không có cart item nào hoặc tất cả đều có clear = true → trả về true
+    if (cartItems.isEmpty) return true;
+    return cartItems.every((item) => item.clear == true);
   }
 
   static increaseCartItemQuantity(int productId) {
