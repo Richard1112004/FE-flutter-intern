@@ -1,5 +1,5 @@
 class NotificationModel {
-  String id;
+  int id;
   String userId;
   String title;
   String subtitle;
@@ -9,7 +9,7 @@ class NotificationModel {
   static List<NotificationModel> notifications = [];
 
   NotificationModel({
-    this.id = '',
+    this.id = 0,
     required this.userId,
     required this.subtitle,
     required this.title,
@@ -23,13 +23,13 @@ class NotificationModel {
   // Factory constructor for creating Notification from Map
   factory NotificationModel.fromMap(Map<String, dynamic> map) {
     return NotificationModel(
-      id: map['id'] ?? '',
-      userId: map['userId'] ?? '',
-      subtitle: map['subtitle'] ?? '',
+      id: map['id'] ?? 0,
+      userId: map['user']?['id'].toString() ?? '',
       title: map['title'] ?? '',
+      subtitle: map['subTitle'] ?? '',
       message: map['message'] ?? '',
-      createdAt: DateTime.parse(map['createdAt'] ?? DateTime.now().toIso8601String()),
-      isRead: map['isRead'] ?? false,
+      createdAt: DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
+      isRead: map['read'] ?? false,
     );
   }
 
@@ -43,7 +43,7 @@ class NotificationModel {
   }
 
   static final NotificationModel welcomeNotification = NotificationModel(
-    id: 'notif_1',
+    id: 1,
     userId: '1',
     subtitle: 'Welcome',
     title: 'Welcome to Our App',
@@ -52,7 +52,7 @@ class NotificationModel {
   );
 
   static final NotificationModel reminderNotification = NotificationModel(
-    id: 'notif_2',
+    id: 2,
     userId: '1',
     subtitle: 'Pay today',
     title: 'Upconing Installment',
@@ -63,6 +63,10 @@ Avoid late fees! Thank you for your prompt payment.
 Need help? Contact us at 0912812382.''',
     createdAt: DateTime.now(),
   );
+
+  static void clearNotifications() {
+    notifications.clear();
+  }
 }
 
 

@@ -171,8 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       icon: Icon(Icons.notification_add, color: Colors.black),
                       onPressed: () async {
-                        print(NotificationModel.welcomeNotification);
-                        print(NotificationModel.reminderNotification);
+                        // print(NotificationModel.welcomeNotification);
+                        // print(NotificationModel.reminderNotification);
                         final prefs = await SharedPreferences.getInstance();
                         final isLoggedIn =
                             prefs.getBool('is_logged_in') ?? false;

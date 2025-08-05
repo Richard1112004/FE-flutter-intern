@@ -1,3 +1,4 @@
+import 'package:begining/api/notification/notificationAPI.dart';
 import 'package:begining/model/notification.dart';
 import 'package:begining/notification/notification_detail.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,13 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  final NotificationApi _notificationApi = NotificationApi();
   void _goToNotificationPage(NotificationModel notification) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NotificationDetail(notification: notification)),
+      MaterialPageRoute(
+        builder: (context) => NotificationDetail(notification: notification),
+      ),
     );
 
     if (result == 'refresh') {
@@ -28,8 +32,11 @@ class _NotificationPageState extends State<NotificationPage> {
     BuildContext context,
   ) {
     return InkWell(
-      onTap: () {
-        notification.isRead = true; // Mark as read when tapped
+      onTap: () async {
+        await _notificationApi.updateNotificationRead(
+          notificationId: notification.id,
+          isRead: true,
+        );
         _goToNotificationPage(notification);
       },
       child: Container(
@@ -99,34 +106,51 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    int unreadCount = NotificationModel.notifications
-        .where((n) => !n.isRead)
-        .length;
     return Scaffold(
       appBar: AppBar(
         title: Text('Notifications'),
         backgroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'You have ${NotificationModel.notifications.length} notifications${unreadCount > 0 ? ' ($unreadCount unread)' : ''}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: FutureBuilder(
+        future: _notificationApi.getAllNotifications(),
+        builder: (context, AsyncSnapshot<List<NotificationModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No notifications available.'));
+          }
+
+          NotificationModel.notifications = snapshot.data!;
+          print(
+            "NotificationModel.notifications: $NotificationModel.notifications",
+          );
+          return Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'You have ${NotificationModel.notifications.length} notifications${NotificationModel.notifications.where((n) => !n.isRead).length > 0 ? ' (${NotificationModel.notifications.where((n) => !n.isRead).length} unread)' : ''}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                ...List.generate(
+                  NotificationModel.notifications.length,
+                  (i) => Column(
+                    children: [
+                      SizedBox(height: 30),
+                      notificationItem(
+                        NotificationModel.notifications[i],
+                        context,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            ...List.generate(
-              NotificationModel.notifications.length,
-              (i) => Column(
-                children: [
-                  SizedBox(height: 30),
-                  notificationItem(NotificationModel.notifications[i], context),
-                ],
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
