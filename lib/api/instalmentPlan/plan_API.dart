@@ -59,11 +59,13 @@ class PlanApi {
   }
 
   Future<List<Installment>> getAllInstallmentPlans() async {
+    final String? rawUserId = await _idToken.getUserIdFromToken();
+    final int? userId = rawUserId != null ? int.tryParse(rawUserId) : null;
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = prefs.getString('auth_token');
 
     final String apiUrl =
-        "${dotenv.env['BASE_URL']}/api/v1/installment-plan/all";
+        "${dotenv.env['BASE_URL']}/api/v1/installment-plan/all/$userId";
 
     try {
       final response = await http.get(

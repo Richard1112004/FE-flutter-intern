@@ -50,11 +50,13 @@ class OrderApi {
 
   // GET all orders
   Future<List<Order>> getAllOrders() async {
+    final String? rawUserId = await _idToken.getUserIdFromToken();
+    final int? userId = rawUserId != null ? int.tryParse(rawUserId) : null;
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = prefs.getString('auth_token');
 
     try {
-      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/orders/all";
+      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/orders/all/$userId";
       final response = await http.get(
         Uri.parse(apiUrl),
         headers: {

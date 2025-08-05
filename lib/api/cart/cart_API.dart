@@ -57,7 +57,7 @@ class CartAPI {
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = await prefs.getString('auth_token');
     try {
-      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/cart-item/all";
+      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/cart-item/all/$userId";
       final response = await http.get(
         Uri.parse(apiUrl),
         headers: {

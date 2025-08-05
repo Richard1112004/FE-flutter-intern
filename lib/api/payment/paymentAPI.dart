@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Paymentapi {
+  final IdToken _idToken = IdToken();
   Future<Payment> createPayment({
     required int installmentPlanId,
     required double amount,

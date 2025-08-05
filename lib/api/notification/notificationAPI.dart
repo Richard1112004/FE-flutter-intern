@@ -8,10 +8,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 class NotificationApi {
+  final IdToken _idToken = IdToken();
   Future<List<NotificationModel>> getAllNotifications() async {
+    final String? rawUserId = await _idToken.getUserIdFromToken();
+    final int? userId = rawUserId != null ? int.tryParse(rawUserId) : null;
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = prefs.getString('auth_token');
-    final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/notifications";
+    final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/notifications/$userId";
 
     try {
       final response = await http.get(
