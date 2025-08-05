@@ -21,7 +21,7 @@ class OrderDetailChart extends StatefulWidget {
 }
 
 class _OrderDetailChartState extends State<OrderDetailChart> {
-  bool isPaid = false; // Trạng thái thanh toán
+  bool isPress = false; // Trạng thái thanh toán
   final Paymentapi paymentapi = Paymentapi();
   final PlanApi planApi = PlanApi();
   @override
@@ -77,9 +77,9 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
         future: paymentapi.getPayments(widget.installment_plan_id),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(
-              color: Colors.blueAccent,
-            ));
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.blueAccent),
+            );
           }
 
           if (snapshot.hasError) {
@@ -283,7 +283,7 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Remaining Balance: \$${(((Installment.getInstallmentById(widget.installment_plan_id).total_month - calculateMonthsPaid(payments, widget.installment_plan_id)) * payments.first.amount) + Installment.getInstallmentById(widget.installment_plan_id).late_fee).toStringAsFixed(2)} (late fee: \$${Installment.getInstallmentById(widget.installment_plan_id).late_fee.toStringAsFixed(2)})',
+                      'Remaining Balance: \$${((Installment.getInstallmentById(widget.installment_plan_id).total_month - calculateMonthsPaid(payments, widget.installment_plan_id)) * payments.last.amount).toStringAsFixed(2)} (late fee: \$${Installment.getInstallmentById(widget.installment_plan_id).late_fee.toStringAsFixed(2)})',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -345,43 +345,119 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            Color(0xFF007FFF),
-                          ),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
+
+                    if (!isPress) // Only show button when isPress is false
+                      Center(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Color(0xFF007FFF),
+                            ),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
                             ),
                           ),
-                        ),
-                        onPressed: () async {
-                          await paymentapi.updatePayment(
-                              paymentId: payments.where(
-                                (payment) =>
-                                    payment.installment_plan_id ==
-                                        widget.installment_plan_id &&
-                                    payment.status == 'OVERDUE',
-                              ).first.id,
-                              status: "PAID",
-                              paidDate: DateTime.now(),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Confirm Payment"),
+                                  content: const Text(
+                                    "Are you sure you want to pay this overdue installment now?",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text(
+                                        "Pay",
+                                        style: TextStyle(
+                                          color: Color(0xFF007FFF),
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+
+                                        // Gọi API update payment
+                                        await paymentapi.updatePayment(
+                                          paymentId: payments
+                                              .where(
+                                                (payment) =>
+                                                    payment.installment_plan_id ==
+                                                        widget
+                                                            .installment_plan_id &&
+                                                    payment.status == 'OVERDUE',
+                                              )
+                                              .first
+                                              .id,
+                                          status: "PAID",
+                                          paidDate: DateTime.now(),
+                                        );
+
+                                        // Gọi API update late fee
+                                        await planApi
+                                            .updateInstallmentPlanLateFee(
+                                              planId:
+                                                  widget.installment_plan_id,
+                                              lateFee: 0.0,
+                                            );
+                                        isPress =
+                                            true; // Cập nhật trạng thái thanh toán
+
+                                        // Refresh UI
+                                        setState(() {});
+
+                                        // Hiện popup thành công
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                "Payment Successful",
+                                              ),
+                                              content: const Text(
+                                                "Your overdue payment has been paid successfully.",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text("OK"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
-                            await planApi.updateInstallmentPlanLateFee(
-                              planId: widget.installment_plan_id,
-                              lateFee: 0.0,
-                            );
-                          setState(() {
-                          });
-                        },
-                        child: const Text(
-                          'Pay Right Now',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          },
+                          child: const Text(
+                            'Pay Right Now',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
