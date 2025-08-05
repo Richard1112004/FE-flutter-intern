@@ -98,9 +98,7 @@ class _ViewCartState extends State<ViewCart> {
     );
 
     if (result == 'refresh') {
-      setState(() {
-        print('Cart has been refreshed after placing an order');
-      });
+      fetchCartItems();
     }
   }
 
