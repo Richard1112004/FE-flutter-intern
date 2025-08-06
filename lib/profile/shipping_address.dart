@@ -1,3 +1,4 @@
+import 'package:begining/api/profile/edit_profile.dart';
 import 'package:begining/model/user.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class ShippingAddress extends StatelessWidget {
         User.getMockUser().street != null
         ? TextEditingController(text: User.getMockUser().street)
         : TextEditingController();
+    final EditProfileAPI editProfileAPI = EditProfileAPI();
     return Scaffold(
       appBar: AppBar(
         title: Text('Shipping Address'),
@@ -82,9 +84,10 @@ class ShippingAddress extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   // Add your save logic here
-                  User user = User.getMockUser();
-                  user.province = provinceController.text;
-                  user.street = streetController.text;
+                  editProfileAPI.updateUserProfile(
+                    province: provinceController.text,
+                    street: streetController.text,
+                  );
                   print(User.getMockUsers());
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Profile updated successfully!')),

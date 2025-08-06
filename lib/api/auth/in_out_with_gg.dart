@@ -74,6 +74,8 @@ class AuthService {
         final jwtToken = data['data']; // backend trả về key 'data'
         print('✅ Nhận JWT Token thành công: $jwtToken');
         final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', jwtToken);
+        final tokenTest = prefs.getString('auth_token');
         await prefs.setBool('is_logged_in', true);
         await prefs.setBool('isLoggedGoogle', true);
       } else {

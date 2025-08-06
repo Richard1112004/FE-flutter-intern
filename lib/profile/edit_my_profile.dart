@@ -1,3 +1,4 @@
+import 'package:begining/api/profile/edit_profile.dart';
 import 'package:begining/model/user.dart';
 import 'package:begining/provider/password_provider.dart';
 import 'package:begining/provider/user_provider.dart';
@@ -16,6 +17,7 @@ class EditMyProfile extends StatelessWidget {
     final TextEditingController emailController = User.getMockUser().email != '' ? TextEditingController(text: User.getMockUser().email) : TextEditingController();
     final TextEditingController phoneController = User.getMockUser().phone != '' ? TextEditingController(text: User.getMockUser().phone) : TextEditingController();
     final TextEditingController nameController = User.getMockUser().name != '' ? TextEditingController(text: User.getMockUser().name) : TextEditingController();
+    final EditProfileAPI editProfileAPI = EditProfileAPI();
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Your Profile'),
@@ -152,10 +154,10 @@ class EditMyProfile extends StatelessWidget {
               SizedBox(height: 20),
               TextButton(
                 onPressed: () {
-                  User user = User.getMockUser();
-                  user.name = nameController.text;
-                  user.email = emailController.text;
-                  user.phone = phoneController.text;
+                  editProfileAPI.updateUserProfile(
+                    name: nameController.text,
+                    phone: phoneController.text,
+                  );
                   print(user);
                   // Add your save logic here
                   ScaffoldMessenger.of(context).showSnackBar(
