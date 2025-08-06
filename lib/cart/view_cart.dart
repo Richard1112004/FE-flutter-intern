@@ -149,7 +149,7 @@ class _ViewCartState extends State<ViewCart> {
                   IconButton(
                     icon: Icon(Icons.delete, color: Color(0xFFD97474)),
                     onPressed: () {
-                      cartProvider.removeCartItem(cartItem.product_id);
+                      cartProvider.removeCartItem(cartItem);
                     },
                   ),
                 ],
@@ -272,7 +272,7 @@ class _ViewCartState extends State<ViewCart> {
                         onPressed: () {
                           // Handle decrease quantity
                           cartProvider.decreaseCartItemQuantity(
-                            cartItem.product_id,
+                            cartItem,
                           );
                         },
                       ),

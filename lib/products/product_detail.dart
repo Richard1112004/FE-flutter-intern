@@ -16,7 +16,7 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final CartAPI cartAPI = CartAPI();
+    final CartAPI cartAPI = CartAPI();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -126,7 +126,8 @@ class ProductDetail extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Iphone15Options(product: product,),
+                            builder: (context) =>
+                                Iphone15Options(product: product),
                           ),
                         ),
                       },
@@ -157,9 +158,10 @@ class ProductDetail extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: TextButton(
-                      onPressed: () async  {
+                      onPressed: () async {
                         final prefs = await SharedPreferences.getInstance();
-                        final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+                        final isLoggedIn =
+                            prefs.getBool('is_logged_in') ?? false;
                         if (!isLoggedIn) {
                           Navigator.push(
                             context,
@@ -169,7 +171,24 @@ class ProductDetail extends StatelessWidget {
                           );
                           return;
                         }
-                        await cartAPI.addToCart(product.id);
+                        CartItem? targetItem;
+                        try {
+                          targetItem = CartItem.cartItems.firstWhere(
+                            (item) =>
+                                !item.clear && item.product_id == product.id,
+                          );
+                        } catch (_) {
+                          targetItem = null;
+                        }
+                        if (targetItem == null) {
+                          await cartAPI.addToCart(product.id);
+                        } else {
+                          await cartAPI.updateCartItemQuantity(
+                            targetItem.id,
+                            targetItem.quantity + 1,
+                          );
+                        }
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Add product to cart successfully!'),

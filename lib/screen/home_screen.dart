@@ -34,7 +34,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isLoggedIn = false; // <- thêm biến này
+  bool isLoggedIn = false; // 
   final ProductAPI productAPI = ProductAPI();
   late Future<List<Product>> _productsFuture;
   @override

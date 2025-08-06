@@ -57,7 +57,8 @@ class CartAPI {
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = await prefs.getString('auth_token');
     try {
-      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/cart-item/all/$userId";
+      final String apiUrl =
+          "${dotenv.env['BASE_URL']}/api/v1/cart-item/all/$userId";
       final response = await http.get(
         Uri.parse(apiUrl),
         headers: {
@@ -93,7 +94,8 @@ class CartAPI {
     final String? authToken = prefs.getString('auth_token');
 
     try {
-      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/cart-item/$cartItemId";
+      final String apiUrl =
+          "${dotenv.env['BASE_URL']}/api/v1/cart-item/$cartItemId";
 
       final response = await http.put(
         Uri.parse(apiUrl),
@@ -102,9 +104,7 @@ class CartAPI {
           "accept": "*/*",
           "Authorization": "Bearer $authToken",
         },
-        body: jsonEncode({
-          "term": term
-        }),
+        body: jsonEncode({"term": term}),
       );
 
       if (response.statusCode == 200) {
@@ -120,12 +120,18 @@ class CartAPI {
       throw Exception("Failed to update cart item");
     }
   }
-  Future<void> updateCartItemOrderIdClear(int cartItemId, int orderId, bool clear) async {
+
+  Future<void> updateCartItemOrderIdClear(
+    int cartItemId,
+    int orderId,
+    bool clear,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = prefs.getString('auth_token');
 
     try {
-      final String apiUrl = "${dotenv.env['BASE_URL']}/api/v1/cart-item/$cartItemId";
+      final String apiUrl =
+          "${dotenv.env['BASE_URL']}/api/v1/cart-item/$cartItemId";
 
       final response = await http.put(
         Uri.parse(apiUrl),
@@ -134,10 +140,7 @@ class CartAPI {
           "accept": "*/*",
           "Authorization": "Bearer $authToken",
         },
-        body: jsonEncode({
-          "orderId": orderId,
-          "clear": clear
-        }),
+        body: jsonEncode({"orderId": orderId, "clear": clear}),
       );
 
       if (response.statusCode == 200) {
@@ -151,6 +154,87 @@ class CartAPI {
     } catch (e) {
       print("Error updating cart item: $e");
       throw Exception("Failed to update cart item");
+    }
+  }
+
+  Future<void> updateCartItemQuantity(int cartItemId, int quantity) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    try {
+      final String apiUrl =
+          "${dotenv.env['BASE_URL']}/api/v1/cart-item/$cartItemId";
+
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+        body: jsonEncode({"quantity": quantity}),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        if (quantity <
+            CartItem.cartItems
+                .firstWhere((item) => item.id == cartItemId)
+                .quantity) {
+          CartItem.decreaseCartItemQuantity(
+            CartItem.cartItems
+                .firstWhere((item) => item.id == cartItemId)
+                .product_id,
+          );
+        } else {
+          CartItem.increaseCartItemQuantity(
+            CartItem.cartItems
+                .firstWhere((item) => item.id == cartItemId)
+                .product_id,
+          );
+        }
+        print("Cart item updated successfully: ${responseData['message']}");
+      } else {
+        print("Failed to update cart item: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to update cart item");
+      }
+    } catch (e) {
+      print("Error updating cart item: $e");
+      throw Exception("Failed to update cart item");
+    }
+  }
+
+  Future<void> deleteCartItem(int cartItemId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    try {
+      final String apiUrl =
+          "${dotenv.env['BASE_URL']}/api/v1/cart-item/$cartItemId";
+
+      final response = await http.delete(
+        Uri.parse(apiUrl),
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+          "Authorization": "Bearer $authToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        CartItem.removeCurrentCartItem(CartItem.cartItems
+            .firstWhere((item) => item.id == cartItemId)
+            .product_id);
+        print("Cart item deleted successfully");
+      } else {
+        print("Failed to delete cart item: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to delete cart item");
+      }
+    } catch (e) {
+      print("Error deleting cart item: $e");
+      throw Exception("Failed to delete cart item");
     }
   }
 }
