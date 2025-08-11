@@ -47,7 +47,7 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
         .where(
           (payment) =>
               payment.installment_plan_id == installmentPlanId &&
-              payment.status == 'PAID',
+              (payment.status == 'PAID' || payment.status == 'PAID LATE'),
         )
         .length;
   }
@@ -204,6 +204,9 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                                       } else if (payments[index].status ==
                                           "PAID") {
                                         color = Colors.green;
+                                      } else if (payments[index].status ==
+                                          "PAID LATE") {
+                                        color = Colors.yellow;
                                       }
                                     }
 
@@ -248,6 +251,8 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                                         color = Colors.red;
                                       } else if (paymentStatus == "PAID") {
                                         color = Colors.green;
+                                      } else if (paymentStatus == "PAID LATE") {
+                                        color = Colors.yellow;
                                       }
                                       dueDate = payments[index].due_date;
                                     } else {
@@ -274,7 +279,7 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      'Months Paid: ${payments.where((p) => p.status == "PAID").length} of ${Installment.getInstallmentById(widget.installment_plan_id).total_month}',
+                      'Months Paid: ${payments.where((p) => p.status == "PAID" || p.status == "PAID LATE").length} of ${Installment.getInstallmentById(widget.installment_plan_id).total_month}',
 
                       style: TextStyle(
                         fontSize: 15,
@@ -334,7 +339,11 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                                     color: isPaid
                                         ? (status == "OVERDUE"
                                               ? Colors.red
-                                              : Colors.green)
+                                              : (status == "PAID"
+                                                    ? Colors.green
+                                                    : status == "PAID LATE"
+                                                    ? Colors.orange
+                                                    : Colors.grey))
                                         : Colors.grey,
                                   ),
                                 ),
@@ -406,7 +415,7 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                                               )
                                               .first
                                               .id,
-                                          status: "PAID",
+                                          status: "PAID LATE",
                                           paidDate: DateTime.now(),
                                         );
 
