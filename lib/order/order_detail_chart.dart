@@ -21,7 +21,6 @@ class OrderDetailChart extends StatefulWidget {
 }
 
 class _OrderDetailChartState extends State<OrderDetailChart> {
-  bool isPress = false; // Trạng thái thanh toán
   final Paymentapi paymentapi = Paymentapi();
   final PlanApi planApi = PlanApi();
   @override
@@ -288,7 +287,7 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Remaining Balance: \$${((Installment.getInstallmentById(widget.installment_plan_id).total_month - calculateMonthsPaid(payments, widget.installment_plan_id)) * payments.last.amount).toStringAsFixed(2)} (late fee: \$${Installment.getInstallmentById(widget.installment_plan_id).late_fee.toStringAsFixed(2)})',
+                      'Remaining Balance: \$${((Installment.getInstallmentById(widget.installment_plan_id).total_month - calculateMonthsPaid(payments, widget.installment_plan_id)) * payments.last.amount).toStringAsFixed(2)}',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -355,7 +354,10 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                     ),
                     const SizedBox(height: 20),
 
-                    if (!isPress) // Only show button when isPress is false
+                    // Check if last payment is paid and today's date has passed the last payment's due date
+                    if (payments.isNotEmpty &&
+                        (payments.last.status == 'OVERDUE' ||
+                            payments.last.status == 'PENDING'))
                       Center(
                         child: ElevatedButton(
                           style: ButtonStyle(
@@ -370,13 +372,25 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                             ),
                           ),
                           onPressed: () {
+                            // Find first payment with OVERDUE or PENDING status
+                            final paymentToPay = payments.firstWhere(
+                              (payment) =>
+                                  payment.installment_plan_id ==
+                                      widget.installment_plan_id &&
+                                  (payment.status == 'OVERDUE' ||
+                                      payment.status == 'PENDING'),
+                              orElse: () => throw Exception(
+                                'No overdue or pending payment found',
+                              ),
+                            );
+
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text("Confirm Payment"),
-                                  content: const Text(
-                                    "Are you sure you want to pay this overdue installment now?",
+                                  content: Text(
+                                    "Are you sure you want to pay this ${paymentToPay.status.toLowerCase()} installment now?",
                                   ),
                                   actions: [
                                     TextButton(
@@ -403,31 +417,30 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                                       onPressed: () async {
                                         Navigator.of(context).pop();
 
-                                        // Gọi API update payment
-                                        await paymentapi.updatePayment(
-                                          paymentId: payments
-                                              .where(
-                                                (payment) =>
-                                                    payment.installment_plan_id ==
-                                                        widget
-                                                            .installment_plan_id &&
-                                                    payment.status == 'OVERDUE',
-                                              )
-                                              .first
-                                              .id,
-                                          status: "PAID LATE",
-                                          paidDate: DateTime.now(),
-                                        );
+                                        if (paymentToPay.status == 'OVERDUE') {
+                                          // For OVERDUE: update to PAID LATE and reset late fee
+                                          await paymentapi.updatePayment(
+                                            paymentId: paymentToPay.id,
+                                            status: "PAID LATE",
+                                            paidDate: DateTime.now(),
+                                          );
 
-                                        // Gọi API update late fee
-                                        await planApi
-                                            .updateInstallmentPlanLateFee(
-                                              planId:
-                                                  widget.installment_plan_id,
-                                              lateFee: 0.0,
-                                            );
-                                        isPress =
-                                            true; // Cập nhật trạng thái thanh toán
+                                          // Reset late fee for overdue payments
+                                          await planApi
+                                              .updateInstallmentPlanLateFee(
+                                                planId:
+                                                    widget.installment_plan_id,
+                                                lateFee: 0.0,
+                                              );
+                                        } else if (paymentToPay.status ==
+                                            'PENDING') {
+                                          // For PENDING: update to PAID only
+                                          await paymentapi.updatePayment(
+                                            paymentId: paymentToPay.id,
+                                            status: "PAID",
+                                            paidDate: DateTime.now(),
+                                          );
+                                        }
 
                                         // Refresh UI
                                         setState(() {});
@@ -440,8 +453,8 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                                               title: const Text(
                                                 "Payment Successful",
                                               ),
-                                              content: const Text(
-                                                "Your overdue payment has been paid successfully.",
+                                              content: Text(
+                                                "Your ${paymentToPay.status.toLowerCase()} payment has been paid successfully.",
                                               ),
                                               actions: [
                                                 TextButton(
