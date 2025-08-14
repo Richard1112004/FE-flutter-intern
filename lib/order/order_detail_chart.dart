@@ -23,6 +23,9 @@ class OrderDetailChart extends StatefulWidget {
 class _OrderDetailChartState extends State<OrderDetailChart> {
   final Paymentapi paymentapi = Paymentapi();
   final PlanApi planApi = PlanApi();
+  late Installment installment = Installment.getInstallmentById(
+    widget.installment_plan_id,
+  );
   @override
   void initState() {
     super.initState();
@@ -428,11 +431,25 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                                           );
 
                                           // Reset late fee for overdue payments
+                                          final late_fee = installment.late_fee;
+
                                           await planApi
                                               .updateInstallmentPlanLateFee(
                                                 planId:
                                                     widget.installment_plan_id,
-                                                lateFee: 0.0,
+                                                lateFee: double.parse(
+                                                  (late_fee -
+                                                          (paymentToPay.amount -
+                                                              payments
+                                                                  .where(
+                                                                    (p) =>
+                                                                        p.status ==
+                                                                        "PAID",
+                                                                  )
+                                                                  .last
+                                                                  .amount))
+                                                      .toStringAsFixed(2),
+                                                ),
                                               );
                                         } else if (paymentToPay.status ==
                                             'PENDING') {
