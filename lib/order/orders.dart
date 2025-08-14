@@ -61,7 +61,7 @@ class _OrdersState extends State<Orders> {
               Text(
                 'Order ${order.id}',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Raleway',
                 ),
@@ -69,12 +69,12 @@ class _OrdersState extends State<Orders> {
               SizedBox(height: 5),
               Text(
                 'Order Date: ${order.createdAt.toLocal().toString().split(' ')[0]}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               SizedBox(height: 5),
               Text(
                 'Order Status: ${order.status}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ],
           ),

@@ -231,46 +231,48 @@ class _OrderDetailChartState extends State<OrderDetailChart> {
                           const SizedBox(width: 20),
                           Expanded(
                             flex: 2,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ...List.generate(
-                                  Installment.getInstallmentById(
-                                    widget.installment_plan_id,
-                                  ).total_month,
-                                  (index) {
-                                    Color color = Colors.white;
-                                    DateTime dueDate;
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ...List.generate(
+                                    Installment.getInstallmentById(
+                                      widget.installment_plan_id,
+                                    ).total_month,
+                                    (index) {
+                                      Color color = Colors.white;
+                                      DateTime dueDate;
 
-                                    if (index < payments.length) {
-                                      final paymentStatus =
-                                          payments[index].status;
-                                      if (paymentStatus == "OVERDUE") {
-                                        color = Colors.red;
-                                      } else if (paymentStatus == "PAID") {
-                                        color = Colors.green;
-                                      } else if (paymentStatus == "PAID LATE") {
-                                        color = Colors.yellow;
+                                      if (index < payments.length) {
+                                        final paymentStatus =
+                                            payments[index].status;
+                                        if (paymentStatus == "OVERDUE") {
+                                          color = Colors.red;
+                                        } else if (paymentStatus == "PAID") {
+                                          color = Colors.green;
+                                        } else if (paymentStatus ==
+                                            "PAID LATE") {
+                                          color = Colors.yellow;
+                                        }
+                                        dueDate = payments[index].due_date;
+                                      } else {
+                                        // Tính ngày đến hạn tiếp theo nếu chưa có payment
+                                        dueDate = addMonths(
+                                          payments.isNotEmpty
+                                              ? payments.last.due_date
+                                              : DateTime.now(),
+                                          index - payments.length + 1,
+                                        );
                                       }
-                                      dueDate = payments[index].due_date;
-                                    } else {
-                                      // Tính ngày đến hạn tiếp theo nếu chưa có payment
-                                      dueDate = addMonths(
-                                        payments.isNotEmpty
-                                            ? payments.last.due_date
-                                            : DateTime.now(),
-                                        index - payments.length + 1,
-                                      );
-                                    }
 
-                                    return LegendItem(
-                                      color: color,
-                                      text: dueDate.toString().split(' ')[0],
-                                    );
-                                  },
-                                ),
-                              ],
+                                      return LegendItem(
+                                        color: color,
+                                        text: dueDate.toString().split(' ')[0],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
